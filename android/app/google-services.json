@@ -1,0 +1,102 @@
+{
+  "project_info": {
+    "project_number": "910817423270",
+    "firebase_url": "https://codigo-de-estrada-mz.firebaseio.com",
+    "project_id": "codigo-de-estrada-mz",
+    "storage_bucket": "codigo-de-estrada-mz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910817423270:android:6ccfe7e4cd8448b2bfe967",
+        "android_client_info": {
+          "package_name": "mz.co.chillstudio.codigo_de_estrada_mz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910817423270-u0gp047f772nfpp2t3lme4sg4u1e5ick.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
+            "certificate_hash": "b4d1318b581be30c2d011ab5b18f97088244b1cc"
+          }
+        },
+        {
+          "client_id": "910817423270-vtbm5j8egp6u9e2ribu11q84r7vsbolg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
+            "certificate_hash": "1fee59f3b644b06c6c033bf79da62f2a4a73a270"
+          }
+        },
+        {
+          "client_id": "910817423270-vs56q4jdfl4t7t8o83sgpchssv49e8d8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
+            "certificate_hash": "0fc90bbe2d51e2c0cd16803346aa739c9f26f0d4"
+          }
+        },
+        {
+          "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxSXRyGlFCprHPeeQo4WwAfxP0idi9KpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-7627687887475703~9931353819"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910817423270:android:1d6d1ce1b437c611bfe967",
+        "android_client_info": {
+          "package_name": "mz.co.chillstudio.cs_monetization"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910817423270-qbsi6df5rj5e3pdkdmdvm4taiu11n1qe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mz.co.chillstudio.cs_monetization",
+            "certificate_hash": "482a2fd079cf2baed7bf1d13fd7ee5c96d4e1a8c"
+          }
+        },
+        {
+          "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxSXRyGlFCprHPeeQo4WwAfxP0idi9KpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
