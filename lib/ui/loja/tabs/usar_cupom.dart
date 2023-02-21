@@ -48,7 +48,7 @@ class _UsarCupomState extends State<UsarCupom> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           padding: const EdgeInsets.symmetric(horizontal: 8),
-                          primary: corPrincipal),
+                          foregroundColor: corPrincipal),
                       onPressed: () {
                         buscarCodigo();
                       },
@@ -157,7 +157,7 @@ class _UsarCupomState extends State<UsarCupom> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    primary: corPrincipal),
+                    foregroundColor: corPrincipal),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     BlocProvider.getBloc<TransacoesBloc>()
@@ -183,7 +183,7 @@ class _UsarCupomState extends State<UsarCupom> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    primary: Colors.grey[200],
+                    foregroundColor: Colors.grey[200],
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -231,7 +231,7 @@ class _UsarCupomState extends State<UsarCupom> {
         msg: "Dados incorectos",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
       );
     }
   }

@@ -96,7 +96,7 @@ class PromoDialogue extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: mainBG,
+                    backgroundColor: mainBG,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
                     padding:

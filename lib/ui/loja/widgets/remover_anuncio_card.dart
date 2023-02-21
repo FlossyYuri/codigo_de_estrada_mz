@@ -155,7 +155,7 @@ class RemoverAnunciosCard extends StatelessWidget {
                               );
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: branco,
+                            backgroundColor: branco,
                             elevation: 5,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40),

@@ -42,7 +42,7 @@ class _AuthViewState extends State<AuthView> {
               alignment: Alignment.bottomCenter,
               child: TextButton(
                 onPressed: () {
-                  launch(politicasDePrivacidade);
+                  launchUrl(Uri.parse(politicasDePrivacidade));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -102,7 +102,7 @@ class _AuthViewState extends State<AuthView> {
                                 Navigator.of(context).push(
                                   CupertinoPageRoute(
                                     builder: (context) => CadastroScreen(
-                                      user: null,
+                                      // user: null,
                                       metodo: "email",
                                     ),
                                   ),

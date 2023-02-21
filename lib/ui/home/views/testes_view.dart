@@ -537,7 +537,7 @@ class _TestesViewState extends State<TestesView>
                       borderRadius: BorderRadius.circular(40),
                       side: BorderSide(color: branco, width: 2),
                     ),
-                    primary: mainBG,
+                    backgroundColor: mainBG,
                   ),
                   child: Container(
                     alignment: Alignment.center,

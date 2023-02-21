@@ -220,7 +220,7 @@ class _GamePageState extends State<GamePage> {
           ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 50),
-                primary: mainBG,
+                backgroundColor: mainBG,
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
@@ -276,7 +276,7 @@ class _GamePageState extends State<GamePage> {
                 return ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 4,
-                      primary: mainBG,
+                      backgroundColor: mainBG,
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40),
@@ -357,7 +357,8 @@ class _GamePageState extends State<GamePage> {
 
   Widget _buildIconButton(IconData icon, VoidCallback f) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(shape: CircleBorder(), primary: branco),
+      style: ElevatedButton.styleFrom(
+          shape: CircleBorder(), backgroundColor: branco),
       child: Icon(
         icon,
         size: 35,

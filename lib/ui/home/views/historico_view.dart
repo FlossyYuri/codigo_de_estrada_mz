@@ -63,18 +63,14 @@ class _HistoricoViewState extends State<HistoricoView> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              CarouselSlider(
-                items: <Widget>[
-                  _card("Desempenho nos últimos 15 testes",
-                      "\$${mediaWins.round()}%", desempenho),
-                  _card("Aprovações nos ultimos 15 testes",
-                      "${cont - contLoses}", desempenho),
-                  _card("Media de erros por teste ", "${mediaErros.round()}",
-                      desErros),
-                ],
-                height: 200.0,
-                autoPlay: true,
-              ),
+              CarouselSlider(items: <Widget>[
+                _card("Desempenho nos últimos 15 testes",
+                    "\$${mediaWins.round()}%", desempenho),
+                _card("Aprovações nos ultimos 15 testes", "${cont - contLoses}",
+                    desempenho),
+                _card("Media de erros por teste ", "${mediaErros.round()}",
+                    desErros),
+              ], options: CarouselOptions(height: 200.0, autoPlay: true)),
               SizedBox(
                 height: 10,
               ),
@@ -288,7 +284,7 @@ class _HistoricoViewState extends State<HistoricoView> {
               Row(
                 children: <Widget>[
                   Icon(
-                    FontAwesomeIcons.dotCircle,
+                    FontAwesomeIcons.circleDot,
                     size: 18,
                     color: secBG,
                   ),

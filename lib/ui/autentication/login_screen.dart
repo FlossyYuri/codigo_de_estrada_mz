@@ -220,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          primary: transparente,
+                          foregroundColor: transparente,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           )),

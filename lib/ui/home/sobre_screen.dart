@@ -37,7 +37,7 @@ class SobreScreen extends StatelessWidget {
                 height: 20,
               ),
               _buildRaised("Politicas de privacidade", () {
-                launch(politicasDePrivacidade);
+                launchUrl(Uri.parse(politicasDePrivacidade));
               }),
               SizedBox(
                 height: 20,
@@ -64,7 +64,8 @@ class SobreScreen extends StatelessWidget {
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
-                            launch("mailto:emerson.yur@gmail.com");
+                            launchUrl(
+                                Uri.parse("mailto:emerson.yur@gmail.com"));
                           },
                         ),
                         TextButton(
@@ -74,7 +75,7 @@ class SobreScreen extends StatelessWidget {
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
-                            launch("sms:+258840521586");
+                            launchUrl(Uri.parse("sms:+258840521586"));
                           },
                         ),
                         TextButton(
@@ -108,7 +109,7 @@ class SobreScreen extends StatelessWidget {
     return ElevatedButton(
       onPressed: f,
       style: ElevatedButton.styleFrom(
-        primary: branco,
+        backgroundColor: branco,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       child: Container(

@@ -396,8 +396,8 @@ class _ResultadosViewState extends State<ResultadosView> {
     return ElevatedButton(
       onPressed: f,
       style: ElevatedButton.styleFrom(
-        primary: darkblue,
-        onPrimary: Colors.black,
+        backgroundColor: darkblue,
+        foregroundColor: Colors.black,
         elevation: 0.5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),

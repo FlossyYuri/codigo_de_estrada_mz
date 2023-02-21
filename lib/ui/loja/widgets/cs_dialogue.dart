@@ -100,7 +100,7 @@ class _CSDialogueState extends State<CSDialogue> {
                           backgroundColor: Colors.blueGrey,
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
-                          timeInSecForIos: 2,
+                          timeInSecForIosWeb: 2,
                         );
                       },
                       child: Card(
@@ -169,10 +169,10 @@ class _CSDialogueState extends State<CSDialogue> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    primary: mainBG.withOpacity(0.8),
+                    foregroundColor: mainBG.withOpacity(0.8),
                   ),
                   onPressed: () {
-                    launch("tel:*150%23");
+                    launchUrl(Uri.parse("tel:*150%23"));
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -221,7 +221,7 @@ class _CSDialogueState extends State<CSDialogue> {
                               ),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
-                              primary: Colors.blueGrey,
+                              foregroundColor: Colors.blueGrey,
                             ),
                             onPressed: () async {
                               ClipboardData cb =
@@ -322,7 +322,7 @@ class _CSDialogueState extends State<CSDialogue> {
                                     msg: "Dados incorectos",
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIos: 1,
+                                    timeInSecForIosWeb: 1,
                                   );
                               }
                             },
@@ -330,7 +330,7 @@ class _CSDialogueState extends State<CSDialogue> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              primary: mainBG.withOpacity(0.8),
+                              foregroundColor: mainBG.withOpacity(0.8),
                             ),
                             child: Container(
                               height: 40,
@@ -425,7 +425,7 @@ class _CSDialogueState extends State<CSDialogue> {
   enviarMensagem(String cod, double val) async {
     String texto = 'code:$cod. value:$val. cs:${widget.cs}.';
     if (Platform.isAndroid) {
-      await launch('sms:+25884052158?body=$texto');
+      await launchUrl(Uri.parse('sms:+25884052158?body=$texto'));
     }
   }
 }

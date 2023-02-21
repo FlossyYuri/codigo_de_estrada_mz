@@ -63,7 +63,7 @@ class HomeScreen extends StatelessWidget {
       ),
       BottomNavigationBarItem(
         icon: Icon(
-          FontAwesomeIcons.shoppingBag,
+          FontAwesomeIcons.bagShopping,
           color: branco,
         ),
         label: "Loja",
@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
       itens.add(
         BottomNavigationBarItem(
           icon: Icon(
-            FontAwesomeIcons.ad,
+            FontAwesomeIcons.rectangleAd,
             color: branco,
           ),
           label: "Virar Premium",

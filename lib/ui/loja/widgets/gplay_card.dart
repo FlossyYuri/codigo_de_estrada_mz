@@ -35,7 +35,7 @@ class _GPLAYCardState extends State<GPLAYCard> {
 
   Future<bool> _initPlatformState() async {
     // prepare
-    await FlutterInappPurchase.instance.initConnection;
+    // await FlutterInappPurchase.instance.initConnection;
     await _getProduct();
     _purchaseUpdatedSubscription = FlutterInappPurchase.purchaseUpdated.listen(
       (productItem) {
@@ -140,7 +140,7 @@ class _GPLAYCardState extends State<GPLAYCard> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              primary: Colors.blueGrey,
+              backgroundColor: Colors.blueGrey,
             ),
             child: Container(
               height: 40,

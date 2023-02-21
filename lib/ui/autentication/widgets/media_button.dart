@@ -18,8 +18,8 @@ class MediaButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        primary: fundo,
-        onPrimary: branco,
+        backgroundColor: fundo,
+        foregroundColor: branco,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
     );

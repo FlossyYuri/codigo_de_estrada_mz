@@ -1,5 +1,4 @@
 import 'package:codigo_de_estrada_mz/ui/loja/widgets/buy_cs_tile.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -31,7 +30,7 @@ class _BuyCSState extends State<BuyCS> {
               child: Wrap(
                 children: <Widget>[
                   Icon(
-                    FontAwesomeIcons.percentage,
+                    FontAwesomeIcons.percent,
                     color: Colors.white,
                     size: 20,
                   ),
@@ -49,7 +48,7 @@ class _BuyCSState extends State<BuyCS> {
                     width: 8,
                   ),
                   Icon(
-                    FontAwesomeIcons.percentage,
+                    FontAwesomeIcons.percent,
                     color: Colors.white,
                     size: 20,
                   ),

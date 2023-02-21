@@ -80,7 +80,7 @@ class TutoriaisScreen extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 4,
-        primary: branco,
+        backgroundColor: branco,
       ),
       child: Container(
         alignment: Alignment.center,

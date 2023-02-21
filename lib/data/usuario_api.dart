@@ -5,7 +5,7 @@ const String TIME_URL = "http://flossyyuri.com/app/dataAtual.php";
 const String MPESA_URL = "https://mpesaphp.herokuapp.com/api/payment";
 
 Future<Map<String, dynamic>> createPost({Map body}) async {
-  return http.post(TIME_URL, body: body).then(
+  return http.post(Uri.parse(TIME_URL), body: body).then(
     (http.Response response) {
       final int statusCode = response.statusCode;
       if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -22,7 +22,10 @@ Future<http.Response> payMPESA(int phone, int amount, String userID) async {
   dados["amount"] = amount.toString();
   dados["channel"] = 'CDE-ANDROID';
   dados["user_id"] = userID;
-  return http.post(MPESA_URL, headers: {"Accept": "application/json"}, body: dados).then(
+  return http
+      .post(Uri.parse(MPESA_URL),
+          headers: {"Accept": "application/json"}, body: dados)
+      .then(
     (http.Response response) {
       print(response.statusCode);
       return response;

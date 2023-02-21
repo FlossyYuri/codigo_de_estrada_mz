@@ -126,7 +126,8 @@ class CustomDrawer extends StatelessWidget {
                     children: <Widget>[
                       BlocProvider.getBloc<UsuarioBloc>().userData.premium
                           ? Container()
-                          : _buildButton("VIRAR PREMIUM", FontAwesomeIcons.ad,
+                          : _buildButton(
+                              "VIRAR PREMIUM", FontAwesomeIcons.rectangleAd,
                               () {
                               Navigator.of(context).push(
                                 CupertinoPageRoute(
@@ -152,7 +153,7 @@ class CustomDrawer extends StatelessWidget {
                           : Container(),
                       _buildButton(
                         "Historico de testes",
-                        FontAwesomeIcons.history,
+                        FontAwesomeIcons.clockRotateLeft,
                         () {
                           Navigator.push(
                             context,
@@ -176,7 +177,8 @@ class CustomDrawer extends StatelessWidget {
                           ),
                         );
                       }),
-                      _buildButton("Logout", FontAwesomeIcons.signOutAlt, () {
+                      _buildButton("Logout", FontAwesomeIcons.rightFromBracket,
+                          () {
                         BlocProvider.getBloc<UsuarioBloc>().logout(context);
                       }),
                       _buildButton(
@@ -353,7 +355,7 @@ class CustomDrawer extends StatelessWidget {
                           duration: Duration(seconds: 4),
                         ),
                       );
-                      scaffoldKey.currentState.setState(() {});
+                      // scaffoldKey.currentState.setState(() {});
                     },
                     child: Text(
                       "Coletar",
@@ -502,5 +504,4 @@ class CustomDrawer extends StatelessWidget {
   //     ),
   //   );
   // }
-
 }

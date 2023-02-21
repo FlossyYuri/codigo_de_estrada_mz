@@ -80,7 +80,7 @@ class _GetPremiumState extends State<GetPremium> {
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: lightgreen,
+                    backgroundColor: lightgreen,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),

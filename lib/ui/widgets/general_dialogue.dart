@@ -36,7 +36,7 @@ class _GeneralDialogueState extends State<GeneralDialogue> {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF1BC0C5)),
+                        backgroundColor: const Color(0xFF1BC0C5)),
                   )
                 ],
               ),

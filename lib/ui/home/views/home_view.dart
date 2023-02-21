@@ -190,7 +190,7 @@ class _HomeViewState extends State<HomeView> {
             children: <Widget>[
               OptionCard(
                 texto: "LOJA",
-                icon: FontAwesomeIcons.shoppingBag,
+                icon: FontAwesomeIcons.bagShopping,
                 f: () {
                   // if (_controller != null) _controller.dispose();
                   Navigator.of(context).push(
@@ -266,7 +266,7 @@ class _HomeViewState extends State<HomeView> {
             children: <Widget>[
               OptionCard(
                 texto: "Sobre",
-                icon: FontAwesomeIcons.infoCircle,
+                icon: FontAwesomeIcons.circleInfo,
                 f: () {
                   // if (_controller != null) _controller.dispose();
                   Navigator.of(context).push(
@@ -396,7 +396,7 @@ class _HomeViewState extends State<HomeView> {
                       children: <Widget>[
                         raised(() {
                           Navigator.pop(context);
-                          launch(APP_URL);
+                          launchUrl(Uri.parse(APP_URL));
                         }, "Baixar"),
                         raised(() {
                           SharedPreferences.getInstance().then((prefs) {
@@ -455,7 +455,7 @@ class _HomeViewState extends State<HomeView> {
   Widget raised(Function f, String text) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: secBG,
+        backgroundColor: secBG,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         elevation: 1,

@@ -1,10 +1,10 @@
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/enums/connectivity_status.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/models/tema.dart';
@@ -14,7 +14,6 @@ import 'package:codigo_de_estrada_mz/ui/home/views/premium_view.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -388,17 +387,16 @@ class _TemasViewState extends State<TemasView> {
                         );
                       } else {
                         Fluttertoast.showToast(
-                          msg:
-                              "Nao tem testes suficientes, volte ao menu assita um video para ganhar teste ou compre teste na loja",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIos: 2,
-                        );
+                            msg:
+                                "Nao tem testes suficientes, volte ao menu assita um video para ganhar teste ou compre teste na loja",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 2);
                       }
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    onPrimary: mainBG,
+                    foregroundColor: mainBG,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40),
                       side: BorderSide(color: branco, width: 2),

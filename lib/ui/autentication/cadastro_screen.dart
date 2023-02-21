@@ -5,15 +5,14 @@ import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/models/usuario.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/custom_text_field2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CadastroScreen extends StatefulWidget {
-  final AuthResult user;
+  // final AuthResult user;
   final String metodo;
-  CadastroScreen({@required this.user, @required this.metodo});
+  CadastroScreen(
+      { //@required this.user,
+      @required this.metodo});
   @override
   _CadastroScreenState createState() => _CadastroScreenState();
 }
@@ -31,14 +30,14 @@ class _CadastroScreenState extends State<CadastroScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.user != null) {
-      String username = widget.user.user.displayName
-          .substring(0, widget.user.user.displayName.indexOf(" "))
-          .toLowerCase();
-      _usernameController.text = username;
-      _emailController.text = widget.user.user.email;
-      _cellController.text = widget.user.user.phoneNumber;
-    }
+    // if (widget.user != null) {
+    //   String username = widget.user.user.displayName
+    //       .substring(0, widget.user.user.displayName.indexOf(" "))
+    //       .toLowerCase();
+    //   _usernameController.text = username;
+    //   _emailController.text = widget.user.user.email;
+    //   _cellController.text = widget.user.user.phoneNumber;
+    // }
   }
 
   @override
@@ -175,7 +174,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40),
                             ),
-                            primary: branco),
+                            backgroundColor: branco),
                         onPressed: () async {
                           if (!clicked) {
                             clicked = true;
@@ -223,26 +222,26 @@ class _CadastroScreenState extends State<CadastroScreen> {
                                     .then((res) {
                                   if (res) {
                                     clicked = false;
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          "Ja existe um usuario com esse contacto",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIos: 1,
-                                    );
+                                    // Fluttertoast.showToast(
+                                    //   msg:
+                                    //       "Ja existe um usuario com esse contacto",
+                                    //   toastLength: Toast.LENGTH_SHORT,
+                                    //   gravity: ToastGravity.BOTTOM,
+                                    //   timeInSecForIos: 1,
+                                    // );
                                   }
                                   BlocProvider.getBloc<UsuarioBloc>()
                                       .existeUsername(_usernameController.text)
                                       .then((res) {
                                     if (res) {
                                       clicked = false;
-                                      Fluttertoast.showToast(
-                                        msg:
-                                            "Ja existe um usuario com esse nome",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIos: 1,
-                                      );
+                                      // Fluttertoast.showToast(
+                                      //   msg:
+                                      //       "Ja existe um usuario com esse nome",
+                                      //   toastLength: Toast.LENGTH_SHORT,
+                                      //   gravity: ToastGravity.BOTTOM,
+                                      //   timeInSecForIos: 1,
+                                      // );
                                     }
                                     if (clicked) {
                                       switch (widget.metodo) {
@@ -269,48 +268,48 @@ class _CadastroScreenState extends State<CadastroScreen> {
                                           });
                                           break;
                                         case "facebook":
-                                          BlocProvider.getBloc<UsuarioBloc>()
-                                              .criarContaComMedia(
-                                                  dados: Usuario(
-                                                      id: null,
-                                                      email:
-                                                          _emailController.text,
-                                                      cell:
-                                                          _cellController.text,
-                                                      username:
-                                                          _usernameController
-                                                              .text,
-                                                      imgUrl: null,
-                                                      cs: 100,
-                                                      nrTestes: 2,
-                                                      premium: false),
-                                                  result: widget.user,
-                                                  key: _scafKey)
-                                              .then((_) {
-                                            clicked = false;
-                                          });
+                                          // BlocProvider.getBloc<UsuarioBloc>()
+                                          //     .criarContaComMedia(
+                                          //         dados: Usuario(
+                                          //             id: null,
+                                          //             email:
+                                          //                 _emailController.text,
+                                          //             cell:
+                                          //                 _cellController.text,
+                                          //             username:
+                                          //                 _usernameController
+                                          //                     .text,
+                                          //             imgUrl: null,
+                                          //             cs: 100,
+                                          //             nrTestes: 2,
+                                          //             premium: false),
+                                          //         result: widget.user,
+                                          //         key: _scafKey)
+                                          //     .then((_) {
+                                          //   clicked = false;
+                                          // });
                                           break;
                                         case "google":
-                                          BlocProvider.getBloc<UsuarioBloc>()
-                                              .criarContaComMedia(
-                                                  dados: Usuario(
-                                                    id: null,
-                                                    email:
-                                                        _emailController.text,
-                                                    cell: _cellController.text,
-                                                    username:
-                                                        _usernameController
-                                                            .text,
-                                                    imgUrl: null,
-                                                    cs: 100,
-                                                    nrTestes: 2,
-                                                    premium: false,
-                                                  ),
-                                                  result: widget.user,
-                                                  key: _scafKey)
-                                              .then((_) {
-                                            clicked = false;
-                                          });
+                                          // BlocProvider.getBloc<UsuarioBloc>()
+                                          //     .criarContaComMedia(
+                                          //         dados: Usuario(
+                                          //           id: null,
+                                          //           email:
+                                          //               _emailController.text,
+                                          //           cell: _cellController.text,
+                                          //           username:
+                                          //               _usernameController
+                                          //                   .text,
+                                          //           imgUrl: null,
+                                          //           cs: 100,
+                                          //           nrTestes: 2,
+                                          //           premium: false,
+                                          //         ),
+                                          //         result: widget.user,
+                                          //         key: _scafKey)
+                                          //     .then((_) {
+                                          //   clicked = false;
+                                          // });
                                           break;
                                       }
                                     } else {

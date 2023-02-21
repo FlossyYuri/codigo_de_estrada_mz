@@ -239,7 +239,7 @@ class TesteCard extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Icon(
-                              FontAwesomeIcons.questionCircle,
+                              FontAwesomeIcons.circleQuestion,
                               size: 10.0,
                               color: Color(0x66FFFFFF),
                             ),

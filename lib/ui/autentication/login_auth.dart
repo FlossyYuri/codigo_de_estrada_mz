@@ -5,7 +5,6 @@ import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_view.dart';
 import 'package:codigo_de_estrada_mz/ui/home/home_screen.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class LoginAuth extends StatefulWidget {
   @override
@@ -89,7 +88,7 @@ class _LoginAuthState extends State<LoginAuth> {
 //                   ),
 //                   onPressed: () {
 //                     Navigator.pop(context);
-//                     launch(appURL);
+//                     launchUrl(Uri.parse(appURL));
 //                   },
 //                 ),
 //                 FlatButton(

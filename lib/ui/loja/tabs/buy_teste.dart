@@ -72,7 +72,7 @@ class BuyTeste extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            primary: Colors.redAccent,
+                            backgroundColor: Colors.redAccent,
                           ),
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 16),

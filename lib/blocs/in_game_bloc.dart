@@ -206,5 +206,6 @@ class InGameBloc extends BlocBase {
   @override
   void dispose() {
     _questoesRespController.close();
+    super.dispose();
   }
 }

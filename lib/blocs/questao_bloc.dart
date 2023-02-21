@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/helpers/historico_helper.dart';
 import 'package:codigo_de_estrada_mz/helpers/questao_helper.dart';
 import 'package:codigo_de_estrada_mz/helpers/tema_helper.dart';
 import 'package:codigo_de_estrada_mz/helpers/teste_helper.dart';
-import 'package:codigo_de_estrada_mz/helpers/historico_helper.dart';
 import 'package:codigo_de_estrada_mz/models/app_info.dart';
 import 'package:codigo_de_estrada_mz/models/historico.dart';
 import 'package:codigo_de_estrada_mz/models/questao.dart';
@@ -87,14 +87,14 @@ class QuestaoBloc extends BlocBase {
 
     //buscar todas apps cadastradas
     List<AppInfo> apps = [];
-    await Firestore.instance
-        .collection("app-info")
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      apps = snapshot.documents.map((doc) {
-        return AppInfo.fromMap(doc.data);
-      }).toList();
-    });
+    // await Firestore.instance
+    //     .collection("app-info")
+    //     .getDocuments()
+    //     .then((QuerySnapshot snapshot) {
+    //   apps = snapshot.documents.map((doc) {
+    //     return AppInfo.fromMap(doc.data);
+    //   }).toList();
+    // });
     // percorer todas apps e verificar se
     apps.forEach((AppInfo a) {
       if (a.bundle > app.bundle)
@@ -111,60 +111,44 @@ class QuestaoBloc extends BlocBase {
     for (Questao q in questoes) {
       questaoHelper.salvarQuestao(q);
     }
-    // qh.apagarTabela();
-    // qh.criarTabela();
-    // temaHelper.criarTabela();
-    // await downloadTestes();
-    // await downloadTemas();
-    // await buscarTemasDB();
-    // await buscarTestesDB();
-
-    // TesteHelper testeHelper = TesteHelper();
-    // for (Teste t in testes) {
-    //   testeHelper.salvarTeste(t);
-    // }
-    // TemaHelper temaHelper = TemaHelper();
-    // for (Tema m in temas) {
-    //   temaHelper.salvarTema(m);
-    // }
   }
 
   Future<Null> downloadQuestoes() async {
     if (questoes.length == 0) {
-      await Firestore.instance
-          .collection("questao")
-          .getDocuments()
-          .then((QuerySnapshot snapshot) {
-        questoes = snapshot.documents.map((doc) {
-          return Questao.fromMap(doc.data, fromDB: false);
-        }).toList();
-      });
+      // await Firestore.instance
+      //     .collection("questao")
+      //     .getDocuments()
+      //     .then((QuerySnapshot snapshot) {
+      //   questoes = snapshot.documents.map((doc) {
+      //     return Questao.fromMap(doc.data, fromDB: false);
+      //   }).toList();
+      // });
     }
   }
 
   Future<Null> downloadTestes() async {
     if (testes.length == 0) {
-      await Firestore.instance
-          .collection("teste")
-          .getDocuments()
-          .then((QuerySnapshot snapshot) {
-        testes = snapshot.documents.map((doc) {
-          return Teste.fromMap(doc.data, fromDB: false);
-        }).toList();
-      });
+      // await Firestore.instance
+      //     .collection("teste")
+      //     .getDocuments()
+      //     .then((QuerySnapshot snapshot) {
+      //   testes = snapshot.documents.map((doc) {
+      //     return Teste.fromMap(doc.data, fromDB: false);
+      //   }).toList();
+      // });
     }
   }
 
   Future<Null> downloadTemas() async {
     if (temas.length == 0) {
-      await Firestore.instance
-          .collection("tema")
-          .getDocuments()
-          .then((QuerySnapshot snapshot) {
-        temas = snapshot.documents.map((doc) {
-          return Tema.fromMap(doc.data);
-        }).toList();
-      });
+      // await Firestore.instance
+      //     .collection("tema")
+      //     .getDocuments()
+      //     .then((QuerySnapshot snapshot) {
+      //   temas = snapshot.documents.map((doc) {
+      //     return Tema.fromMap(doc.data);
+      //   }).toList();
+      // });
     }
   }
 
