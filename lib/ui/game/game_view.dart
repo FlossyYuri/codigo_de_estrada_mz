@@ -39,8 +39,6 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     var blocInGame = BlocProvider.getBloc<InGameBloc>();
-    // if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium && conexao)
-    //   myInterstitial.dispose();
     if (!blocInGame.jogando) {
       //se nao estiver jogando
       if (BlocProvider.getBloc<UsuarioBloc>().userData.nrTestes > 0) {

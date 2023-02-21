@@ -142,11 +142,6 @@ class _HistoricoViewState extends State<HistoricoView> {
               end: Alignment.bottomLeft,
               colors: [Color(0xFFC33764), Color(0xFF1D2671)],
             ),
-            // gradient: LinearGradient(
-            //   begin: Alignment.topRight,
-            //   end: Alignment.bottomLeft,
-            //   colors: [Color(0xFFDA4453), Color(0xFF89216B)],
-            // ),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(

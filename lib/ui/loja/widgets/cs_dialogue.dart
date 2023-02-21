@@ -351,25 +351,6 @@ class _CSDialogueState extends State<CSDialogue> {
                     ),
                   ),
                 ),
-                // TextButton(
-                //   shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(10)),
-                //   color: mainBG.withOpacity(0.8),
-                //   splashColor: mainBG,
-                //   padding: const EdgeInsets.symmetric(horizontal: 8),
-                //   onPressed: () {
-                //     Navigator.of(context).pop();
-                //   },
-                //   child: Container(
-                //     alignment: Alignment.center,
-                //     height: 50,
-                //     child: Text(
-                //       "Usar cuppon",
-                //       style: TextStyle(
-                //           fontSize: 20, color: branco, letterSpacing: 1),
-                //     ),
-                //   ),
-                // ),
                 SizedBox(height: 10.0),
               ],
             ),

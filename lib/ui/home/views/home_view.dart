@@ -136,7 +136,6 @@ class _HomeViewState extends State<HomeView> {
                 texto: "LOJA",
                 icon: FontAwesomeIcons.bagShopping,
                 f: () {
-                  // if (_controller != null) _controller.dispose();
                   Navigator.of(context).push(
                     CupertinoPageRoute(
                       builder: (context) => LojaScreen(),
@@ -148,7 +147,6 @@ class _HomeViewState extends State<HomeView> {
                 texto: "Noticias",
                 icon: FontAwesomeIcons.newspaper,
                 f: () {
-                  // if (_controller != null) _controller.dispose();
                   Navigator.of(context).push(
                     CupertinoPageRoute(
                       builder: (context) => NoticiasScreen(),
@@ -203,7 +201,6 @@ class _HomeViewState extends State<HomeView> {
                 texto: "Sobre",
                 icon: FontAwesomeIcons.circleInfo,
                 f: () {
-                  // if (_controller != null) _controller.dispose();
                   Navigator.of(context).push(
                     CupertinoPageRoute(
                       builder: (context) => SobreScreen(),
@@ -215,7 +212,6 @@ class _HomeViewState extends State<HomeView> {
                 texto: "Tutoriais",
                 icon: FontAwesomeIcons.lightbulb,
                 f: () {
-                  // if (_controller != null) _controller.dispose();
                   Navigator.of(context).push(
                     CupertinoPageRoute(builder: (context) => TutoriaisScreen()),
                   );

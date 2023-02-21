@@ -1,4 +1,5 @@
 import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/ui/tutoriais/como_jogar.dart';
 import 'package:codigo_de_estrada_mz/ui/tutoriais/ganhar_testes.dart';
 import 'package:codigo_de_estrada_mz/ui/tutoriais/usar_cupom.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,31 +23,20 @@ class TutoriaisScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // SizedBox(
-              //   height: 30,
-              // ),
-              // _buildRaised("Como jogar", () {
-              //   Navigator.push(
-              //     context,
-              //     CupertinoPageRoute(
-              //       builder: (context) => TutorialComoJogar(),
-              //     ),
-              //   );
-              // }),
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // _buildRaised("Como comprar cs", () {
-              //   Navigator.push(
-              //     context,
-              //     CupertinoPageRoute(
-              //       builder: (context) => TutorialComprarCS(),
-              //     ),
-              //   );
-              // }),
-              // SizedBox(
-              //   height: 20,
-              // ),
+              SizedBox(
+                height: 30,
+              ),
+              _buildRaised("Como jogar", () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => TutorialComoJogar(),
+                  ),
+                );
+              }),
+              SizedBox(
+                height: 20,
+              ),
               _buildRaised("Como ganhar testes", () {
                 Navigator.push(
                   context,

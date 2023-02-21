@@ -20,7 +20,6 @@ class ResultadosView extends StatefulWidget {
 
 class _ResultadosViewState extends State<ResultadosView> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool intersticialReady = false;
   bool conexao = true;
   bool resolucao = false;
   bool premium;
@@ -44,7 +43,6 @@ class _ResultadosViewState extends State<ResultadosView> {
     if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium && conexao)
       _loadSub.stream.listen((load) {
         if (load) {
-          intersticialReady = false;
           _loadSub.close();
         }
       });

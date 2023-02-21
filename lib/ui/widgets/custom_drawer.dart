@@ -355,7 +355,7 @@ class CustomDrawer extends StatelessWidget {
                           duration: Duration(seconds: 4),
                         ),
                       );
-                      // scaffoldKey.currentState.setState(() {});
+                      scaffoldKey.currentState.setState(() {});
                     },
                     child: Text(
                       "Coletar",
@@ -395,113 +395,117 @@ class CustomDrawer extends StatelessWidget {
       ),
     );
   }
-  // _buildButton("Recompensas diárias", FontAwesomeIcons.gifts,
-  //     () {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return Dialog(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(20.0),
-  //           ), //this right here
-  //           child: Container(
-  //             height: 250,
-  //             child: SingleChildScrollView(
-  //               padding: const EdgeInsets.all(12.0),
-  //               scrollDirection: Axis.horizontal,
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 crossAxisAlignment:
-  //                     CrossAxisAlignment.start,
-  //                 children: [
-  //                   _rewardCard(
-  //                       "assets/icons/gold1.png",
-  //                       Color.fromRGBO(195, 55, 100, 1),
-  //                       "1 teste",
-  //                       1),
-  //                   _rewardCard(
-  //                       "assets/icons/gold2.png",
-  //                       Color.fromRGBO(170, 43, 109, 1),
-  //                       "2 teste",
-  //                       2),
-  //                   _rewardCard(
-  //                       "assets/icons/gold1.png",
-  //                       Color.fromRGBO(151, 39, 114, 1),
-  //                       "1 teste",
-  //                       3),
-  //                   _rewardCard(
-  //                       "assets/icons/gold2.png",
-  //                       Color.fromRGBO(118, 38, 118, 1),
-  //                       "2 teste",
-  //                       4),
-  //                   _rewardCard(
-  //                       "assets/icons/gold1.png",
-  //                       Color.fromRGBO(80, 38, 118, 1),
-  //                       "1 teste",
-  //                       5),
-  //                   _rewardCard(
-  //                       "assets/icons/gold2.png",
-  //                       Color.fromRGBO(50, 38, 115, 1),
-  //                       "2 teste",
-  //                       6),
-  //                   _rewardCard(
-  //                       "assets/icons/gold2.png",
-  //                       Color.fromRGBO(29, 38, 113, 1),
-  //                       "2 teste",
-  //                       6),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         );
-  //       });
-  // }),
-  // _rewardCard(String url, Color cor, String recompensa, int dias) {
-  //   return Container(
-  //     height: 180,
-  //     width: 140,
-  //     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-  //     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-  //     decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(20), color: Colors.green),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //       children: <Widget>[
-  //         Align(
-  //           child: Icon(Icons.close, size: 25, color: branco),
-  //           alignment: Alignment.centerRight,
-  //         ),
-  //         Image.asset(
-  //           url,
-  //           height: 75,
-  //           alignment: Alignment.center,
-  //         ),
-  //         Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: <Widget>[
-  //             Text(
-  //               recompensa,
-  //               style: TextStyle(
-  //                 color: Colors.white,
-  //                 fontSize: 20,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             ),
-  //             SizedBox(
-  //               height: 4,
-  //             ),
-  //             Text(
-  //               dias == 1 ? "1 dia" : "$dias dias",
-  //               style: TextStyle(
-  //                 color: Colors.grey[100],
-  //                 fontSize: 18,
-  //               ),
-  //             ),
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
+
+/*
+  _buildButton("Recompensas diárias", FontAwesomeIcons.gifts,
+      () {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ), //this right here
+            child: Container(
+              height: 250,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(12.0),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    _rewardCard(
+                        "assets/icons/gold1.png",
+                        Color.fromRGBO(195, 55, 100, 1),
+                        "1 teste",
+                        1),
+                    _rewardCard(
+                        "assets/icons/gold2.png",
+                        Color.fromRGBO(170, 43, 109, 1),
+                        "2 teste",
+                        2),
+                    _rewardCard(
+                        "assets/icons/gold1.png",
+                        Color.fromRGBO(151, 39, 114, 1),
+                        "1 teste",
+                        3),
+                    _rewardCard(
+                        "assets/icons/gold2.png",
+                        Color.fromRGBO(118, 38, 118, 1),
+                        "2 teste",
+                        4),
+                    _rewardCard(
+                        "assets/icons/gold1.png",
+                        Color.fromRGBO(80, 38, 118, 1),
+                        "1 teste",
+                        5),
+                    _rewardCard(
+                        "assets/icons/gold2.png",
+                        Color.fromRGBO(50, 38, 115, 1),
+                        "2 teste",
+                        6),
+                    _rewardCard(
+                        "assets/icons/gold2.png",
+                        Color.fromRGBO(29, 38, 113, 1),
+                        "2 teste",
+                        6),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  });
+*/
+
+  _rewardCard(String url, Color cor, String recompensa, int dias) {
+    return Container(
+      height: 180,
+      width: 140,
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: Colors.green),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Align(
+            child: Icon(Icons.close, size: 25, color: branco),
+            alignment: Alignment.centerRight,
+          ),
+          Image.asset(
+            url,
+            height: 75,
+            alignment: Alignment.center,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                recompensa,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                dias == 1 ? "1 dia" : "$dias dias",
+                style: TextStyle(
+                  color: Colors.grey[100],
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }

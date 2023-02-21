@@ -57,38 +57,3 @@ const questGrad3 = LinearGradient(
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
 );
-
-//ADS INFO
-String getAppId() {
-  return 'ca-app-pub-7627687887475703~9931353819';
-}
-
-String getBannerAdUnitId() {
-  // return BannerAd.testAdUnitId;
-  return 'ca-app-pub-7627687887475703/5992108804';
-}
-
-String getRewardedVideoAdUnitId() {
-  // return RewardedVideoAd.testAdUnitId;
-  return 'ca-app-pub-7627687887475703/7105981552';
-}
-
-String getIntersticialAdUnitId() {
-  // return InterstitialAd.testAdUnitId;
-  return 'ca-app-pub-7627687887475703/7250663236';
-}
-
-// const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-//   childDirected: false,
-//   keywords: [
-//     "MOZAMBIQUE",
-//     "Mobile Games",
-//     "Mobile APPS",
-//     "GEARBEST",
-//     "ALIEXPRESS",
-//     "ONLINE SHOPPING",
-//     "YOUTUBE",
-//     "Driving School",
-//     "Social Media",
-//   ],
-// );

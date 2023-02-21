@@ -51,59 +51,61 @@ class _LoginAuthState extends State<LoginAuth> {
     );
   }
 }
+/*
+showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              title: Text(
+                "Nova Atualização disponível",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: mainBG,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Text(
+                  "Já está disponivel uma atualização da aplicação. Veja o que há de novo na tela de noticias. Atualize já porque a qualquer momento a sua versao pode ser desativada.\n"
+                  "se a versão atual estiver desactivada nao permitir a utilização",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: preto,
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    "Baixar Atualização",
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: mainBG,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    launchUrl(Uri.parse(appURL));
+                  },
+                ),
+                FlatButton(
+                  child: Text(
+                    "fechar".toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: mainBG,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
 
-// showDialog(
-//           context: context,
-//           builder: (context) {
-//             return AlertDialog(
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(10),
-//               ),
-//               title: Text(
-//                 "Nova Atualização disponível",
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(
-//                   fontSize: 24,
-//                   color: mainBG,
-//                 ),
-//               ),
-//               content: SingleChildScrollView(
-//                 child: Text(
-//                   "Já está disponivel uma atualização da aplicação. Veja o que há de novo na tela de noticias. Atualize já porque a qualquer momento a sua versao pode ser desativada.\n"
-//                   "se a versão atual estiver desactivada nao permitir a utilização",
-//                   style: TextStyle(
-//                     fontSize: 20,
-//                     color: preto,
-//                   ),
-//                 ),
-//               ),
-//               actions: <Widget>[
-//                 TextButton(
-//                   child: Text(
-//                     "Baixar Atualização",
-//                     style: TextStyle(
-//                         fontSize: 22,
-//                         color: mainBG,
-//                         fontWeight: FontWeight.bold),
-//                   ),
-//                   onPressed: () {
-//                     Navigator.pop(context);
-//                     launchUrl(Uri.parse(appURL));
-//                   },
-//                 ),
-//                 FlatButton(
-//                   child: Text(
-//                     "fechar".toUpperCase(),
-//                     style: TextStyle(
-//                         fontSize: 22,
-//                         color: mainBG,
-//                         fontWeight: FontWeight.bold),
-//                   ),
-//                   onPressed: () {
-//                     Navigator.pop(context);
-//                   },
-//                 ),
-//               ],
-//             );
-//           },
-//         );
+        */

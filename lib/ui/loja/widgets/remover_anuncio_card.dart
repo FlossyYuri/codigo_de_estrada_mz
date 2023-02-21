@@ -103,26 +103,6 @@ class RemoverAnunciosCard extends StatelessWidget {
                                     TextButton(
                                       onPressed: () async {
                                         Navigator.pop(context);
-                                        // if (await BlocProvider.getBloc<TransacoesBloc>(
-                                        //         context)
-                                        //     .removerAnuncios(context))
-                                        //   Fluttertoast.showToast(
-                                        //     msg: "Anúncios removidos com sucesso",
-                                        //     textColor: branco,
-                                        //     backgroundColor: Colors.blueGrey,
-                                        //     toastLength: Toast.LENGTH_SHORT,
-                                        //     gravity: ToastGravity.BOTTOM,
-                                        //     timeInSecForIos: 2,
-                                        //   );
-                                        // else
-                                        //   Fluttertoast.showToast(
-                                        //     msg: "Não tem CS suficientes!!",
-                                        //     textColor: branco,
-                                        //     backgroundColor: Colors.blueGrey,
-                                        //     toastLength: Toast.LENGTH_SHORT,
-                                        //     gravity: ToastGravity.BOTTOM,
-                                        //     timeInSecForIos: 2,
-                                        //   );
                                       },
                                       child: Text(
                                         "Confirmar",

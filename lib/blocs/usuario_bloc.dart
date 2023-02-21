@@ -105,9 +105,9 @@ class UsuarioBloc extends BlocBase {
 
   Future<Null> criarContaComMedia(
       {@required Usuario dados,
-      // @required AuthResult result,
+      @required UserCredential result,
       @required GlobalKey<ScaffoldState> key}) async {
-    // await saveUserData(dados, result);
+    await saveUserData(dados, result);
     _authDone(key);
   }
 

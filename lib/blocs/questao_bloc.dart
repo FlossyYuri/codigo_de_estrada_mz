@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/helpers/historico_helper.dart';
 import 'package:codigo_de_estrada_mz/helpers/questao_helper.dart';
@@ -87,14 +88,14 @@ class QuestaoBloc extends BlocBase {
 
     //buscar todas apps cadastradas
     List<AppInfo> apps = [];
-    // await Firestore.instance
-    //     .collection("app-info")
-    //     .getDocuments()
-    //     .then((QuerySnapshot snapshot) {
-    //   apps = snapshot.documents.map((doc) {
-    //     return AppInfo.fromMap(doc.data);
-    //   }).toList();
-    // });
+    await FirebaseFirestore.instance
+        .collection("app-info")
+        .get()
+        .then((QuerySnapshot snapshot) {
+      apps = snapshot.docs.map((doc) {
+        return AppInfo.fromMap(doc.data());
+      }).toList();
+    });
     // percorer todas apps e verificar se
     apps.forEach((AppInfo a) {
       if (a.bundle > app.bundle)
@@ -115,40 +116,40 @@ class QuestaoBloc extends BlocBase {
 
   Future<Null> downloadQuestoes() async {
     if (questoes.length == 0) {
-      // await Firestore.instance
-      //     .collection("questao")
-      //     .getDocuments()
-      //     .then((QuerySnapshot snapshot) {
-      //   questoes = snapshot.documents.map((doc) {
-      //     return Questao.fromMap(doc.data, fromDB: false);
-      //   }).toList();
-      // });
+      await FirebaseFirestore.instance
+          .collection("questao")
+          .get()
+          .then((QuerySnapshot snapshot) {
+        questoes = snapshot.docs.map((doc) {
+          return Questao.fromMap(doc.data(), fromDB: false);
+        }).toList();
+      });
     }
   }
 
   Future<Null> downloadTestes() async {
     if (testes.length == 0) {
-      // await Firestore.instance
-      //     .collection("teste")
-      //     .getDocuments()
-      //     .then((QuerySnapshot snapshot) {
-      //   testes = snapshot.documents.map((doc) {
-      //     return Teste.fromMap(doc.data, fromDB: false);
-      //   }).toList();
-      // });
+      await FirebaseFirestore.instance
+          .collection("teste")
+          .get()
+          .then((QuerySnapshot snapshot) {
+        testes = snapshot.docs.map((doc) {
+          return Teste.fromMap(doc.data(), fromDB: false);
+        }).toList();
+      });
     }
   }
 
   Future<Null> downloadTemas() async {
     if (temas.length == 0) {
-      // await Firestore.instance
-      //     .collection("tema")
-      //     .getDocuments()
-      //     .then((QuerySnapshot snapshot) {
-      //   temas = snapshot.documents.map((doc) {
-      //     return Tema.fromMap(doc.data);
-      //   }).toList();
-      // });
+      await FirebaseFirestore.instance
+          .collection("tema")
+          .get()
+          .then((QuerySnapshot snapshot) {
+        temas = snapshot.docs.map((doc) {
+          return Tema.fromMap(doc.data());
+        }).toList();
+      });
     }
   }
 
@@ -215,8 +216,8 @@ class QuestaoBloc extends BlocBase {
   }
 
   Future<void> guardarHistorico() async {
-    // HistoricoHelper histoHelper = HistoricoHelper();
-    // histoHelper.deleteHistorico("0");
+    HistoricoHelper histoHelper = HistoricoHelper();
+    histoHelper.deleteHistorico("0");
   }
 
   Future<bool> lerHistorico() async {

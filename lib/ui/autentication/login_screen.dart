@@ -127,8 +127,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: !loading
                           ? () async {
                               if (_formKey.currentState.validate()) {
+                                if (!await checkConnection()) {
+                                  loading = false;
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(_scaffKey.currentContext)
+                                      .showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "Sem conexao a internet.",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w300,
+                                            color: branco),
+                                      ),
+                                      backgroundColor: Colors.redAccent,
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                  return;
+                                }
                                 setState(
-                                  () async {
+                                  () {
                                     loading = true;
                                     showDialog(
                                       context: context,
@@ -169,38 +188,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                         );
                                       },
                                     );
-                                    if (await checkConnection()) {
-                                      BlocProvider.getBloc<UsuarioBloc>()
-                                          .entrarEmail(_emailController.text,
-                                              _passController.text, _scaffKey)
-                                          .then(
-                                        (_) {
-                                          setState(
-                                            () {
-                                              loading = false;
-                                            },
-                                          );
-                                        },
-                                      );
-                                    } else {
-                                      loading = false;
-                                      Navigator.pop(context);
-                                      ScaffoldMessenger.of(
-                                              _scaffKey.currentContext)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            "Sem conexao a internet.",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w300,
-                                                color: branco),
-                                          ),
-                                          backgroundColor: Colors.redAccent,
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );
-                                    }
+                                    BlocProvider.getBloc<UsuarioBloc>()
+                                        .entrarEmail(_emailController.text,
+                                            _passController.text, _scaffKey)
+                                        .then(
+                                      (_) {
+                                        setState(
+                                          () {
+                                            loading = false;
+                                          },
+                                        );
+                                      },
+                                    );
                                   },
                                 );
                               }
