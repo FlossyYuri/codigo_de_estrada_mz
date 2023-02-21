@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
@@ -15,7 +14,6 @@ import 'package:codigo_de_estrada_mz/ui/loja/loja_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/tutoriais/tutoriais_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
 import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,66 +28,12 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   bool videoReady = false;
   bool conexao = false;
-  AdmobBannerController _controller;
 
   @override
   Widget build(BuildContext context) {
     checkConnection().then(
       (conexao) {
         this.conexao = conexao;
-        if (conexao) {
-          RewardedVideoAd.instance.load(
-            adUnitId: getRewardedVideoAdUnitId(),
-            targetingInfo: targetingInfo,
-          );
-          RewardedVideoAd.instance.listener = (RewardedVideoAdEvent event,
-              {String rewardType, int rewardAmount}) async {
-            switch (event) {
-              case RewardedVideoAdEvent.started:
-                break;
-              case RewardedVideoAdEvent.opened:
-                break;
-              case RewardedVideoAdEvent.loaded:
-                videoReady = true;
-                break;
-              case RewardedVideoAdEvent.leftApplication:
-                break;
-              case RewardedVideoAdEvent.rewarded:
-                await BlocProvider.getBloc<TransacoesBloc>()
-                    .ganharTestes(context, 1);
-                break;
-              case RewardedVideoAdEvent.failedToLoad:
-                _showSnackBar(
-                  "Falha ao carregar anuncio, tente novamente",
-                  Colors.greenAccent,
-                  action: SnackBarAction(
-                    label: "Carregar anucio",
-                    onPressed: () async {
-                      await RewardedVideoAd.instance.load(
-                        adUnitId: getRewardedVideoAdUnitId(),
-                        targetingInfo: targetingInfo,
-                      );
-                    },
-                  ),
-                );
-                break;
-              case RewardedVideoAdEvent.completed:
-                RewardedVideoAd.instance.load(
-                    adUnitId: getRewardedVideoAdUnitId(),
-                    targetingInfo: targetingInfo);
-                break;
-              case RewardedVideoAdEvent.closed:
-                videoReady = false;
-                RewardedVideoAd.instance.load(
-                    adUnitId: getRewardedVideoAdUnitId(),
-                    targetingInfo: targetingInfo);
-                break;
-            }
-          };
-          videoReady = true;
-        } else {
-          conexao = false;
-        }
       },
     );
     SharedPreferences.getInstance().then((prefs) {
@@ -236,16 +180,7 @@ class _HomeViewState extends State<HomeView> {
                               borderRadius: BorderRadius.circular(10)),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(0),
-                            title: AdmobBanner(
-                              adUnitId: getBannerAdUnitId(),
-                              adSize: AdmobBannerSize.LARGE_BANNER,
-                              onBannerCreated: (controller) {
-                                if (!BlocProvider.getBloc<UsuarioBloc>()
-                                        .userData
-                                        .premium &&
-                                    conexao) _controller = controller;
-                              },
-                            ),
+                            title: SizedBox(height: 100.0),
                           ),
                         );
                       }
@@ -436,8 +371,7 @@ class _HomeViewState extends State<HomeView> {
         .then((ativo) {
       if (BlocProvider.getBloc<UsuarioBloc>().userData.nrTestes >= 1 || ativo) {
         if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium && conexao)
-          _controller.dispose();
-        f();
+          f();
       } else
         _showSnackBar(
           "Nao tem testes suficiente, compre testes na loja ou assista um anuncio e ganhe testes",
@@ -515,7 +449,6 @@ class _HomeViewState extends State<HomeView> {
   _showRewardedVideo() {
     if (conexao) {
       if (videoReady) {
-        RewardedVideoAd.instance.show();
       } else {
         _showSnackBar("Anuncio carregando! tente novamente", Colors.blueAccent);
       }

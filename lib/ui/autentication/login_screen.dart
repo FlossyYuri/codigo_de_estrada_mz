@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scaffKey = GlobalKey<ScaffoldState>();
-  bool clicked = false;
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     _navHome() {
@@ -124,12 +124,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      onPressed: !clicked
+                      onPressed: !loading
                           ? () async {
                               if (_formKey.currentState.validate()) {
                                 setState(
                                   () async {
-                                    clicked = true;
+                                    loading = true;
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
@@ -177,13 +177,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                         (_) {
                                           setState(
                                             () {
-                                              clicked = false;
+                                              loading = false;
                                             },
                                           );
                                         },
                                       );
                                     } else {
-                                      clicked = false;
+                                      loading = false;
                                       Navigator.pop(context);
                                       ScaffoldMessenger.of(
                                               _scaffKey.currentContext)

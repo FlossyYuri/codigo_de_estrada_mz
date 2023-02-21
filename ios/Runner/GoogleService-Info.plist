@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>910817423270-3p3av2mcrrnei4jncom2g180k8oju6gf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.910817423270-3p3av2mcrrnei4jncom2g180k8oju6gf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>910817423270-qbsi6df5rj5e3pdkdmdvm4taiu11n1qe.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCTBO72qZDAGAUZMSksA43vNJhDDGx5FfU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>910817423270</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>mz.co.chillstudio.codigoDeEstradaMz</string>
+	<key>PROJECT_ID</key>
+	<string>codigo-de-estrada-mz</string>
+	<key>STORAGE_BUCKET</key>
+	<string>codigo-de-estrada-mz.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:910817423270:ios:f5512fcbe87845a2bfe967</string>
+	<key>DATABASE_URL</key>
+	<string>https://codigo-de-estrada-mz.firebaseio.com</string>
+</dict>
+</plist>

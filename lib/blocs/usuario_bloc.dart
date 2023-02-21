@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/helpers/usuario_helper.dart';
@@ -22,7 +23,7 @@ enum AuthProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class UsuarioBloc extends BlocBase {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  // FirebaseUser firebaseUser;
+  User firebaseUser;
   Usuario userData;
   Map<String, dynamic> presentes = {'novo': false};
   UsuarioHelper userHelper = UsuarioHelper();
@@ -73,12 +74,13 @@ class UsuarioBloc extends BlocBase {
       @required String pass,
       @required GlobalKey<ScaffoldState> key}) async {
     try {
-      // AuthResult result = await _auth.createUserWithEmailAndPassword(
-      //     email: dados.email, password: pass);
-      // await saveUserData(dados, result);
-      // await result.user.sendEmailVerification();
-      // _snackBar(key,
-      //     "Usuario cadastrado com sucesso. Verique seu email para poder entrar.");
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: dados.email, password: pass);
+
+      await saveUserData(dados, result);
+      await result.user.sendEmailVerification();
+      _snackBar(key,
+          "Usuario cadastrado com sucesso. Verique seu email para poder entrar.");
 
       Navigator.pop(key.currentContext);
       Navigator.pop(key.currentContext);
@@ -428,30 +430,15 @@ class UsuarioBloc extends BlocBase {
   Future<Null> entrarEmail(
       String email, String pass, GlobalKey<ScaffoldState> key) async {
     try {
-      // AuthResult authResult =
-      //     await _auth.signInWithEmailAndPassword(email: email, password: pass);
-      // if (authResult.user.isEmailVerified) {
-      //   firebaseUser = authResult.user;
-      //   this.userData = await getUserData();
-      //   await userHelper.salvarUsuario(userData);
-      //   _userController.sink.add(userData);
-      //   final prefs = await SharedPreferences.getInstance();
-      //   prefs.setInt("EstadoDaSessao", 1);
-      //   _authDone(key);
-      // } else {
-      //   Navigator.pop(key.currentContext);
-      //   ScaffoldMessenger.of(key.currentContext).showSnackBar(
-      //     SnackBar(
-      //       content: Text(
-      //         "Esta conta ainda não foi verificada. Entre no seu email valida-la.",
-      //         style: TextStyle(
-      //             fontSize: 18, fontWeight: FontWeight.w300, color: branco),
-      //       ),
-      //       backgroundColor: Colors.red,
-      //       duration: Duration(seconds: 2),
-      //     ),
-      //   );
-      // }
+      UserCredential authResult =
+          await _auth.signInWithEmailAndPassword(email: email, password: pass);
+      firebaseUser = authResult.user;
+      this.userData = await getUserData();
+      await userHelper.salvarUsuario(userData);
+      _userController.sink.add(userData);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setInt("EstadoDaSessao", 1);
+      _authDone(key);
     } on PlatformException catch (e) {
       Navigator.pop(key.currentContext);
       Navigator.pop(key.currentContext);
@@ -528,7 +515,7 @@ class UsuarioBloc extends BlocBase {
 
   logout(BuildContext context) async {
     await _auth.signOut();
-    // firebaseUser = null;
+    firebaseUser = null;
     await userHelper.deleteUsuario(userData.id);
     userData = null;
     _userController.sink.add(userData);
@@ -552,17 +539,15 @@ class UsuarioBloc extends BlocBase {
     return false;
   }
 
-  Future<Null> saveUserData(
-    Usuario dados, //AuthResult user
-  ) async {
-    // firebaseUser = user.user;
-    // dados.id = firebaseUser.uid;
-    // dados.imgUrl = user.user.photoUrl;
+  Future<Null> saveUserData(Usuario dados, UserCredential user) async {
+    firebaseUser = user.user;
+    dados.id = firebaseUser.uid;
+    dados.imgUrl = user.user.photoURL;
     this.userData = dados;
-    // await Firestore.instance
-    //     .collection("usuarios")
-    //     .document(firebaseUser.uid)
-    //     .setData(dados.toMap(forDB: false));
+    await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(firebaseUser.uid)
+        .set(dados.toMap(forDB: false));
     await userHelper.salvarUsuario(userData);
     _userController.sink.add(userData);
     final prefs = await SharedPreferences.getInstance();
@@ -570,17 +555,16 @@ class UsuarioBloc extends BlocBase {
   }
 
   Future<Null> updateUserData() async {
-    // Firestore.instance
-    //     .collection("usuarios")
-    //     .document(userData.id)
-    //     .updateData(userData.toMap(forDB: false));
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(userData.id)
+        .update(userData.toMap(forDB: false));
   }
 
   Future<bool> verifyUser(String uid) async {
-    // DocumentSnapshot snapshot =
-    //     await Firestore.instance.collection("usuarios").document(uid).get();
-    // return snapshot.exists;
-    return true;
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection("usuarios").doc(uid).get();
+    return snapshot.exists;
   }
 
   _authDone(GlobalKey<ScaffoldState> key) {
@@ -593,71 +577,61 @@ class UsuarioBloc extends BlocBase {
   }
 
   Future<Usuario> getUserData() async {
-    // var document = await Firestore.instance
-    //     .collection("usuarios")
-    //     .document(firebaseUser.uid)
-    //     .get();
-    // return Usuario.fromJson(document.data);
-    return new Usuario(
-        id: "x",
-        email: "emerson@gmail.com",
-        cell: "+258857485943",
-        username: "user",
-        imgUrl: null,
-        cs: 100,
-        nrTestes: 2,
-        premium: false);
+    DocumentSnapshot document = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(firebaseUser.uid)
+        .get();
+    return Usuario.fromJson(document.data());
   }
 
   Future<bool> existeCell(String cell) async {
-    // QuerySnapshot docs = await Firestore.instance
-    //     .collection("usuarios")
-    //     .where("cell", isEqualTo: cell)
-    //     .getDocuments();
-    // if (docs.documents.isEmpty)
-    //   return false;
-    // else
-    return true;
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .where("cell", isEqualTo: cell)
+        .get();
+    return !snapshot.docs.isEmpty;
   }
 
   Future<bool> getPresentes() async {
-    // QuerySnapshot docs = await Firestore.instance
-    //     .collection("presentes")
-    //     .where("username", isEqualTo: userData.username)
-    //     .getDocuments();
-    // if (docs.documents.isEmpty)
-    //   presentes['novo'] = false;
-    // else {
-    //   List<Map<String, dynamic>> gifts = [];
-    //   Map<String, dynamic> gift;
-
-    //   docs.documents.forEach((document) {
-    //     if (!document.data['colected']) {
-    //       gift = Map<String, dynamic>();
-    //       gift['documentID'] = document.documentID;
-    //       gift['texto'] = document.data['texto'];
-    //       if (document.data.containsKey('premium'))
-    //         gift['premium'] = document.data['premium'];
-    //       if (document.data.containsKey('cs')) gift['cs'] = document.data['cs'];
-    //       gifts.add(gift);
-    //     }
-    //   });
-    //   if (gifts.isNotEmpty) {
-    //     presentes['novo'] = true;
-    //     presentes['premios'] = gifts;
-    //     return true;
-    //   } else {
-    //     presentes['novo'] = false;
-    //   }
-    // }
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("presentes")
+        .where("username", isEqualTo: userData.username)
+        .get();
+    if (snapshot.docs.isEmpty)
+      presentes['novo'] = false;
+    else {
+      List<Map<String, dynamic>> gifts = [];
+      Map<String, dynamic> gift;
+      snapshot.docs.forEach((document) {
+        print(document.get("colected"));
+        if (!document.get("colected")) {
+          gift = Map<String, dynamic>();
+          gift['documentID'] = document.get("documentID");
+          gift['texto'] = document.get("texto");
+          if (document.get("premium"))
+            gift['premium'] = document.get("premium");
+          if (document.get("cs")) gift['cs'] = document.get("cs");
+          gifts.add(gift);
+        }
+      });
+      if (gifts.isNotEmpty) {
+        presentes['novo'] = true;
+        presentes['premios'] = gifts;
+        return true;
+      } else {
+        presentes['novo'] = false;
+      }
+    }
     return false;
   }
 
   Future<bool> getPrecos() async {
-    // DocumentSnapshot precos =
-    //     await Firestore.instance.collection("config").document('precos').get();
-    // List<int> precario = precos['precario'];
-    // Map<String, dynamic> descontos = precos['desconto'];
+    DocumentSnapshot precos = await FirebaseFirestore.instance
+        .collection("config")
+        .doc('precos')
+        .get();
+    List<int> precario = precos['precario'];
+    Map<String, dynamic> descontos = precos['desconto'];
 
     return false;
   }
@@ -665,10 +639,10 @@ class UsuarioBloc extends BlocBase {
   Future<bool> coletarPresente(
       BuildContext context, Map<String, dynamic> gift) async {
     bool premium = false;
-    // Firestore.instance
-    //     .collection("presentes")
-    //     .document(gift['documentID'])
-    //     .updateData({'colected': true});
+    FirebaseFirestore.instance
+        .collection("presentes")
+        .doc(gift['documentID'])
+        .update({'colected': true});
     await getPresentes();
     if (gift.containsKey('premium')) {
       userData.premium = gift['premium'];
@@ -684,25 +658,19 @@ class UsuarioBloc extends BlocBase {
   }
 
   Future<bool> existeUsername(String username) async {
-    // QuerySnapshot docs = await Firestore.instance
-    //     .collection("usuarios")
-    //     .where("username", isEqualTo: username)
-    //     .getDocuments();
-    // if (docs.documents.isEmpty)
-    //   return false;
-    // else
-    return true;
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .where("username", isEqualTo: username)
+        .get();
+    return !snapshot.docs.isEmpty;
   }
 
   Future<bool> existeEmail(String email) async {
-    // QuerySnapshot docs = await Firestore.instance
-    //     .collection("usuarios")
-    //     .where("email", isEqualTo: email)
-    //     .getDocuments();
-    // if (docs.documents.isEmpty)
-    //   return false;
-    // else
-    return true;
+    QuerySnapshot docs = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .where("email", isEqualTo: email)
+        .get();
+    return !docs.docs.isEmpty;
   }
 
   void _snackBar(GlobalKey<ScaffoldState> key, String message) {

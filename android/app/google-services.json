@@ -23,19 +23,19 @@
           }
         },
         {
-          "client_id": "910817423270-vtbm5j8egp6u9e2ribu11q84r7vsbolg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
-            "certificate_hash": "1fee59f3b644b06c6c033bf79da62f2a4a73a270"
-          }
-        },
-        {
           "client_id": "910817423270-vs56q4jdfl4t7t8o83sgpchssv49e8d8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
             "certificate_hash": "0fc90bbe2d51e2c0cd16803346aa739c9f26f0d4"
+          }
+        },
+        {
+          "client_id": "910817423270-vtbm5j8egp6u9e2ribu11q84r7vsbolg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
+            "certificate_hash": "1fee59f3b644b06c6c033bf79da62f2a4a73a270"
           }
         },
         {
@@ -54,6 +54,13 @@
             {
               "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "910817423270-3p3av2mcrrnei4jncom2g180k8oju6gf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mz.co.chillstudio.codigoDeEstradaMz"
+              }
             }
           ]
         }
@@ -92,6 +99,13 @@
             {
               "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "910817423270-3p3av2mcrrnei4jncom2g180k8oju6gf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mz.co.chillstudio.codigoDeEstradaMz"
+              }
             }
           ]
         }

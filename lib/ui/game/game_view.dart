@@ -1,18 +1,16 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:admob_flutter/admob_flutter.dart';
+
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:codigo_de_estrada_mz/ui/game/views/resultados_view.dart';
-import 'package:codigo_de_estrada_mz/ui/game/widgets/questao_view.dart';
-import 'package:firebase_admob/firebase_admob.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/models/teste.dart';
+import 'package:codigo_de_estrada_mz/ui/game/views/resultados_view.dart';
+import 'package:codigo_de_estrada_mz/ui/game/widgets/questao_view.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class GamePage extends StatefulWidget {
   final String gameMode;
@@ -30,55 +28,11 @@ class _GamePageState extends State<GamePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int currentPage = 0;
   bool conexao = false;
-  InterstitialAd myInterstitial;
   @override
   void initState() {
     super.initState();
     checkConnection().then((conexao) {
       this.conexao = conexao;
-      if (conexao) {
-        myInterstitial = InterstitialAd(
-          adUnitId: getIntersticialAdUnitId(),
-          targetingInfo: targetingInfo,
-        );
-        myInterstitial.listener = (MobileAdEvent event) async {
-          switch (event) {
-            case MobileAdEvent.loaded:
-              break;
-            case MobileAdEvent.failedToLoad:
-              // The ad failed to load into memory.
-              break;
-            case MobileAdEvent.clicked:
-              Random r = Random();
-              if (r.nextInt(5) == 3) {
-                await BlocProvider.getBloc<TransacoesBloc>()
-                    .ganharTestes(context, 1);
-              }
-              break;
-            case MobileAdEvent.impression:
-              // The user is still looking at the ad. A new ad came up.
-              break;
-            case MobileAdEvent.opened:
-              // The Ad is now open.
-              break;
-            case MobileAdEvent.leftApplication:
-              // You've left the app after clicking the Ad.
-              break;
-            case MobileAdEvent.closed:
-              myInterstitial.dispose();
-              myInterstitial = InterstitialAd(
-                adUnitId: getIntersticialAdUnitId(),
-                targetingInfo: targetingInfo,
-              );
-              myInterstitial.load();
-              // You've closed the Ad and returned to the app.
-              break;
-            default:
-            // There's a 'new' MobileAdEvent?!
-          }
-        };
-        myInterstitial.load();
-      }
     });
   }
 
@@ -162,12 +116,6 @@ class _GamePageState extends State<GamePage> {
                       child: FutureBuilder<bool>(
                         future: checkConnection(),
                         builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return AdmobBanner(
-                              adUnitId: getBannerAdUnitId(),
-                              adSize: AdmobBannerSize.LARGE_BANNER,
-                            );
-                          }
                           return Container();
                         },
                       ),
@@ -262,14 +210,8 @@ class _GamePageState extends State<GamePage> {
                     conexao)
                   switch (snapshot.data) {
                     case 8:
-                      myInterstitial.show().catchError((onError) {
-                        print(onError);
-                      });
                       break;
                     case 16:
-                      myInterstitial.show().catchError((onError) {
-                        print(onError);
-                      });
                       break;
                     default:
                   }

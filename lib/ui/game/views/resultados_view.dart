@@ -1,17 +1,15 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:admob_flutter/admob_flutter.dart';
+
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/models/resultados.dart';
 import 'package:codigo_de_estrada_mz/ui/game/game_view.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,64 +24,12 @@ class _ResultadosViewState extends State<ResultadosView> {
   bool conexao = true;
   bool resolucao = false;
   bool premium;
-  InterstitialAd myInterstitial;
   StreamController _loadSub = StreamController<bool>.broadcast();
   @override
   void initState() {
     super.initState();
     checkConnection().then((conexao) {
       this.conexao = conexao;
-      if (conexao) {
-        myInterstitial = InterstitialAd(
-          adUnitId: getIntersticialAdUnitId(),
-          targetingInfo: targetingInfo,
-        );
-        myInterstitial.listener = (MobileAdEvent event) async {
-          switch (event) {
-            case MobileAdEvent.loaded:
-              intersticialReady = true;
-              _loadSub.sink.add(intersticialReady);
-              break;
-            case MobileAdEvent.failedToLoad:
-              // The ad failed to load into memory.
-              break;
-            case MobileAdEvent.clicked:
-              Random r = Random();
-              if (r.nextInt(5) == 3) {
-                await BlocProvider.getBloc<TransacoesBloc>()
-                    .ganharTestes(context, 1);
-              }
-              break;
-            case MobileAdEvent.impression:
-              // The user is still looking at the ad. A new ad came up.
-              break;
-            case MobileAdEvent.opened:
-              // The Ad is now open.
-              break;
-            case MobileAdEvent.leftApplication:
-              // You've left the app after clicking the Ad.
-              break;
-            case MobileAdEvent.closed:
-              // You've closed the Ad and returned to the app.
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    "Ao clicar neste tipo de anuncio se tiver sorte pode ganhar um teste",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300,
-                        color: branco),
-                  ),
-                  backgroundColor: Colors.blue,
-                ),
-              );
-              break;
-            default:
-            // There's a 'new' MobileAdEvent?!
-          }
-        };
-        myInterstitial.load();
-      }
     });
   }
 
@@ -98,7 +44,6 @@ class _ResultadosViewState extends State<ResultadosView> {
     if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium && conexao)
       _loadSub.stream.listen((load) {
         if (load) {
-          myInterstitial.show();
           intersticialReady = false;
           _loadSub.close();
         }
@@ -302,10 +247,8 @@ class _ResultadosViewState extends State<ResultadosView> {
                                           child: ListTile(
                                             contentPadding:
                                                 const EdgeInsets.all(0),
-                                            title: AdmobBanner(
-                                              adUnitId: getBannerAdUnitId(),
-                                              adSize:
-                                                  AdmobBannerSize.LARGE_BANNER,
+                                            title: SizedBox(
+                                              height: 100.0,
                                             ),
                                           ),
                                         );

@@ -20,12 +20,10 @@ dependencies:
   flare_flutter: ^3.0.2
   cached_network_image: ^3.2.3
   font_awesome_flutter: ^10.4.0
-  cloud_firestore: ^4.4.2
+  cloud_firestore: ^4.4.3
   firebase_messaging: ^14.2.4
   firebase_auth: ^4.2.8
   firebase_analytics: ^10.1.3
-  firebase_admob: ^0.11.2
-  admob_flutter: ^3.0.0
   google_sign_in: ^6.0.0
   flutter_launcher_icons: ^0.11.0
   flutter_inapp_purchase: ^5.3.1
@@ -34,6 +32,7 @@ dependencies:
   path_provider: ^2.0.12
   connectivity: ^3.0.6
   provider: ^6.0.5
+  firebase_core: ^2.7.0
 
 dev_dependencies:
   flutter_test:

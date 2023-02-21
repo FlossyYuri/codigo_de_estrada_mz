@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
@@ -180,10 +179,7 @@ class _TemasViewState extends State<TemasView> {
                           ),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(0),
-                            title: AdmobBanner(
-                              adUnitId: getBannerAdUnitId(),
-                              adSize: AdmobBannerSize.MEDIUM_RECTANGLE,
-                            ),
+                            title: SizedBox(height: 10.0),
                           ),
                         );
                       }

@@ -6,6 +6,7 @@ import 'package:codigo_de_estrada_mz/models/usuario.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/custom_text_field2.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CadastroScreen extends StatefulWidget {
   // final AuthResult user;
@@ -25,7 +26,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final _secPassController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scafKey = GlobalKey<ScaffoldState>();
-  bool clicked = false;
 
   @override
   void initState() {
@@ -176,167 +176,147 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             ),
                             backgroundColor: branco),
                         onPressed: () async {
-                          if (!clicked) {
-                            clicked = true;
-                            if (_formKey.currentState.validate()) {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return Dialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: Container(
-                                      height: 200,
-                                      width: 200,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              height: 60,
-                                              width: 60,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 5,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation(
-                                                  mainBG,
-                                                ),
+                          if (_formKey.currentState.validate()) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    height: 200,
+                                    width: 200,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            height: 60,
+                                            width: 60,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 5,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                mainBG,
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Text("Loading"),
-                                          ],
-                                        ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text("Loading"),
+                                        ],
                                       ),
                                     ),
-                                  );
-                                },
-                              );
-                              if (await checkConnection()) {
-                                BlocProvider.getBloc<UsuarioBloc>()
-                                    .existeCell(_cellController.text)
-                                    .then((res) {
-                                  if (res) {
-                                    clicked = false;
-                                    // Fluttertoast.showToast(
-                                    //   msg:
-                                    //       "Ja existe um usuario com esse contacto",
-                                    //   toastLength: Toast.LENGTH_SHORT,
-                                    //   gravity: ToastGravity.BOTTOM,
-                                    //   timeInSecForIos: 1,
-                                    // );
-                                  }
-                                  BlocProvider.getBloc<UsuarioBloc>()
-                                      .existeUsername(_usernameController.text)
-                                      .then((res) {
-                                    if (res) {
-                                      clicked = false;
-                                      // Fluttertoast.showToast(
-                                      //   msg:
-                                      //       "Ja existe um usuario com esse nome",
-                                      //   toastLength: Toast.LENGTH_SHORT,
-                                      //   gravity: ToastGravity.BOTTOM,
-                                      //   timeInSecForIos: 1,
-                                      // );
-                                    }
-                                    if (clicked) {
-                                      switch (widget.metodo) {
-                                        case "email":
-                                          BlocProvider.getBloc<UsuarioBloc>()
-                                              .criarContaComEmail(
-                                                  dados: Usuario(
-                                                    id: null,
-                                                    email:
-                                                        _emailController.text,
-                                                    cell: _cellController.text,
-                                                    username:
-                                                        _usernameController
-                                                            .text,
-                                                    imgUrl: null,
-                                                    cs: 100,
-                                                    nrTestes: 2,
-                                                    premium: false,
-                                                  ),
-                                                  pass: _passController.text,
-                                                  key: _scafKey)
-                                              .then((_) {
-                                            clicked = false;
-                                          });
-                                          break;
-                                        case "facebook":
-                                          // BlocProvider.getBloc<UsuarioBloc>()
-                                          //     .criarContaComMedia(
-                                          //         dados: Usuario(
-                                          //             id: null,
-                                          //             email:
-                                          //                 _emailController.text,
-                                          //             cell:
-                                          //                 _cellController.text,
-                                          //             username:
-                                          //                 _usernameController
-                                          //                     .text,
-                                          //             imgUrl: null,
-                                          //             cs: 100,
-                                          //             nrTestes: 2,
-                                          //             premium: false),
-                                          //         result: widget.user,
-                                          //         key: _scafKey)
-                                          //     .then((_) {
-                                          //   clicked = false;
-                                          // });
-                                          break;
-                                        case "google":
-                                          // BlocProvider.getBloc<UsuarioBloc>()
-                                          //     .criarContaComMedia(
-                                          //         dados: Usuario(
-                                          //           id: null,
-                                          //           email:
-                                          //               _emailController.text,
-                                          //           cell: _cellController.text,
-                                          //           username:
-                                          //               _usernameController
-                                          //                   .text,
-                                          //           imgUrl: null,
-                                          //           cs: 100,
-                                          //           nrTestes: 2,
-                                          //           premium: false,
-                                          //         ),
-                                          //         result: widget.user,
-                                          //         key: _scafKey)
-                                          //     .then((_) {
-                                          //   clicked = false;
-                                          // });
-                                          break;
-                                      }
-                                    } else {
-                                      Navigator.pop(context);
-                                    }
-                                  });
-                                });
-                              } else {
-                                clicked = false;
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(_scafKey.currentContext)
-                                    .showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Sem conexao a internet.",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w300,
-                                          color: branco),
-                                    ),
-                                    backgroundColor: Colors.redAccent,
-                                    duration: Duration(seconds: 2),
                                   ),
                                 );
-                              }
+                              },
+                            );
+                            if (await checkConnection()) {
+                              BlocProvider.getBloc<UsuarioBloc>()
+                                  .existeCell(_cellController.text)
+                                  .then((res) {
+                                if (res) {
+                                  Fluttertoast.showToast(
+                                    msg:
+                                        "Ja existe um usuario com esse contacto",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                  );
+                                }
+                                BlocProvider.getBloc<UsuarioBloc>()
+                                    .existeUsername(_usernameController.text)
+                                    .then((res) {
+                                  if (res) {
+                                    Fluttertoast.showToast(
+                                      msg: "Ja existe um usuario com esse nome",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                    );
+                                  }
+                                  switch (widget.metodo) {
+                                    case "email":
+                                      BlocProvider.getBloc<UsuarioBloc>()
+                                          .criarContaComEmail(
+                                              dados: Usuario(
+                                                id: null,
+                                                email: _emailController.text,
+                                                cell: _cellController.text,
+                                                username:
+                                                    _usernameController.text,
+                                                imgUrl: null,
+                                                cs: 100,
+                                                nrTestes: 2,
+                                                premium: false,
+                                              ),
+                                              pass: _passController.text,
+                                              key: _scafKey)
+                                          .then((_) {});
+                                      break;
+                                    case "facebook":
+                                      // BlocProvider.getBloc<UsuarioBloc>()
+                                      //     .criarContaComMedia(
+                                      //         dados: Usuario(
+                                      //             id: null,
+                                      //             email:
+                                      //                 _emailController.text,
+                                      //             cell:
+                                      //                 _cellController.text,
+                                      //             username:
+                                      //                 _usernameController
+                                      //                     .text,
+                                      //             imgUrl: null,
+                                      //             cs: 100,
+                                      //             nrTestes: 2,
+                                      //             premium: false),
+                                      //         result: widget.user,
+                                      //         key: _scafKey)
+                                      //     .then((_) {
+                                      // });
+                                      break;
+                                    case "google":
+                                      // BlocProvider.getBloc<UsuarioBloc>()
+                                      //     .criarContaComMedia(
+                                      //         dados: Usuario(
+                                      //           id: null,
+                                      //           email:
+                                      //               _emailController.text,
+                                      //           cell: _cellController.text,
+                                      //           username:
+                                      //               _usernameController
+                                      //                   .text,
+                                      //           imgUrl: null,
+                                      //           cs: 100,
+                                      //           nrTestes: 2,
+                                      //           premium: false,
+                                      //         ),
+                                      //         result: widget.user,
+                                      //         key: _scafKey)
+                                      //     .then((_) {
+                                      // });
+                                      break;
+                                  }
+                                });
+                              });
                             } else {
-                              clicked = false;
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(_scafKey.currentContext)
+                                  .showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Sem conexao a internet.",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w300,
+                                        color: branco),
+                                  ),
+                                  backgroundColor: Colors.redAccent,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
                             }
                           }
                         },

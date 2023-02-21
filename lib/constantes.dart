@@ -1,4 +1,3 @@
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
 const politicasDePrivacidade = "https://flossyyuri.com/main/termos";
@@ -79,17 +78,17 @@ String getIntersticialAdUnitId() {
   return 'ca-app-pub-7627687887475703/7250663236';
 }
 
-const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-  childDirected: false,
-  keywords: [
-    "MOZAMBIQUE",
-    "Mobile Games",
-    "Mobile APPS",
-    "GEARBEST",
-    "ALIEXPRESS",
-    "ONLINE SHOPPING",
-    "YOUTUBE",
-    "Driving School",
-    "Social Media",
-  ],
-);
+// const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+//   childDirected: false,
+//   keywords: [
+//     "MOZAMBIQUE",
+//     "Mobile Games",
+//     "Mobile APPS",
+//     "GEARBEST",
+//     "ALIEXPRESS",
+//     "ONLINE SHOPPING",
+//     "YOUTUBE",
+//     "Driving School",
+//     "Social Media",
+//   ],
+// );
