@@ -169,7 +169,7 @@ class _CSDialogueState extends State<CSDialogue> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    foregroundColor: mainBG.withOpacity(0.8),
+                    backgroundColor: mainBG.withOpacity(0.8),
                   ),
                   onPressed: () {
                     launchUrl(Uri.parse("tel:*150%23"));
@@ -221,7 +221,7 @@ class _CSDialogueState extends State<CSDialogue> {
                               ),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
-                              foregroundColor: Colors.blueGrey,
+                              backgroundColor: Colors.blueGrey,
                             ),
                             onPressed: () async {
                               ClipboardData cb =
@@ -330,7 +330,7 @@ class _CSDialogueState extends State<CSDialogue> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              foregroundColor: mainBG.withOpacity(0.8),
+                              backgroundColor: mainBG.withOpacity(0.8),
                             ),
                             child: Container(
                               height: 40,

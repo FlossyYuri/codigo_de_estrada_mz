@@ -48,7 +48,7 @@ class _UsarCupomState extends State<UsarCupom> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           padding: const EdgeInsets.symmetric(horizontal: 8),
-                          foregroundColor: corPrincipal),
+                          backgroundColor: corPrincipal),
                       onPressed: () {
                         buscarCodigo();
                       },
@@ -157,9 +157,10 @@ class _UsarCupomState extends State<UsarCupom> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    foregroundColor: corPrincipal),
+                    backgroundColor: corPrincipal),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
+                    print("xs");
                     BlocProvider.getBloc<TransacoesBloc>()
                         .usarCupom(context, _codigoController.text);
                   }
@@ -183,7 +184,7 @@ class _UsarCupomState extends State<UsarCupom> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    foregroundColor: Colors.grey[200],
+                    backgroundColor: Colors.grey[200],
                   ),
                   onPressed: () {
                     Navigator.push(

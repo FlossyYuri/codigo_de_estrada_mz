@@ -17,7 +17,7 @@ class AuthButton extends StatelessWidget {
       onPressed: onPressed,
       // disabledColor: Colors.white30,
       // disabledTextColor: Colors.black.withOpacity(.6),
-      style: ElevatedButton.styleFrom(foregroundColor: branco, elevation: 4),
+      style: ElevatedButton.styleFrom(backgroundColor: branco, elevation: 4),
       child: Container(
           alignment: Alignment.center,
           height: 60,

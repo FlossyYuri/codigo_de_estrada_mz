@@ -392,7 +392,7 @@ class _TemasViewState extends State<TemasView> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: mainBG,
+                    backgroundColor: mainBG,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40),
                       side: BorderSide(color: branco, width: 2),

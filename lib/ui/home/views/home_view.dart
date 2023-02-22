@@ -159,39 +159,6 @@ class _HomeViewState extends State<HomeView> {
         ),
         SliverPadding(
           padding: pagePadding,
-          sliver: SliverToBoxAdapter(
-            child: _buildGanharTestes(context),
-          ),
-        ),
-        !BlocProvider.getBloc<UsuarioBloc>().userData.premium
-            ? SliverToBoxAdapter(
-                child: FutureBuilder<bool>(
-                  future: checkConnection(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data) {
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: SizedBox(height: 100.0),
-                          ),
-                        );
-                      }
-                    }
-                    return Container();
-                  },
-                ),
-              )
-            : SliverToBoxAdapter(
-                child: Container(),
-              ),
-        SliverPadding(
-          padding: pagePadding,
           sliver: SliverGrid.count(
             crossAxisCount: 2,
             mainAxisSpacing: 10,
@@ -396,47 +363,6 @@ class _HomeViewState extends State<HomeView> {
         child: Text(
           text,
           style: TextStyle(color: branco, fontSize: 18),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGanharTestes(BuildContext context) {
-    return MaterialButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      onPressed: () {
-        _showRewardedVideo();
-      },
-      highlightColor: transparente,
-      color: darkred,
-      splashColor: lightblue,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        decoration: BoxDecoration(color: Colors.transparent),
-        child: Column(
-          children: <Widget>[
-            Text(
-              "GANHAR TESTES",
-              style: TextStyle(shadows: [
-                Shadow(
-                  blurRadius: 2,
-                  color: Colors.black.withOpacity(0.2),
-                )
-              ], fontSize: 34, color: branco, fontWeight: FontWeight.w300),
-            ),
-            Text(
-              "Clique aqui e assista um anuncio em video ate o fim e ganhe testes como recompensa.",
-              textAlign: TextAlign.justify,
-              style: TextStyle(shadows: [
-                Shadow(
-                  blurRadius: 2,
-                  color: Colors.black.withOpacity(0.2),
-                )
-              ], color: branco, fontSize: 20, fontWeight: FontWeight.w300),
-            ),
-          ],
         ),
       ),
     );

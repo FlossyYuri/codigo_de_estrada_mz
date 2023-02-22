@@ -35,7 +35,7 @@ class _GPLAYCardState extends State<GPLAYCard> {
 
   Future<bool> _initPlatformState() async {
     // prepare
-    // await FlutterInappPurchase.instance.initConnection;
+    await FlutterInappPurchase.instance.initialize();
     await _getProduct();
     _purchaseUpdatedSubscription = FlutterInappPurchase.purchaseUpdated.listen(
       (productItem) {

@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/data/usuario_api.dart';
+import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/models/cuppon.dart';
+import 'package:codigo_de_estrada_mz/ui/home/widgets/promo-dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,104 +33,104 @@ class TransacoesBloc extends BlocBase {
   }
 
   usarCupom(BuildContext context, String codigo) async {
-    // if (await checkConnection()) {
-    //   DocumentSnapshot snapshot = await Firestore.instance
-    //       .collection("cupons")
-    //       .document(codigo.toUpperCase())
-    //       .get();
-    //   if (snapshot.exists) {
-    //     Cupom cupom = Cupom.fromJson(snapshot.data);
-    //     if (!cupom.usado) {
-    //       var bloc = BlocProvider.getBloc<UsuarioBloc>();
-    //       bloc.userData.cs += cupom.cs;
-    //       await Firestore.instance
-    //           .collection("cupons")
-    //           .document(cupom.codigo)
-    //           .updateData({"usado": true, "username": bloc.userData.username});
-    //       await bloc.fullUpdateUser();
-    //       ScaffoldMessenger.of(context).showSnackBar(
-    //         SnackBar(
-    //           content: Text(
-    //             "Cupom de ${cupom.cs} cs usado com sucesso",
-    //             style: TextStyle(
-    //                 fontSize: 22, fontWeight: FontWeight.w300, color: branco),
-    //           ),
-    //           backgroundColor: Colors.green,
-    //           duration: Duration(seconds: 2),
-    //         ),
-    //       );
-    //       Future.delayed(Duration(seconds: 3)).then((_) async {
-    //         Map<String, dynamic> json = await createPost(body: {});
-    //         DateTime data = DateTime.parse(json['data_hora_atual']);
-    //         if (data.month == 12 && data.day >= 8 && data.day <= 31) {
-    //           switch (cupom.cs) {
-    //             case 200:
-    //               bloc.userData.nrTestes += 10;
-    //               bloc.fullUpdateUser();
+    if (await checkConnection()) {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection("cupons")
+          .doc(codigo.toUpperCase())
+          .get();
+      if (snapshot.exists) {
+        Cupom cupom = Cupom.fromJson(snapshot.data());
+        if (!cupom.usado) {
+          var bloc = BlocProvider.getBloc<UsuarioBloc>();
+          bloc.userData.cs += cupom.cs;
+          await FirebaseFirestore.instance
+              .collection("cupons")
+              .doc(cupom.codigo)
+              .update({"usado": true, "username": bloc.userData.username});
+          await bloc.fullUpdateUser();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Cupom de ${cupom.cs} cs usado com sucesso",
+                style: TextStyle(
+                    fontSize: 22, fontWeight: FontWeight.w300, color: branco),
+              ),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          Future.delayed(Duration(seconds: 3)).then((_) async {
+            Map<String, dynamic> json = await createPost(body: {});
+            DateTime data = DateTime.parse(json['data_hora_atual']);
+            if (data.month == 12 && data.day >= 8 && data.day <= 31) {
+              switch (cupom.cs) {
+                case 200:
+                  bloc.userData.nrTestes += 10;
+                  bloc.fullUpdateUser();
 
-    //               showDialog(
-    //                 context: context,
-    //                 builder: (BuildContext context) => PromoDialogue(
-    //                   title: "Parabéns",
-    //                   description:
-    //                       "Ganhou 10 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
-    //                   buttonText: "fechar",
-    //                 ),
-    //               );
-    //               break;
-    //             case 500:
-    //               bloc.userData.cs += 100;
-    //               bloc.userData.nrTestes += 15;
-    //               bloc.fullUpdateUser();
-    //               showDialog(
-    //                 context: context,
-    //                 builder: (BuildContext context) => PromoDialogue(
-    //                   title: "Parabéns",
-    //                   description:
-    //                       "Ganhou 100cs e 15 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
-    //                   buttonText: "fechar",
-    //                 ),
-    //               );
-    //               break;
-    //           }
-    //         }
-    //       });
-    //     } else {
-    //       ScaffoldMessenger.of(context).showSnackBar(
-    //         SnackBar(
-    //           content: Text(
-    //             "Este cupom ja foi usado.",
-    //             style: TextStyle(
-    //                 fontSize: 22, fontWeight: FontWeight.w300, color: branco),
-    //           ),
-    //           backgroundColor: lightred,
-    //         ),
-    //       );
-    //     }
-    //   } else {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text(
-    //           "Codigo invalido! porfavor, digite um codigo valido",
-    //           style: TextStyle(
-    //               fontSize: 22, fontWeight: FontWeight.w300, color: branco),
-    //         ),
-    //         backgroundColor: lightred,
-    //       ),
-    //     );
-    //   }
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text(
-    //         "Falha ao verificar o cupom por falta de conexao a internet!",
-    //         style: TextStyle(
-    //             fontSize: 22, fontWeight: FontWeight.w300, color: branco),
-    //       ),
-    //       backgroundColor: lightred,
-    //     ),
-    //   );
-    // }
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => PromoDialogue(
+                      title: "Parabéns",
+                      description:
+                          "Ganhou 10 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
+                      buttonText: "fechar",
+                    ),
+                  );
+                  break;
+                case 500:
+                  bloc.userData.cs += 100;
+                  bloc.userData.nrTestes += 15;
+                  bloc.fullUpdateUser();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => PromoDialogue(
+                      title: "Parabéns",
+                      description:
+                          "Ganhou 100cs e 15 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
+                      buttonText: "fechar",
+                    ),
+                  );
+                  break;
+              }
+            }
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Este cupom ja foi usado.",
+                style: TextStyle(
+                    fontSize: 22, fontWeight: FontWeight.w300, color: branco),
+              ),
+              backgroundColor: lightred,
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Codigo invalido! porfavor, digite um codigo valido",
+              style: TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.w300, color: branco),
+            ),
+            backgroundColor: lightred,
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Falha ao verificar o cupom por falta de conexao a internet!",
+            style: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.w300, color: branco),
+          ),
+          backgroundColor: lightred,
+        ),
+      );
+    }
   }
 
   void gerarTestesIlimitados() {
