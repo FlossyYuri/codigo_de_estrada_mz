@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class Resultados {
   List<Map<int, String>> opcoesEscolhidas;
   Teste teste;
+  bool testPaid = false;
   int acertos;
   int erros;
   String classificacao;
@@ -21,7 +22,7 @@ class Resultados {
     @required this.data,
   });
 
-  String getTipoDeTeste(){
+  String getTipoDeTeste() {
     switch (tipoDeTeste) {
       case 1:
         return "Personalizado";

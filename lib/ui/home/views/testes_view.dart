@@ -462,6 +462,7 @@ class _TestesViewState extends State<TestesView>
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     _actionChip(
+                      context,
                       "Normal",
                       0,
                       () {
@@ -472,7 +473,7 @@ class _TestesViewState extends State<TestesView>
                         });
                       },
                     ),
-                    _actionChip("Classico", 1, () {
+                    _actionChip(context, "Classico", 1, () {
                       setState(() {
                         modo = 1;
                         BlocProvider.getBloc<InGameBloc>().questionMode =
@@ -607,7 +608,8 @@ class _TestesViewState extends State<TestesView>
     );
   }
 
-  _actionChip(String text, int mod, Function f, {bool active = true}) {
+  _actionChip(BuildContext context, String text, int mod, Function f,
+      {bool active = true}) {
     bool classic = text == "Classico";
     return ActionChip(
       shape: RoundedRectangleBorder(
@@ -617,34 +619,28 @@ class _TestesViewState extends State<TestesView>
       labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       backgroundColor: mod == modo ? mainBG : transparente,
       elevation: mod == modo ? 4 : 0,
-      label: Container(
-        width: 130,
-        alignment: Alignment.center,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              text,
-              style: TextStyle(
-                color: !active && classic
-                    ? Colors.grey
-                    : mod == modo
-                        ? branco
-                        : preto,
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-              ),
+      label: Row(
+        children: <Widget>[
+          Text(
+            text,
+            style: TextStyle(
+              color: !active && classic
+                  ? Colors.grey
+                  : mod == modo
+                      ? branco
+                      : preto,
+              fontSize: 20,
+              fontWeight: FontWeight.w300,
             ),
-            !active && classic
-                ? Icon(
-                    Icons.lock_outline,
-                    color: Colors.grey,
-                    size: 24,
-                  )
-                : Container()
-          ],
-        ),
+          ),
+          !active && classic
+              ? Icon(
+                  Icons.lock_outline,
+                  color: Colors.grey,
+                  size: 24,
+                )
+              : Text("")
+        ],
       ),
       onPressed: active
           ? f

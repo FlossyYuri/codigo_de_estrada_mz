@@ -165,13 +165,27 @@ class _ResultadosViewState extends State<ResultadosView> {
                                     color: preto.withOpacity(0.2),
                                   ),
                                 ),
-                                onPressed: () {
-                                  if (BlocProvider.getBloc<UsuarioBloc>()
+                                onPressed: () async {
+                                  if (result.testPaid) {
+                                    Navigator.of(context).push(
+                                      CupertinoPageRoute(
+                                        builder: (context) => GamePage(
+                                          gameMode: "resolucao",
+                                          teste:
+                                              BlocProvider.getBloc<InGameBloc>()
+                                                  .teste,
+                                        ),
+                                      ),
+                                    );
+                                  } else if (BlocProvider.getBloc<UsuarioBloc>()
                                           .userData
                                           .cs >=
                                       5) {
                                     BlocProvider.getBloc<TransacoesBloc>()
                                         .pagarResolucao(context);
+                                    setState(() {
+                                      result.testPaid = true;
+                                    });
                                     Navigator.of(context).push(
                                       CupertinoPageRoute(
                                         builder: (context) => GamePage(
@@ -209,7 +223,9 @@ class _ResultadosViewState extends State<ResultadosView> {
                                       ),
                                     ),
                                     Text(
-                                      premium ? "grátis" : "custo: 5 cs",
+                                      premium || result.testPaid
+                                          ? "grátis"
+                                          : "custo: 5 cs",
                                       style: TextStyle(
                                         color: preto,
                                         fontSize: 18,
