@@ -163,34 +163,6 @@ class _TemasViewState extends State<TemasView> {
             ),
           ),
         ),
-        !BlocProvider.getBloc<UsuarioBloc>().userData.premium
-            ? SliverToBoxAdapter(
-                child: FutureBuilder<bool>(
-                  future: checkConnection(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data) {
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 20),
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: SizedBox(height: 10.0),
-                          ),
-                        );
-                      }
-                    }
-                    return Container();
-                  },
-                ),
-              )
-            : SliverToBoxAdapter(
-                child: Container(),
-              ),
       ],
     );
   }
@@ -313,6 +285,7 @@ class _TemasViewState extends State<TemasView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     _actionChip(
+                      context,
                       "Normal",
                       0,
                       () {
@@ -323,7 +296,7 @@ class _TemasViewState extends State<TemasView> {
                         });
                       },
                     ),
-                    _actionChip("Classico", 1, () {
+                    _actionChip(context, "Classico", 1, () {
                       setState(() {
                         modo = 1;
                         BlocProvider.getBloc<InGameBloc>().questionMode =
@@ -419,44 +392,39 @@ class _TemasViewState extends State<TemasView> {
     );
   }
 
-  _actionChip(String text, int mod, Function f, {bool active = true}) {
+  _actionChip(BuildContext context, String text, int mod, Function f,
+      {bool active = true}) {
     bool classic = text == "Classico";
     return ActionChip(
       shape: RoundedRectangleBorder(
         side: BorderSide(color: preto.withOpacity(0.1), width: 0.5),
         borderRadius: BorderRadius.circular(40),
       ),
-      labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      labelPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
       backgroundColor: mod == modo ? mainBG : transparente,
       elevation: mod == modo ? 7 : 0,
-      label: Container(
-        width: 130,
-        alignment: Alignment.center,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              text,
-              style: TextStyle(
-                color: !active && classic
-                    ? Colors.grey
-                    : mod == modo
-                        ? branco
-                        : preto,
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-              ),
+      label: Row(
+        children: <Widget>[
+          Text(
+            text,
+            style: TextStyle(
+              color: !active && classic
+                  ? Colors.grey
+                  : mod == modo
+                      ? branco
+                      : preto,
+              fontSize: 20,
+              fontWeight: FontWeight.w300,
             ),
-            !active && classic
-                ? Icon(
-                    Icons.lock_outline,
-                    color: Colors.grey,
-                    size: 24,
-                  )
-                : Container()
-          ],
-        ),
+          ),
+          !active && classic
+              ? Icon(
+                  Icons.lock_outline,
+                  color: Colors.grey,
+                  size: 24,
+                )
+              : Text("")
+        ],
       ),
       onPressed: active
           ? f

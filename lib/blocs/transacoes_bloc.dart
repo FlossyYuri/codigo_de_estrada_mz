@@ -59,42 +59,43 @@ class TransacoesBloc extends BlocBase {
               duration: Duration(seconds: 2),
             ),
           );
-          Future.delayed(Duration(seconds: 3)).then((_) async {
-            Map<String, dynamic> json = await createPost(body: {});
-            DateTime data = DateTime.parse(json['data_hora_atual']);
-            if (data.month == 12 && data.day >= 8 && data.day <= 31) {
-              switch (cupom.cs) {
-                case 200:
-                  bloc.userData.nrTestes += 10;
-                  bloc.fullUpdateUser();
+          // enable gifts on christmas
+          // Future.delayed(Duration(seconds: 3)).then((_) async {
+          //   Map<String, dynamic> json = await createPost(body: {});
+          //   DateTime data = DateTime.parse(json['data_hora_atual']);
+          //   if (data.month == 12 && data.day >= 8 && data.day <= 31) {
+          //     switch (cupom.cs) {
+          //       case 200:
+          //         bloc.userData.nrTestes += 10;
+          //         bloc.fullUpdateUser();
 
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => PromoDialogue(
-                      title: "Parabéns",
-                      description:
-                          "Ganhou 10 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
-                      buttonText: "fechar",
-                    ),
-                  );
-                  break;
-                case 500:
-                  bloc.userData.cs += 100;
-                  bloc.userData.nrTestes += 15;
-                  bloc.fullUpdateUser();
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => PromoDialogue(
-                      title: "Parabéns",
-                      description:
-                          "Ganhou 100cs e 15 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
-                      buttonText: "fechar",
-                    ),
-                  );
-                  break;
-              }
-            }
-          });
+          //         showDialog(
+          //           context: context,
+          //           builder: (BuildContext context) => PromoDialogue(
+          //             title: "Parabéns",
+          //             description:
+          //                 "Ganhou 10 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
+          //             buttonText: "fechar",
+          //           ),
+          //         );
+          //         break;
+          //       case 500:
+          //         bloc.userData.cs += 100;
+          //         bloc.userData.nrTestes += 15;
+          //         bloc.fullUpdateUser();
+          //         showDialog(
+          //           context: context,
+          //           builder: (BuildContext context) => PromoDialogue(
+          //             title: "Parabéns",
+          //             description:
+          //                 "Ganhou 100cs e 15 testes por ter usado o cupom na época festiva. Desejamos-lhe festas felizes.",
+          //             buttonText: "fechar",
+          //           ),
+          //         );
+          //         break;
+          //     }
+          //   }
+          // });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
