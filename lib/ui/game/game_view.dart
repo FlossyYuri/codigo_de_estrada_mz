@@ -57,7 +57,7 @@ class _GamePageState extends State<GamePage> {
         }
       } else {
         //se nao tiver testes
-        Navigator.of(context).pop();
+        if (widget.gameMode != "resolucao") Navigator.of(context).pop();
       }
       if (widget.gameMode != "resolucao") blocInGame.jogando = true;
     }

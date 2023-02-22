@@ -227,35 +227,6 @@ class _ResultadosViewState extends State<ResultadosView> {
                                 .nome
                                 .substring(0),
                           ),
-                          // _buildResultCard(title: "Dificuldade", trailing: dific),
-                          !BlocProvider.getBloc<UsuarioBloc>()
-                                      .userData
-                                      .premium &&
-                                  conexao
-                              ? FutureBuilder<bool>(
-                                  future: checkConnection(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      if (snapshot.data) {
-                                        return Card(
-                                          elevation: 4,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: ListTile(
-                                            contentPadding:
-                                                const EdgeInsets.all(0),
-                                            title: SizedBox(
-                                              height: 100.0,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    }
-                                    return Container();
-                                  },
-                                )
-                              : Container(),
                           _buildResultCard(
                             title: "Acertos",
                             trailing:
@@ -299,9 +270,7 @@ class _ResultadosViewState extends State<ResultadosView> {
                           _buildRaised("Escolher Tema", () async {
                             Navigator.of(context).pop();
                           }),
-                          const SizedBox(height: 5),
-                          const SizedBox(height: 5),
-                          const SizedBox(height: 70),
+                          const SizedBox(height: 24),
                         ]),
                   ))
             ],
