@@ -104,7 +104,7 @@ class _AuthViewState extends State<AuthView> {
                                 Navigator.of(context).push(
                                   CupertinoPageRoute(
                                     builder: (context) => CadastroScreen(
-                                      user: null,
+                                      userCredencial: null,
                                       method: SignUpMethod.EMAIL,
                                     ),
                                   ),

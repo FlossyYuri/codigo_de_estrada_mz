@@ -19,24 +19,25 @@ class AuthButton extends StatelessWidget {
       // disabledTextColor: Colors.black.withOpacity(.6),
       style: ElevatedButton.styleFrom(backgroundColor: branco, elevation: 4),
       child: Container(
-          alignment: Alignment.center,
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              icon,
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                "$action com $text",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black),
-              ),
-            ],
-          )),
+        alignment: Alignment.center,
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            icon,
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              "$action com $text",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

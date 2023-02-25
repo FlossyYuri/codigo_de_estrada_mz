@@ -10,9 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CadastroScreen extends StatefulWidget {
-  final UserCredential user;
+  final UserCredential userCredencial;
   final SignUpMethod method;
-  CadastroScreen({@required this.user, @required this.method});
+  CadastroScreen({@required this.userCredencial, @required this.method});
   @override
   _CadastroScreenState createState() => _CadastroScreenState();
 }
@@ -29,13 +29,13 @@ class _CadastroScreenState extends State<CadastroScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.user != null) {
-      String username = widget.user.user.displayName
-          .substring(0, widget.user.user.displayName.indexOf(" "))
+    if (widget.userCredencial != null) {
+      String username = widget.userCredencial.user.displayName
+          .substring(0, widget.userCredencial.user.displayName.indexOf(" "))
           .toLowerCase();
       _usernameController.text = username;
-      _emailController.text = widget.user.user.email;
-      _cellController.text = widget.user.user.phoneNumber;
+      _emailController.text = widget.userCredencial.user.email;
+      _cellController.text = widget.userCredencial.user.phoneNumber;
     }
   }
 
@@ -75,10 +75,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
                               "Faltam poucos passos para finalizar seu cadastro.",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: branco,
-                                  fontWeight: FontWeight.w300,
-                                  letterSpacing: 3,
-                                  fontSize: 18),
+                                color: branco,
+                                fontWeight: FontWeight.w300,
+                                letterSpacing: 3,
+                                fontSize: 18,
+                              ),
                             ),
                           ],
                         ),
@@ -126,7 +127,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         prefix: Icons.phone,
                         keyboard: TextInputType.text,
                         asSufix: false,
-                        tamanho: 9,
+                        size: 9,
                         valid: (String text) {
                           if (text.length != 9) {
                             return "Deve conter 9 digitos";
@@ -204,17 +205,19 @@ class _CadastroScreenState extends State<CadastroScreen> {
                               case SignUpMethod.EMAIL:
                                 BlocProvider.getBloc<UsuarioBloc>()
                                     .criarContaComEmail(
-                                        dados: user,
-                                        pass: _passController.text,
-                                        key: _scafKey);
+                                  dados: user,
+                                  pass: _passController.text,
+                                  key: _scafKey,
+                                );
                                 break;
                               case SignUpMethod.FACEBOOK:
                               case SignUpMethod.GOOGLE:
                                 BlocProvider.getBloc<UsuarioBloc>()
                                     .criarContaComMedia(
-                                        dados: user,
-                                        result: widget.user,
-                                        key: _scafKey);
+                                  dados: user,
+                                  result: widget.userCredencial,
+                                  key: _scafKey,
+                                );
                                 break;
                             }
                           }

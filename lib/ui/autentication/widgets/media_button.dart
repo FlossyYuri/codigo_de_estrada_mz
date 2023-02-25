@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class MediaButton extends StatelessWidget {
   final String text;
-  final Color fundo;
-  MediaButton({@required this.text, @required this.fundo});
+  final Color background;
+  MediaButton({@required this.text, @required this.background});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -18,7 +18,7 @@ class MediaButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        foregroundColor: fundo,
+        foregroundColor: background,
         backgroundColor: branco,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),

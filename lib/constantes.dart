@@ -57,3 +57,7 @@ const questGrad3 = LinearGradient(
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
 );
+
+class APP_CONSTANTS {
+  static const String SESSION_STATE = 'SESSION_STATE';
+}

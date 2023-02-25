@@ -9,7 +9,7 @@ class CustomTextField2 extends StatefulWidget {
   final bool asSufix;
   final Function valid;
   final TextEditingController controller;
-  final int tamanho;
+  final int size;
   CustomTextField2(
       {@required this.hint,
       @required this.isObscure,
@@ -18,7 +18,7 @@ class CustomTextField2 extends StatefulWidget {
       @required this.asSufix,
       @required this.controller,
       @required this.valid,
-      this.tamanho});
+      this.size});
 
   @override
   _CustomTextField2State createState() => _CustomTextField2State();
@@ -36,7 +36,7 @@ class _CustomTextField2State extends State<CustomTextField2> {
         controller: widget.controller,
         textCapitalization: TextCapitalization.none,
         autocorrect: false,
-        maxLength: widget.tamanho != null ? widget.tamanho : null,
+        maxLength: widget.size != null ? widget.size : null,
         style: TextStyle(color: branco, fontSize: 22),
         obscureText: widget.isObscure,
         validator: widget.valid,

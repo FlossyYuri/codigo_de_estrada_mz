@@ -24,11 +24,12 @@ class _LoginScreenState extends State<LoginScreen> {
     _navHome() {
       return () {
         Navigator.pushAndRemoveUntil(
-            context,
-            CupertinoPageRoute(
-              builder: (BuildContext context) => HomeScreen(),
-            ),
-            ModalRoute.withName('/'));
+          context,
+          CupertinoPageRoute(
+            builder: (BuildContext context) => HomeScreen(),
+          ),
+          ModalRoute.withName('/'),
+        );
       };
     }
 

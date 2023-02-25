@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/enums/app_session_status.dart';
 import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/helpers/usuario_helper.dart';
@@ -51,23 +52,28 @@ class UsuarioBloc extends BlocBase {
     super.dispose();
   }
 
-  Future<int> estadoSessao() async {
+  Future<AppSessionStatus> sessionStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    int estado = prefs.getInt("EstadoDaSessao");
-    if (estado == null) return 0;
+    int estadoHelper = prefs.getInt(APP_CONSTANTS.SESSION_STATE);
+    AppSessionStatus estado = AppSessionStatus.values.firstWhere(
+        (element) =>
+            element.toString() == prefs.getString(APP_CONSTANTS.SESSION_STATE),
+        orElse: () => AppSessionStatus.NOT_LOGGED_IN);
+    if (estado == null || estadoHelper == null)
+      return AppSessionStatus.NOT_LOGGED_IN;
     return estado;
   }
 
-  Future<int> offlineLogin() async {
-    switch (await estadoSessao()) {
-      case 1:
+  Future<AppSessionStatus> offlineLogin() async {
+    switch (await sessionStatus()) {
+      case AppSessionStatus.LOGGED_IN:
         await userHelper.getTodosusuarios().then((usuario) {
           this.userData = usuario[0];
         });
         _userController.sink.add(userData);
-        return 1;
+        return AppSessionStatus.LOGGED_IN;
       default:
-        return 0;
+        return AppSessionStatus.NOT_LOGGED_IN;
     }
   }
 
@@ -191,7 +197,7 @@ class UsuarioBloc extends BlocBase {
     //       await userHelper.salvarUsuario(userData);
     //       _userController.sink.add(userData);
     //       final prefs = await SharedPreferences.getInstance();
-    //       prefs.setInt("EstadoDaSessao", 1);
+    //       prefs.setString(APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
     //       _authDone(key);
     //     } else {
     //       Navigator.pop(key.currentContext);
@@ -250,7 +256,7 @@ class UsuarioBloc extends BlocBase {
         //     await userHelper.salvarUsuario(userData);
         //     _userController.sink.add(userData);
         //     final prefs = await SharedPreferences.getInstance();
-        //     prefs.setInt("EstadoDaSessao", 1);
+        //     prefs.setString(APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
         //     _authDone(key);
         //   } else {
         //     Navigator.pop(key.currentContext);
@@ -280,7 +286,7 @@ class UsuarioBloc extends BlocBase {
         //     await userHelper.salvarUsuario(userData);
         //     _userController.sink.add(userData);
         //     final prefs = await SharedPreferences.getInstance();
-        //     prefs.setInt("EstadoDaSessao", 1);
+        //     prefs.setString(APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
         //     _authDone(key);
         //   } else {
         //     Navigator.pop(key.currentContext);
@@ -342,7 +348,8 @@ class UsuarioBloc extends BlocBase {
       await userHelper.salvarUsuario(userData);
       _userController.sink.add(userData);
       final prefs = await SharedPreferences.getInstance();
-      prefs.setInt("EstadoDaSessao", 1);
+      prefs.setString(
+          APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
       _authDone(key);
     } on PlatformException catch (e) {
       Navigator.pop(key.currentContext);
@@ -415,7 +422,8 @@ class UsuarioBloc extends BlocBase {
     userData = null;
     _userController.sink.add(userData);
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt("EstadoDaSessao", 0);
+    prefs.setString(
+        APP_CONSTANTS.SESSION_STATE, AppSessionStatus.NOT_LOGGED_IN.toString());
   }
 
   logout(BuildContext context) async {
@@ -425,7 +433,8 @@ class UsuarioBloc extends BlocBase {
     userData = null;
     _userController.sink.add(userData);
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt("EstadoDaSessao", 0);
+    prefs.setString(
+        APP_CONSTANTS.SESSION_STATE, AppSessionStatus.NOT_LOGGED_IN.toString());
     Navigator.of(context).pushReplacement(
       CupertinoPageRoute(
         builder: (context) => AuthView(
@@ -456,7 +465,8 @@ class UsuarioBloc extends BlocBase {
     await userHelper.salvarUsuario(userData);
     _userController.sink.add(userData);
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt("EstadoDaSessao", 1);
+    prefs.setString(
+        APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
   }
 
   Future<Null> updateUserData() async {
@@ -602,14 +612,15 @@ class UsuarioBloc extends BlocBase {
       await userHelper.salvarUsuario(userData);
       _userController.sink.add(userData);
       final prefs = await SharedPreferences.getInstance();
-      prefs.setInt("EstadoDaSessao", 1);
+      prefs.setString(
+          APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
       _authDone(key);
     } else {
       Navigator.pop(key.currentContext);
       Navigator.of(key.currentContext).push(
         CupertinoPageRoute(
           builder: (context) => CadastroScreen(
-            user: userCredential,
+            userCredencial: userCredential,
             method: SignUpMethod.FACEBOOK,
           ),
         ),
