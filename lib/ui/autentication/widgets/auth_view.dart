@@ -1,20 +1,22 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/cadastro_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/criar_conta_auth.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/login_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_button.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AuthView extends StatefulWidget {
-  final bool login;
-  AuthView({@required this.login});
+  final bool isLogin;
+  AuthView({@required this.isLogin});
   @override
   _AuthViewState createState() => _AuthViewState();
 }
@@ -75,7 +77,7 @@ class _AuthViewState extends State<AuthView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            widget.login ? "Entrar" : "Criar conta",
+                            widget.isLogin ? "Entrar" : "Criar conta",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               color: branco,
@@ -88,11 +90,11 @@ class _AuthViewState extends State<AuthView> {
                             height: 30,
                           ),
                           AuthButton(
-                            acao: widget.login ? "Entrar" : "Criar conta",
-                            texto: "email",
+                            action: widget.isLogin ? "Entrar" : "Criar conta",
+                            text: "email",
                             icon: Icon(FontAwesomeIcons.envelope),
                             onPressed: () {
-                              if (widget.login) {
+                              if (widget.isLogin) {
                                 Navigator.of(context).push(
                                   CupertinoPageRoute(
                                     builder: (context) => LoginScreen(),
@@ -103,7 +105,7 @@ class _AuthViewState extends State<AuthView> {
                                   CupertinoPageRoute(
                                     builder: (context) => CadastroScreen(
                                       user: null,
-                                      metodo: "email",
+                                      method: SignUpMethod.EMAIL,
                                     ),
                                   ),
                                 );
@@ -143,8 +145,8 @@ class _AuthViewState extends State<AuthView> {
                             height: 40,
                           ),
                           AuthButton(
-                            acao: widget.login ? "Entrar" : "Criar conta",
-                            texto: "Facebook",
+                            action: widget.isLogin ? "Entrar" : "Criar conta",
+                            text: "Facebook",
                             icon: Icon(
                               FontAwesomeIcons.facebookF,
                               color: Colors.indigo,
@@ -153,62 +155,13 @@ class _AuthViewState extends State<AuthView> {
                             onPressed: () async {
                               if (!clicked) {
                                 clicked = true;
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Container(
-                                        height: 200,
-                                        width: 200,
-                                        child: Center(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                height: 60,
-                                                width: 60,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 5,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                    mainBG,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Text("Loading"),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                                if (await checkConnection()) {
-                                  if (widget.login) {
-                                    BlocProvider.getBloc<UsuarioBloc>()
-                                        .entrarFacebook(_scaffKey)
-                                        .then((_) {
-                                      clicked = false;
-                                    });
-                                  } else {
-                                    BlocProvider.getBloc<UsuarioBloc>()
-                                        .criarContaFacebook(_scaffKey)
-                                        .then((_) {
-                                      clicked = false;
-                                    });
-                                  }
-                                } else {
+                                ScreenNotificationUtils()
+                                    .showLoadingModal(context);
+                                BlocProvider.getBloc<UsuarioBloc>()
+                                    .facebookAuthentication(_scaffKey)
+                                    .then((_) {
                                   clicked = false;
-                                  Navigator.pop(context);
-                                }
+                                });
                               }
                             },
                           ),
@@ -216,8 +169,8 @@ class _AuthViewState extends State<AuthView> {
                             height: 20,
                           ),
                           AuthButton(
-                            acao: widget.login ? "Entrar" : "Criar conta",
-                            texto: "Google",
+                            action: widget.isLogin ? "Entrar" : "Criar conta",
+                            text: "Google",
                             icon: Icon(
                               FontAwesomeIcons.google,
                               color: Colors.redAccent.withOpacity(.6),
@@ -226,46 +179,10 @@ class _AuthViewState extends State<AuthView> {
                             onPressed: () async {
                               if (!clicked) {
                                 clicked = true;
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Container(
-                                        height: 200,
-                                        width: 200,
-                                        child: Center(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                height: 60,
-                                                width: 60,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 5,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                    mainBG,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Text("Loading"),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                ScreenNotificationUtils()
+                                    .showLoadingModal(context);
                                 if (await checkConnection()) {
-                                  if (widget.login) {
+                                  if (widget.isLogin) {
                                     BlocProvider.getBloc<UsuarioBloc>()
                                         .entrarGoogle(_scaffKey)
                                         .then((_) {
@@ -304,7 +221,7 @@ class _AuthViewState extends State<AuthView> {
                           SizedBox(height: 50),
                           TextButton(
                             onPressed: () {
-                              if (widget.login) {
+                              if (widget.isLogin) {
                                 Navigator.of(context).pushReplacement(
                                   CupertinoPageRoute(
                                     builder: (context) => CriarContaAuth(),
@@ -314,7 +231,7 @@ class _AuthViewState extends State<AuthView> {
                                 Navigator.of(context).pushReplacement(
                                   CupertinoPageRoute(
                                     builder: (context) => AuthView(
-                                      login: true,
+                                      isLogin: true,
                                     ),
                                   ),
                                 );
@@ -324,7 +241,7 @@ class _AuthViewState extends State<AuthView> {
                               height: 40,
                               alignment: Alignment.center,
                               child: Text(
-                                widget.login
+                                widget.isLogin
                                     ? "É novo aqui? crie uma conta"
                                     : "Tem uma conta? Entre",
                                 style: TextStyle(

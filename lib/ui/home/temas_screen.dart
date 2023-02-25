@@ -18,7 +18,7 @@ class TemasScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<ConnectivityStatus>(
-      initialData: ConnectivityStatus.Offline,
+      initialData: ConnectivityStatus.OFFLINE,
       create: (context) => ConnectivityService().statusController.stream,
       child: Scaffold(
         key: _scaffoldKey,

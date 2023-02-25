@@ -42,18 +42,19 @@ class _CustomTextField2State extends State<CustomTextField2> {
         validator: widget.valid,
         keyboardType: widget.keyboard,
         decoration: InputDecoration(
+          counterStyle: TextStyle(color: Colors.white),
           errorStyle: TextStyle(color: Colors.white, fontSize: 18),
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: branco,width: 1),
+            borderSide: BorderSide(color: branco, width: 1),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: branco,width: 2),
+            borderSide: BorderSide(color: branco, width: 2),
           ),
           errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white,width: 1),
+            borderSide: BorderSide(color: Colors.white, width: 1),
           ),
           focusedErrorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white,width: 2),
+            borderSide: BorderSide(color: Colors.white, width: 2),
           ),
           hintText: widget.hint,
           prefixText: widget.hint == "Cell" ? "+258" : null,

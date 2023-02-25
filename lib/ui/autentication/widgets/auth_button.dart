@@ -2,13 +2,13 @@ import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:flutter/material.dart';
 
 class AuthButton extends StatelessWidget {
-  final String texto;
-  final String acao;
+  final String text;
+  final String action;
   final Icon icon;
   final VoidCallback onPressed;
   AuthButton(
-      {@required this.texto,
-      @required this.acao,
+      {@required this.text,
+      @required this.action,
       @required this.icon,
       @required this.onPressed});
   @override
@@ -29,8 +29,11 @@ class AuthButton extends StatelessWidget {
                 width: 20,
               ),
               Text(
-                "$acao com $texto",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                "$action com $text",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black),
               ),
             ],
           )),

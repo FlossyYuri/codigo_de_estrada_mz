@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/helpers/usuario_helper.dart';
 import 'package:codigo_de_estrada_mz/models/usuario.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/cadastro_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/criar_conta_auth.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/login_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_view.dart';
@@ -15,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,70 +114,63 @@ class UsuarioBloc extends BlocBase {
     _authDone(key);
   }
 
-  Future<Null> criarContaFacebook(GlobalKey<ScaffoldState> key) async {
-    // final FacebookLogin fbLogin = FacebookLogin();
-    // final facebookLoginResult =
-    //     await fbLogin.logIn(['email', 'public_profile']);
-
-    // switch (facebookLoginResult.status) {
-    //   case FacebookLoginStatus.error:
-    //     Navigator.pop(key.currentContext);
-    //     break;
-    //   case FacebookLoginStatus.cancelledByUser:
-    //     Navigator.pop(key.currentContext);
-    //     break;
-    //   case FacebookLoginStatus.loggedIn:
-    //     await _firebaseAuthWithFacebook(
-    //         token: facebookLoginResult.accessToken, key: key);
-    // }
+  Future<Null> facebookAuthentication(GlobalKey<ScaffoldState> key) async {
+    final LoginResult result = await FacebookAuth.instance.login(
+      permissions: ['public_profile', 'email'],
+    );
+    switch (result.status) {
+      case LoginStatus.success:
+        _firebaseAuthWithFacebook(accessToken: result.accessToken, key: key);
+        return;
+      case LoginStatus.cancelled:
+        Navigator.pop(key.currentContext);
+        return;
+      case LoginStatus.failed:
+        Navigator.pop(key.currentContext);
+        return;
+      default:
+        return null;
+    }
   }
 
-  // _firebaseAuthWithFacebook(
-  //     { //@required FacebookAccessToken token,
-  //     @required GlobalKey<ScaffoldState> key}) async {
-  //   // AuthCredential credential =
-  //   //     FacebookAuthProvider.getCredential(accessToken: token.token);
-
-  //   try {
-  //     // AuthResult user = await _auth.signInWithCredential(credential);
-  //     // if (await existeEmail(user.user.email)) {
-  //     //   firebaseUser = user.user;
-  //     //   this.userData = await getUserData();
-  //     //   await userHelper.salvarUsuario(userData);
-  //     //   _userController.sink.add(userData);
-  //     //   final prefs = await SharedPreferences.getInstance();
-  //     //   prefs.setInt("EstadoDaSessao", 1);
-  //     //   _authDone(key);
-  //     // } else {
-  //     //   Navigator.pop(key.currentContext);
-  //     //   Navigator.of(key.currentContext).push(
-  //     //     CupertinoPageRoute(
-  //     //       builder: (context) => CadastroScreen(
-  //     //         user: user,
-  //     //         metodo: "facebook",
-  //     //       ),
-  //     //     ),
-  //     //   );
-  //     // }
-  //   } catch (error) {
-  //     Navigator.pop(key.currentContext);
-  //     switch (error.code) {
-  //       case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-  //         _snackBar(
-  //             key, "Esta conta já foi criada usando outro método (provedor).");
-  //         break;
-  //       case "ERROR_CREDENTIAL_ALREADY_IN_USE":
-  //         _snackBar(key, "Esta conta já existe");
-  //         break;
-  //       case "ERROR_EMAIL_ALREADY_IN_USE":
-  //         _snackBar(key, "Esta conta ja está sendo usada.");
-  //         break;
-  //       default:
-  //         _snackBar(key, "Não foi possivel criar uma conta.");
-  //     }
-  //     await resetLOGS();
-  //   }
-  // }
+  _firebaseAuthWithFacebook(
+      {@required AccessToken accessToken,
+      @required GlobalKey<ScaffoldState> key}) async {
+    final AuthCredential facebookCredential =
+        FacebookAuthProvider.credential(accessToken.token);
+    print("Chegou nas credenciais");
+    try {
+      final userCredential =
+          await _auth.signInWithCredential(facebookCredential);
+      _finishAuthProcess(userCredential, key);
+    } catch (error) {
+      print("Error code:" + error.code);
+      Navigator.pop(key.currentContext);
+      switch (error.code) {
+        case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
+          _snackBar(
+              key, "Esta conta já foi criada usando outro método (provedor).");
+          break;
+        case "ERROR_CREDENTIAL_ALREADY_IN_USE":
+          _snackBar(key, "Esta conta já existe");
+          break;
+        case "ERROR_EMAIL_ALREADY_IN_USE":
+          _snackBar(key, "Esta conta ja está sendo usada.");
+          break;
+        case "account-exists-with-different-credential":
+          List<String> emailList =
+              await _auth.fetchSignInMethodsForEmail(error.email);
+          print(emailList);
+          if (emailList.first == "google.com") {
+            // await this.service.signInwithGoogle(true, error.credential);
+          }
+          break;
+        default:
+          _snackBar(key, "Não foi possivel criar uma conta.");
+      }
+      await resetLOGS();
+    }
+  }
 
   Future<Null> criarContaGoogle(GlobalKey<ScaffoldState> key) async {
     // final GoogleSignIn gglSign = GoogleSignIn();
@@ -203,7 +199,7 @@ class UsuarioBloc extends BlocBase {
     //         CupertinoPageRoute(
     //           builder: (context) => CadastroScreen(
     //             user: user,
-    //             metodo: "google",
+    //             method: "google",
     //           ),
     //         ),
     //       );
@@ -262,7 +258,7 @@ class UsuarioBloc extends BlocBase {
         //       CupertinoPageRoute(
         //         builder: (context) => CadastroScreen(
         //           user: user,
-        //           metodo: "google",
+        //           method: "google",
         //         ),
         //       ),
         //     );
@@ -292,7 +288,7 @@ class UsuarioBloc extends BlocBase {
         //       CupertinoPageRoute(
         //         builder: (context) => CadastroScreen(
         //           user: user,
-        //           metodo: "google",
+        //           method: "google",
         //         ),
         //       ),
         //     );
@@ -317,97 +313,6 @@ class UsuarioBloc extends BlocBase {
         switch (error.code) {
           case "ERROR_USER_NOT_FOUND":
             _snackBar(key, "Não existe nenhum usuario em estas credenciais");
-            break;
-          default:
-            _snackBar(key,
-                "Não foi possível fazer o login, certifique se de criar uma conta.");
-        }
-      } catch (error) {
-        _snackBar(key,
-            "Não foi possível fazer o login, certifique se de criar uma conta.");
-        Future.delayed(Duration(seconds: 3)).then((value) {
-          Navigator.of(key.currentContext).pushReplacement(
-            CupertinoPageRoute(
-              builder: (context) => CriarContaAuth(),
-            ),
-          );
-        });
-      }
-    }
-  }
-
-  Future<Null> entrarFacebook(GlobalKey<ScaffoldState> key) async {
-    try {
-      // final FacebookLogin fbLogin = FacebookLogin();
-      // final facebookLoginResult =
-      //     await fbLogin.logIn(['email', 'public_profile']);
-      // switch (facebookLoginResult.status) {
-      //   case FacebookLoginStatus.error:
-      //     Navigator.pop(key.currentContext);
-      //     _snackBar(key, "Não foi possível fazer o login, Ocorreu algum erro.");
-      //     Future.delayed(Duration(seconds: 3)).then((value) {
-      //       Navigator.of(key.currentContext).pushReplacement(
-      //         CupertinoPageRoute(
-      //           builder: (context) => CriarContaAuth(),
-      //         ),
-      //       );
-      //     });
-      //     break;
-      //   case FacebookLoginStatus.cancelledByUser:
-      //     break;
-      //   case FacebookLoginStatus.loggedIn:
-      //     if (await fbLogin.isLoggedIn) {
-      //       AuthCredential credential = FacebookAuthProvider.getCredential(
-      //           accessToken: facebookLoginResult.accessToken.token);
-      //       AuthResult user = await _auth.signInWithCredential(credential);
-
-      //       if (await verifyUser(user.user.uid)) {
-      //         firebaseUser = user.user;
-      //         this.userData = await getUserData();
-      //         await userHelper.salvarUsuario(userData);
-      //         _userController.sink.add(userData);
-      //         final prefs = await SharedPreferences.getInstance();
-      //         prefs.setInt("EstadoDaSessao", 1);
-      //         _authDone(key);
-      //       } else {
-      //         await resetLOGS();
-      //         Navigator.pop(key.currentContext);
-      //         Navigator.of(key.currentContext).push(
-      //           CupertinoPageRoute(
-      //             builder: (context) => CadastroScreen(
-      //               user: user,
-      //               metodo: "facebook",
-      //             ),
-      //           ),
-      //         );
-      //       }
-      //     } else {
-      //       Navigator.pop(key.currentContext);
-      //       _snackBar(key,
-      //           "Não foi possível fazer o login, certifique se de criar uma conta.");
-      //       Future.delayed(Duration(seconds: 3)).then((value) {
-      //         Navigator.of(key.currentContext).pushReplacement(
-      //           CupertinoPageRoute(
-      //             builder: (context) => CriarContaAuth(),
-      //           ),
-      //         );
-      //       });
-      //     }
-      // }
-    } catch (e) {
-      Navigator.pop(key.currentContext);
-
-      try {
-        switch (e.code) {
-          case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-            _snackBar(key,
-                "Esta conta já foi criada usando outro método (provedor).");
-            break;
-          case "ERROR_CREDENTIAL_ALREADY_IN_USE":
-            _snackBar(key, "Esta conta já existe");
-            break;
-          case "ERROR_EMAIL_ALREADY_IN_USE":
-            _snackBar(key, "Esta conta ja está sendo usada.");
             break;
           default:
             _snackBar(key,
@@ -524,7 +429,7 @@ class UsuarioBloc extends BlocBase {
     Navigator.of(context).pushReplacement(
       CupertinoPageRoute(
         builder: (context) => AuthView(
-          login: true,
+          isLogin: true,
         ),
       ),
     );
@@ -688,4 +593,27 @@ class UsuarioBloc extends BlocBase {
   }
 
   recuperarConta() {}
+
+  void _finishAuthProcess(
+      UserCredential userCredential, GlobalKey<ScaffoldState> key) async {
+    if (await existeEmail(userCredential.user.email)) {
+      firebaseUser = userCredential.user;
+      this.userData = await getUserData();
+      await userHelper.salvarUsuario(userData);
+      _userController.sink.add(userData);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setInt("EstadoDaSessao", 1);
+      _authDone(key);
+    } else {
+      Navigator.pop(key.currentContext);
+      Navigator.of(key.currentContext).push(
+        CupertinoPageRoute(
+          builder: (context) => CadastroScreen(
+            user: userCredential,
+            method: SignUpMethod.FACEBOOK,
+          ),
+        ),
+      );
+    }
+  }
 }

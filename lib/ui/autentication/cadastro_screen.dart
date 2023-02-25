@@ -1,18 +1,18 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
 import 'package:codigo_de_estrada_mz/models/usuario.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/custom_text_field2.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CadastroScreen extends StatefulWidget {
   final UserCredential user;
-  final String metodo;
-  CadastroScreen({@required this.user, @required this.metodo});
+  final SignUpMethod method;
+  CadastroScreen({@required this.user, @required this.method});
   @override
   _CadastroScreenState createState() => _CadastroScreenState();
 }
@@ -59,29 +59,30 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                          margin: const EdgeInsets.only(top: 40, bottom: 20),
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Bem-Vindo!",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: branco,
-                                    fontWeight: FontWeight.w300,
-                                    letterSpacing: 3,
-                                    fontSize: 30),
-                              ),
-                              Text(
-                                "Crie sua conta",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: branco,
-                                    fontWeight: FontWeight.w300,
-                                    letterSpacing: 3,
-                                    fontSize: 24),
-                              ),
-                            ],
-                          )),
+                        margin: const EdgeInsets.only(top: 40, bottom: 20),
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "Bem-Vindo!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: branco,
+                                  fontWeight: FontWeight.w300,
+                                  letterSpacing: 3,
+                                  fontSize: 30),
+                            ),
+                            Text(
+                              "Faltam poucos passos para finalizar seu cadastro.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: branco,
+                                  fontWeight: FontWeight.w300,
+                                  letterSpacing: 3,
+                                  fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
                       CustomTextField2(
                         controller: _usernameController,
                         hint: "Username",
@@ -133,7 +134,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           return null;
                         },
                       ),
-                      widget.metodo == "email"
+                      widget.method == SignUpMethod.EMAIL
                           ? CustomTextField2(
                               controller: _passController,
                               hint: "Senha",
@@ -149,7 +150,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                               },
                             )
                           : Container(),
-                      widget.metodo == "email"
+                      widget.method == SignUpMethod.EMAIL
                           ? CustomTextField2(
                               controller: _secPassController,
                               hint: "Confirmar senha",
@@ -176,139 +177,45 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             backgroundColor: branco),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return Dialog(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Container(
-                                    height: 200,
-                                    width: 200,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            height: 60,
-                                            width: 60,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 5,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation(
-                                                mainBG,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text("Loading"),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
+                            ScreenNotificationUtils().showLoadingModal(context);
+                            if (await BlocProvider.getBloc<UsuarioBloc>()
+                                .existeCell(_cellController.text)) {
+                              ScreenNotificationUtils().showToast(
+                                  "Ja existe um usuario com esse contacto");
+                              return;
+                            }
+                            if (await BlocProvider.getBloc<UsuarioBloc>()
+                                .existeUsername(_usernameController.text)) {
+                              ScreenNotificationUtils().showToast(
+                                  "Ja existe um usuario com esse nome");
+                              return;
+                            }
+                            final Usuario user = Usuario(
+                              id: null,
+                              email: _emailController.text,
+                              cell: _cellController.text,
+                              username: _usernameController.text,
+                              imgUrl: null,
+                              cs: 100,
+                              nrTestes: 2,
+                              premium: false,
                             );
-                            if (await checkConnection()) {
-                              BlocProvider.getBloc<UsuarioBloc>()
-                                  .existeCell(_cellController.text)
-                                  .then((res) {
-                                if (res) {
-                                  Fluttertoast.showToast(
-                                    msg:
-                                        "Ja existe um usuario com esse contacto",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                  );
-                                }
+                            switch (widget.method) {
+                              case SignUpMethod.EMAIL:
                                 BlocProvider.getBloc<UsuarioBloc>()
-                                    .existeUsername(_usernameController.text)
-                                    .then((res) {
-                                  if (res) {
-                                    Fluttertoast.showToast(
-                                      msg: "Ja existe um usuario com esse nome",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                    );
-                                  }
-                                  switch (widget.metodo) {
-                                    case "email":
-                                      BlocProvider.getBloc<UsuarioBloc>()
-                                          .criarContaComEmail(
-                                              dados: Usuario(
-                                                id: null,
-                                                email: _emailController.text,
-                                                cell: _cellController.text,
-                                                username:
-                                                    _usernameController.text,
-                                                imgUrl: null,
-                                                cs: 100,
-                                                nrTestes: 2,
-                                                premium: false,
-                                              ),
-                                              pass: _passController.text,
-                                              key: _scafKey)
-                                          .then((_) {});
-                                      break;
-                                    case "facebook":
-                                      BlocProvider.getBloc<UsuarioBloc>()
-                                          .criarContaComMedia(
-                                              dados: Usuario(
-                                                  id: null,
-                                                  email: _emailController.text,
-                                                  cell: _cellController.text,
-                                                  username:
-                                                      _usernameController.text,
-                                                  imgUrl: null,
-                                                  cs: 100,
-                                                  nrTestes: 2,
-                                                  premium: false),
-                                              result: widget.user,
-                                              key: _scafKey)
-                                          .then((_) {});
-                                      break;
-                                    case "google":
-                                      BlocProvider.getBloc<UsuarioBloc>()
-                                          .criarContaComMedia(
-                                              dados: Usuario(
-                                                id: null,
-                                                email: _emailController.text,
-                                                cell: _cellController.text,
-                                                username:
-                                                    _usernameController.text,
-                                                imgUrl: null,
-                                                cs: 100,
-                                                nrTestes: 2,
-                                                premium: false,
-                                              ),
-                                              result: widget.user,
-                                              key: _scafKey)
-                                          .then((_) {});
-                                      break;
-                                  }
-                                });
-                              });
-                            } else {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(_scafKey.currentContext)
-                                  .showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Sem conexao a internet.",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w300,
-                                        color: branco),
-                                  ),
-                                  backgroundColor: Colors.redAccent,
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
+                                    .criarContaComEmail(
+                                        dados: user,
+                                        pass: _passController.text,
+                                        key: _scafKey);
+                                break;
+                              case SignUpMethod.FACEBOOK:
+                              case SignUpMethod.GOOGLE:
+                                BlocProvider.getBloc<UsuarioBloc>()
+                                    .criarContaComMedia(
+                                        dados: user,
+                                        result: widget.user,
+                                        key: _scafKey);
+                                break;
                             }
                           }
                         },
@@ -316,8 +223,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           padding: EdgeInsets.symmetric(vertical: 16),
                           alignment: Alignment.center,
                           child: Text(
-                            "Criar conta",
-                            style: TextStyle(fontSize: 24, color: preto),
+                            "Finalizar cadastro",
+                            style: TextStyle(fontSize: 20.0, color: preto),
                           ),
                         ),
                       ),
@@ -325,7 +232,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         height: 10,
                       ),
                       Text(
-                        "Ao clicar em \"criar conta\" voce concorda com nossos Termos de uso e nossa Política de privacidade.",
+                        "Ao clicar em \"Finalizar cadastro\" voce concorda com nossos Termos de uso e nossa Política de privacidade.",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: branco, fontSize: 18),
                       )

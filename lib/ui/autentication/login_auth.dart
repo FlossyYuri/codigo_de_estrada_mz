@@ -40,7 +40,7 @@ class _LoginAuthState extends State<LoginAuth> {
                 Navigator.of(context).pushReplacement(
                   CupertinoPageRoute(
                     builder: (context) => AuthView(
-                      login: true,
+                      isLogin: true,
                     ),
                   ),
                 );

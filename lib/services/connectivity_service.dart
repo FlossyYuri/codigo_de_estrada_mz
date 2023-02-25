@@ -9,22 +9,24 @@ class ConnectivityService {
 
   ConnectivityService() {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      //
-      var connectionStatus = _getStatusFromResult(result);
-      statusController.add(connectionStatus);
+      Connectivity().checkConnectivity().then((value) {
+        statusController.sink.add(_getStatusFromResult(value));
+        var connectionStatus = _getStatusFromResult(result);
+        statusController.add(connectionStatus);
+      });
     });
   }
 
   ConnectivityStatus _getStatusFromResult(ConnectivityResult result) {
     switch (result) {
       case ConnectivityResult.mobile:
-        return ConnectivityStatus.Celular;
+        return ConnectivityStatus.CELULAR;
       case ConnectivityResult.wifi:
-        return ConnectivityStatus.WiFi;
+        return ConnectivityStatus.WIFI;
       case ConnectivityResult.none:
-        return ConnectivityStatus.Offline;
+        return ConnectivityStatus.OFFLINE;
       default:
-        return ConnectivityStatus.Offline;
+        return ConnectivityStatus.OFFLINE;
     }
   }
 }

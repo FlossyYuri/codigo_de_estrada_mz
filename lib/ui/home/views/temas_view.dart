@@ -22,8 +22,6 @@ class TemasView extends StatefulWidget {
 }
 
 class _TemasViewState extends State<TemasView> {
-  bool conexao = false;
-
   int modo = 0;
   int idTema = 0;
   List<String> alertas = [
@@ -34,14 +32,6 @@ class _TemasViewState extends State<TemasView> {
   List<Tema> mostPlayed = [];
   List<Tema> relevant = [];
   List<Tema> pro = [];
-
-  @override
-  void initState() {
-    super.initState();
-    checkConnection().then((conexao) {
-      this.conexao = conexao;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +57,7 @@ class _TemasViewState extends State<TemasView> {
       slivers: <Widget>[
         CustomSliverAppBar(),
         SliverToBoxAdapter(
-          child: (connectivityStatus == ConnectivityStatus.Offline)
+          child: (connectivityStatus == ConnectivityStatus.OFFLINE)
               ? Column(
                   children: alertas.map((alerta) {
                     return Container(
