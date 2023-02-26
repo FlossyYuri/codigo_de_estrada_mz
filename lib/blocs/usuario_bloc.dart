@@ -148,7 +148,7 @@ class UsuarioBloc extends BlocBase {
     try {
       final userCredential =
           await _auth.signInWithCredential(facebookCredential);
-      _finishAuthProcess(userCredential, key);
+      _finishAuthProcess(userCredential, SignUpMethod.FACEBOOK, key);
     } catch (error) {
       print("Error code:" + error.code);
       Navigator.pop(key.currentContext);
@@ -168,7 +168,7 @@ class UsuarioBloc extends BlocBase {
               await _auth.fetchSignInMethodsForEmail(error.email);
           print(emailList);
           if (emailList.first == "google.com") {
-            // await this.service.signInwithGoogle(true, error.credential);
+            await googleAuthentication(key);
           }
           break;
         default:
@@ -178,140 +178,39 @@ class UsuarioBloc extends BlocBase {
     }
   }
 
-  Future<Null> criarContaGoogle(GlobalKey<ScaffoldState> key) async {
-    // final GoogleSignIn gglSign = GoogleSignIn();
-    // GoogleSignInAccount user = gglSign.currentUser;
-    // try {
-    //   if (user == null) user = await gglSign.signIn();
-    //   if (await _auth.currentUser() == null) {
-    //     GoogleSignInAuthentication credenciais =
-    //         await gglSign.currentUser.authentication;
-    //     AuthResult user = await _auth.signInWithCredential(
-    //       GoogleAuthProvider.getCredential(
-    //           idToken: credenciais.idToken,
-    //           accessToken: credenciais.accessToken),
-    //     );
-    //     if (await existeEmail(user.user.email)) {
-    //       firebaseUser = user.user;
-    //       this.userData = await getUserData();
-    //       await userHelper.salvarUsuario(userData);
-    //       _userController.sink.add(userData);
-    //       final prefs = await SharedPreferences.getInstance();
-    //       prefs.setString(APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
-    //       _authDone(key);
-    //     } else {
-    //       Navigator.pop(key.currentContext);
-    //       Navigator.of(key.currentContext).push(
-    //         CupertinoPageRoute(
-    //           builder: (context) => CadastroScreen(
-    //             user: user,
-    //             method: "google",
-    //           ),
-    //         ),
-    //       );
-    //     }
-    //   }
-    // } catch (error) {
-    //   Navigator.pop(key.currentContext);
-    //   switch (error.code) {
-    //     case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-    //       _snackBar(
-    //           key, "Esta conta já foi criada usando outro método (provedor).");
-    //       break;
-    //     case "ERROR_CREDENTIAL_ALREADY_IN_USE":
-    //       _snackBar(key, "Esta conta já existe");
-    //       break;
-    //     case "ERROR_EMAIL_ALREADY_IN_USE":
-    //       _snackBar(key, "Esta conta ja está sendo usada.");
-    //       break;
-    //     default:
-    //       _snackBar(key, "Não foi possivel criar uma conta.");
-    //   }
-    //   await resetLOGS();
-    //   print(error.message);
-    // }
-  }
-
-  Future<Null> entrarGoogle(GlobalKey<ScaffoldState> key) async {
-    final GoogleSignIn gglSign = GoogleSignIn();
-    GoogleSignInAccount user;
-    user = gglSign.currentUser;
+  Future<Null> googleAuthentication(GlobalKey<ScaffoldState> key) async {
+    final GoogleSignIn gglSign = GoogleSignIn(
+      scopes: [
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ],
+    );
+    GoogleSignInAccount googleUser = gglSign.currentUser;
     try {
       if (await gglSign.isSignedIn()) {
-        if (user == null) {
-          user = await gglSign.signInSilently(suppressErrors: false);
+        if (googleUser == null) {
+          googleUser = await gglSign.signInSilently(suppressErrors: false);
         }
-        if (user == null) await gglSign.signIn();
-        // if (await _auth.currentUser() == null) {
-        //   GoogleSignInAuthentication credenciais =
-        //       await gglSign.currentUser.authentication;
-        //   AuthResult user = await _auth.signInWithCredential(
-        //     GoogleAuthProvider.getCredential(
-        //         idToken: credenciais.idToken,
-        //         accessToken: credenciais.accessToken),
-        //   );
-        //   if (await verifyUser(user.user.uid)) {
-        //     firebaseUser = user.user;
-        //     this.userData = await getUserData();
-        //     await userHelper.salvarUsuario(userData);
-        //     _userController.sink.add(userData);
-        //     final prefs = await SharedPreferences.getInstance();
-        //     prefs.setString(APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
-        //     _authDone(key);
-        //   } else {
-        //     Navigator.pop(key.currentContext);
-        //     Navigator.of(key.currentContext).push(
-        //       CupertinoPageRoute(
-        //         builder: (context) => CadastroScreen(
-        //           user: user,
-        //           method: "google",
-        //         ),
-        //       ),
-        //     );
-        //   }
-        // }
-      } else {
-        if (user == null) await gglSign.signIn();
-        // if (await _auth.currentUser() == null) {
-        //   GoogleSignInAuthentication credenciais =
-        //       await gglSign.currentUser.authentication;
-        //   AuthResult user = await _auth.signInWithCredential(
-        //     GoogleAuthProvider.getCredential(
-        //         idToken: credenciais.idToken,
-        //         accessToken: credenciais.accessToken),
-        //   );
-        //   if (await verifyUser(user.user.uid)) {
-        //     firebaseUser = user.user;
-        //     this.userData = await getUserData();
-        //     await userHelper.salvarUsuario(userData);
-        //     _userController.sink.add(userData);
-        //     final prefs = await SharedPreferences.getInstance();
-        //     prefs.setString(APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
-        //     _authDone(key);
-        //   } else {
-        //     Navigator.pop(key.currentContext);
-        //     Navigator.of(key.currentContext).push(
-        //       CupertinoPageRoute(
-        //         builder: (context) => CadastroScreen(
-        //           user: user,
-        //           method: "google",
-        //         ),
-        //       ),
-        //     );
-        //   }
-        // }
-        if (!await gglSign.isSignedIn()) {
-          Navigator.pop(key.currentContext);
-          _snackBar(key,
-              "Não foi possível fazer o login, certifique se de criar uma conta.");
-          Future.delayed(Duration(seconds: 3)).then((value) {
-            Navigator.of(key.currentContext).pushReplacement(
-              CupertinoPageRoute(
-                builder: (context) => CriarContaAuth(),
-              ),
-            );
-          });
-        }
+      }
+      if (googleUser == null) await gglSign.signIn();
+      GoogleSignInAuthentication credenciais =
+          await gglSign.currentUser.authentication;
+      UserCredential userCredential = await _auth.signInWithCredential(
+        GoogleAuthProvider.credential(
+            idToken: credenciais.idToken, accessToken: credenciais.accessToken),
+      );
+      _finishAuthProcess(userCredential, SignUpMethod.GOOGLE, key);
+      if (!await gglSign.isSignedIn()) {
+        Navigator.pop(key.currentContext);
+        _snackBar(key,
+            "Não foi possível fazer o login, certifique se de criar uma conta.");
+        Future.delayed(Duration(seconds: 3)).then((value) {
+          Navigator.of(key.currentContext).pushReplacement(
+            CupertinoPageRoute(
+              builder: (context) => CriarContaAuth(),
+            ),
+          );
+        });
       }
     } catch (error) {
       Navigator.pop(key.currentContext);
@@ -604,8 +503,8 @@ class UsuarioBloc extends BlocBase {
 
   recuperarConta() {}
 
-  void _finishAuthProcess(
-      UserCredential userCredential, GlobalKey<ScaffoldState> key) async {
+  void _finishAuthProcess(UserCredential userCredential, SignUpMethod method,
+      GlobalKey<ScaffoldState> key) async {
     if (await existeEmail(userCredential.user.email)) {
       firebaseUser = userCredential.user;
       this.userData = await getUserData();
@@ -621,7 +520,7 @@ class UsuarioBloc extends BlocBase {
         CupertinoPageRoute(
           builder: (context) => CadastroScreen(
             userCredencial: userCredential,
-            method: SignUpMethod.FACEBOOK,
+            method: method,
           ),
         ),
       );

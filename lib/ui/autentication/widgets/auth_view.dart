@@ -181,40 +181,11 @@ class _AuthViewState extends State<AuthView> {
                                 clicked = true;
                                 ScreenNotificationUtils()
                                     .showLoadingModal(context);
-                                if (await checkConnection()) {
-                                  if (widget.isLogin) {
-                                    BlocProvider.getBloc<UsuarioBloc>()
-                                        .entrarGoogle(_scaffKey)
-                                        .then((_) {
-                                      clicked = false;
-                                    });
-                                  } else {
-                                    BlocProvider.getBloc<UsuarioBloc>()
-                                        .criarContaGoogle(_scaffKey)
-                                        .then(
-                                      (_) {
-                                        clicked = false;
-                                      },
-                                    );
-                                  }
-                                } else {
+                                BlocProvider.getBloc<UsuarioBloc>()
+                                    .googleAuthentication(_scaffKey)
+                                    .then((_) {
                                   clicked = false;
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(_scaffKey.currentContext)
-                                      .showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        "Sem conexao a internet.",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w300,
-                                            color: branco),
-                                      ),
-                                      backgroundColor: Colors.redAccent,
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                }
+                                });
                               }
                             },
                           ),
@@ -245,9 +216,10 @@ class _AuthViewState extends State<AuthView> {
                                     ? "É novo aqui? crie uma conta"
                                     : "Tem uma conta? Entre",
                                 style: TextStyle(
-                                    fontSize: 20,
-                                    color: branco,
-                                    fontWeight: FontWeight.w300),
+                                  fontSize: 20,
+                                  color: branco,
+                                  fontWeight: FontWeight.w300,
+                                ),
                               ),
                             ),
                           ),
