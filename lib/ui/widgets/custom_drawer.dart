@@ -181,11 +181,6 @@ class CustomDrawer extends StatelessWidget {
                           () {
                         BlocProvider.getBloc<UsuarioBloc>().logout(context);
                       }),
-                      _buildButton(
-                        "Sair",
-                        FontAwesomeIcons.powerOff,
-                        () => exit(0),
-                      ),
                     ],
                   ),
                 ),

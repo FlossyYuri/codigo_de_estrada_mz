@@ -1,8 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/cadastro_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/criar_conta_auth.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/login_screen.dart';

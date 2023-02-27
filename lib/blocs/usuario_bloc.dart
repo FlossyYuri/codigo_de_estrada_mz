@@ -14,6 +14,7 @@ import 'package:codigo_de_estrada_mz/ui/autentication/criar_conta_auth.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/login_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_view.dart';
 import 'package:codigo_de_estrada_mz/ui/home/home_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/common_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,13 +55,29 @@ class UsuarioBloc extends BlocBase {
 
   Future<AppSessionStatus> sessionStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    int estadoHelper = prefs.getInt(APP_CONSTANTS.SESSION_STATE);
+    int estadoHelper;
+    try {
+      estadoHelper = prefs.getInt(APP_CONSTANTS.SESSION_STATE);
+    } catch (e) {}
+
+    if (estadoHelper != null && estadoHelper >= 0) {
+      if (estadoHelper == 0) {
+        prefs.remove(APP_CONSTANTS.SESSION_STATE);
+        prefs.setString(APP_CONSTANTS.SESSION_STATE,
+            AppSessionStatus.NOT_LOGGED_IN.toString());
+        return AppSessionStatus.NOT_LOGGED_IN;
+      }
+      prefs.remove(APP_CONSTANTS.SESSION_STATE);
+      prefs.setString(
+          APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
+      return AppSessionStatus.LOGGED_IN;
+    }
     AppSessionStatus estado = AppSessionStatus.values.firstWhere(
         (element) =>
             element.toString() == prefs.getString(APP_CONSTANTS.SESSION_STATE),
         orElse: () => AppSessionStatus.NOT_LOGGED_IN);
-    if (estado == null || estadoHelper == null)
-      return AppSessionStatus.NOT_LOGGED_IN;
+
+    if (estado == null) return AppSessionStatus.NOT_LOGGED_IN;
     return estado;
   }
 
@@ -144,14 +161,11 @@ class UsuarioBloc extends BlocBase {
       @required GlobalKey<ScaffoldState> key}) async {
     final AuthCredential facebookCredential =
         FacebookAuthProvider.credential(accessToken.token);
-    print("Chegou nas credenciais");
     try {
       final userCredential =
           await _auth.signInWithCredential(facebookCredential);
       _finishAuthProcess(userCredential, SignUpMethod.FACEBOOK, key);
     } catch (error) {
-      print("Error code:" + error.code);
-      Navigator.pop(key.currentContext);
       switch (error.code) {
         case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
           _snackBar(
@@ -166,7 +180,6 @@ class UsuarioBloc extends BlocBase {
         case "account-exists-with-different-credential":
           List<String> emailList =
               await _auth.fetchSignInMethodsForEmail(error.email);
-          print(emailList);
           if (emailList.first == "google.com") {
             await googleAuthentication(key);
           }
@@ -382,7 +395,7 @@ class UsuarioBloc extends BlocBase {
   }
 
   _authDone(GlobalKey<ScaffoldState> key) {
-    Navigator.pop(key.currentContext);
+    CommonUtils().popUntilRoot(key.currentContext);
     Navigator.of(key.currentContext).pushReplacement(
       CupertinoPageRoute(
         builder: (context) => HomeScreen(),
@@ -515,8 +528,9 @@ class UsuarioBloc extends BlocBase {
           APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
       _authDone(key);
     } else {
-      Navigator.pop(key.currentContext);
-      Navigator.of(key.currentContext).push(
+      CommonUtils().popUntilRoot(key.currentContext);
+      Navigator.pushReplacement(
+        key.currentContext,
         CupertinoPageRoute(
           builder: (context) => CadastroScreen(
             userCredencial: userCredential,

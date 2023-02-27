@@ -2,8 +2,6 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/enums/app_session_status.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_view.dart';
-import 'package:codigo_de_estrada_mz/ui/home/home_screen.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -29,23 +27,10 @@ class _LoginAuthState extends State<LoginAuth> {
       callback: (val) async {
         BlocProvider.getBloc<UsuarioBloc>().offlineLogin().then(
           (val) {
-            switch (val) {
-              case AppSessionStatus.LOGGED_IN:
-                Navigator.of(context).pushReplacement(
-                  CupertinoPageRoute(
-                    builder: (context) => HomeScreen(),
-                  ),
-                );
-                break;
-              default:
-                Navigator.of(context).pushReplacement(
-                  CupertinoPageRoute(
-                    builder: (context) => AuthView(
-                      isLogin: true,
-                    ),
-                  ),
-                );
-            }
+            if (val == AppSessionStatus.LOGGED_IN)
+              Navigator.pushReplacementNamed(context, '/home');
+            else
+              Navigator.pushReplacementNamed(context, '/auth');
           },
         );
       },
