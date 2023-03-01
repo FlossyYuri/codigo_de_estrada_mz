@@ -64,21 +64,21 @@ class BuyCSTile extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        valor.toString() + " CS",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 8,
+                    // ),
+                    // Container(
+                    //   margin: EdgeInsets.only(bottom: 5),
+                    //   child: Text(
+                    //     valor.toString() + " CS",
+                    //     style: TextStyle(
+                    //       fontSize: 18,
+                    //       color: Colors.white,
+                    //       fontWeight: FontWeight.w400,
+                    //       decoration: TextDecoration.lineThrough,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 Text(

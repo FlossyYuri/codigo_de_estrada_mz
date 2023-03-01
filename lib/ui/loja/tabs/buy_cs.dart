@@ -17,56 +17,56 @@ class _BuyCSState extends State<BuyCS> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 20,
-              ),
-              alignment: Alignment.center,
-              child: Wrap(
-                children: <Widget>[
-                  Icon(
-                    FontAwesomeIcons.percent,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    "Aproveite o desconto de 50%",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Icon(
-                    FontAwesomeIcons.percent,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.redAccent,
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0.0, 4.0),
-                    color: Colors.redAccent.withOpacity(.5),
-                    blurRadius: 8,
-                    spreadRadius: .6,
-                  ),
-                ],
-              ),
-            ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            // Container(
+            //   padding: EdgeInsets.all(10),
+            //   margin: EdgeInsets.symmetric(
+            //     vertical: 10,
+            //     horizontal: 20,
+            //   ),
+            //   alignment: Alignment.center,
+            //   child: Wrap(
+            //     children: <Widget>[
+            //       Icon(
+            //         FontAwesomeIcons.percent,
+            //         color: Colors.white,
+            //         size: 20,
+            //       ),
+            //       SizedBox(
+            //         width: 8,
+            //       ),
+            //       Text(
+            //         "Aproveite o desconto de 50%",
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontSize: 18,
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         width: 8,
+            //       ),
+            //       Icon(
+            //         FontAwesomeIcons.percent,
+            //         color: Colors.white,
+            //         size: 20,
+            //       ),
+            //     ],
+            //   ),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10),
+            //     color: Colors.redAccent,
+            //     boxShadow: [
+            //       BoxShadow(
+            //         offset: const Offset(0.0, 4.0),
+            //         color: Colors.redAccent.withOpacity(.5),
+            //         blurRadius: 8,
+            //         spreadRadius: .6,
+            //       ),
+            //     ],
+            //   ),
+            // ),
             BuyCSTile(
               scaffoldKey: widget.scaffoldKey,
               titulo: "Cuppon Essencial",
