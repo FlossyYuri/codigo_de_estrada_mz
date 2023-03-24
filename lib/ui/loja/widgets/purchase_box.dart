@@ -5,6 +5,7 @@ import 'package:codigo_de_estrada_mz/data/usuario_api.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:codigo_de_estrada_mz/ui/loja/widgets/gplay_card.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -246,15 +247,15 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                             },
                           );
                           payMPESA(
-                            int.parse(_cellController.text),
+                            _cellController.text,
                             widget.cs,
                             BlocProvider.getBloc<UsuarioBloc>()
                                 .userData
                                 .username,
                           ).then(
                             (http.Response response) {
-                              Navigator.pop(scaffoldKey.currentContext);
-                              Navigator.pop(scaffoldKey.currentContext);
+                              CommonUtils()
+                                  .popUntilRoot(scaffoldKey.currentContext);
                               switch (response.statusCode) {
                                 case 200:
                                 case 201:
@@ -286,10 +287,6 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                                           "Parabéns, Versão Premium assinada com sucesso.\n A aplicação precisa ser reiniciada para configurar a versão premium. Ira fechar em 4 segundos.",
                                           true,
                                           scaffoldKey);
-                                      Future.delayed(Duration(seconds: 5))
-                                          .then((value) {
-                                        exit(0);
-                                      });
                                     } else {
                                       _showToast(
                                           'Pagamento realizado com sucesso.',

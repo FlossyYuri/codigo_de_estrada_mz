@@ -97,9 +97,7 @@ class _GetPremiumState extends State<GetPremium> {
                           gradient: null,
                           scaffoldKey: _scaffoldKey,
                         ),
-                      ).then((value) {
-                        setState(() {});
-                      });
+                      );
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),

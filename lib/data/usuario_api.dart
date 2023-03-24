@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 const String TIME_URL = "http://flossyyuri.com/app/dataAtual.php";
-const String MPESA_URL = "https://mpesaphp.herokuapp.com/api/payment";
+const String MPESA_URL = "https://mpesa.flossyyuri.com/test/pay";
 
 Future<Map<String, dynamic>> createPost({Map body}) async {
   return http.post(Uri.parse(TIME_URL), body: body).then(
@@ -16,18 +16,20 @@ Future<Map<String, dynamic>> createPost({Map body}) async {
   );
 }
 
-Future<http.Response> payMPESA(int phone, int amount, String userID) async {
-  Map<String, String> dados = Map<String, String>();
-  dados["phone"] = phone.toString();
-  dados["amount"] = amount.toString();
-  dados["channel"] = 'CDE-ANDROID';
-  dados["user_id"] = userID;
+Future<http.Response> payMPESA(
+    String phone, int amount, String username) async {
+  Map<String, dynamic> dados = Map<String, dynamic>();
+  dados["phone"] = phone;
+  dados["amount"] = amount;
+  dados["channel"] = 'CDE';
+  dados["username"] = 'MZ';
   return http
       .post(Uri.parse(MPESA_URL),
-          headers: {"Accept": "application/json"}, body: dados)
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(dados))
       .then(
     (http.Response response) {
-      print(response.statusCode);
+      print(response.body);
       return response;
     },
   );
