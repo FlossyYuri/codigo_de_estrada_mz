@@ -18,22 +18,10 @@ class CustomSliverAppBar extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                FutureBuilder(
-                  future: BlocProvider.getBloc<TransacoesBloc>()
-                      .verificarTestesIlimitados(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return CardEntity(
-                          entidade: snapshot.data ? "Testes ∞" : "Testes",
-                          valor: 50,
-                          icon: Icons.library_books);
-                    } else {
-                      return CardEntity(
-                          entidade: "Testes",
-                          valor: 50,
-                          icon: Icons.library_books);
-                    }
-                  },
+                CardEntity(
+                  entidade: "Testes ∞",
+                  valor: 50,
+                  icon: Icons.library_books,
                 ),
                 CardEntity(
                     entidade: "CS", valor: 100, icon: Icons.attach_money),

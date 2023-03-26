@@ -1,15 +1,13 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/ui/loja/widgets/buy_teste_tile.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:flutter/material.dart';
 
 class BuyTeste extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime data = DateTime.now();
-    bool premium = BlocProvider.getBloc<UsuarioBloc>().userData.premium;
 
     return SingleChildScrollView(
       child: Container(
@@ -95,7 +93,6 @@ class BuyTeste extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            _testesInfinitos(context, premium),
             SizedBox(
               height: 10,
             ),

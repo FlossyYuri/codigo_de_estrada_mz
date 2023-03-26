@@ -115,17 +115,18 @@ class _QuestaoViewState extends State<QuestaoView> {
                     ),
                   ),
                   Align(
-                      alignment: Alignment.bottomRight,
-                      child: IgnorePointer(
-                        child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: Icon(
-                            Icons.zoom_in,
-                            color: Colors.white,
-                            size: 40,
-                          ),
+                    alignment: Alignment.bottomRight,
+                    child: IgnorePointer(
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        child: Icon(
+                          Icons.zoom_in,
+                          color: Colors.white,
+                          size: 40,
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

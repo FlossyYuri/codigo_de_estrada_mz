@@ -1,9 +1,8 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/ui/tutoriais/usar_cupom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -175,39 +174,6 @@ class _UsarCupomState extends State<UsarCupom> {
                 ),
               ),
               SizedBox(height: 20),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 60,
-                ),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Colors.grey[200],
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => TutorialUsarCupom(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 40,
-                    width: 200,
-                    child: Text(
-                      "Ver tutorial",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 20,
               ),

@@ -1,14 +1,13 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/models/historico.dart';
 import 'package:codigo_de_estrada_mz/models/tema.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/models/teste.dart';
 import 'package:codigo_de_estrada_mz/ui/game/game_view.dart';
-import 'package:codigo_de_estrada_mz/ui/home/views/premium_view.dart';
 import 'package:codigo_de_estrada_mz/ui/home/widgets/tema_card.dart';
 import 'package:codigo_de_estrada_mz/ui/home/widgets/teste_card.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
@@ -164,10 +163,6 @@ class _TestesViewState extends State<TestesView>
                                   } else {
                                     state = "novo";
                                   }
-                                  if (!BlocProvider.getBloc<UsuarioBloc>()
-                                      .userData
-                                      .premium) if (porTema >= 1)
-                                    state = "bloqueado";
                                   w.add(
                                     Column(
                                       children: <Widget>[
@@ -178,18 +173,9 @@ class _TestesViewState extends State<TestesView>
                                           nrQuestoes: t.questoes.length,
                                           titulo: t.nome,
                                           erros: hi != null ? hi.nrErros : 0,
-                                          f: () {
-                                            if (state != "bloqueado") {
-                                              _buildModo(
-                                                  context,
-                                                  tema,
-                                                  t,
-                                                  state,
-                                                  hi != null ? hi.nrErros : 0);
-                                            } else {
-                                              _getPremium(context,
-                                                  "Este teste está disponivel apenas para usuários Premium.");
-                                            }
+                                          callback: () {
+                                            _buildModo(context, tema, t, state,
+                                                hi != null ? hi.nrErros : 0);
                                           },
                                           estado: state,
                                         ),
@@ -479,10 +465,7 @@ class _TestesViewState extends State<TestesView>
                         BlocProvider.getBloc<InGameBloc>().questionMode =
                             'classico';
                       });
-                    },
-                        active: BlocProvider.getBloc<UsuarioBloc>()
-                            .userData
-                            .premium),
+                    }, active: true),
                   ],
                 ),
                 SizedBox(
@@ -490,48 +473,26 @@ class _TestesViewState extends State<TestesView>
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    BlocProvider.getBloc<TransacoesBloc>()
-                        .verificarTestesIlimitados()
-                        .then((ativo) {
-                      if (BlocProvider.getBloc<UsuarioBloc>()
-                                  .userData
-                                  .nrTestes >=
-                              1 ||
-                          ativo) {
-                        Navigator.of(context).pop();
-                        switch (modo) {
-                          case 0:
-                            BlocProvider.getBloc<InGameBloc>().questionMode =
-                                'normal';
-                            break;
-                          case 1:
-                            BlocProvider.getBloc<InGameBloc>().questionMode =
-                                'classico';
-                            break;
-                        }
-                        BlocProvider.getBloc<InGameBloc>().tipoDeTeste = 2;
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                            builder: (context) => GamePage(
-                              gameMode: "teste",
-                              teste: t,
-                            ),
-                          ),
-                        );
-                      } else {
-                        SnackBar(
-                          content: Text(
-                            "Não tem testes suficientes",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                                color: branco),
-                          ),
-                          backgroundColor: lightred,
-                          duration: Duration(seconds: 2),
-                        );
-                      }
-                    });
+                    Navigator.of(context).pop();
+                    switch (modo) {
+                      case 0:
+                        BlocProvider.getBloc<InGameBloc>().questionMode =
+                            'normal';
+                        break;
+                      case 1:
+                        BlocProvider.getBloc<InGameBloc>().questionMode =
+                            'classico';
+                        break;
+                    }
+                    BlocProvider.getBloc<InGameBloc>().tipoDeTeste = 2;
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(
+                        builder: (context) => GamePage(
+                          gameMode: "teste",
+                          teste: t,
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -566,88 +527,40 @@ class _TestesViewState extends State<TestesView>
     );
   }
 
-  void _getPremium(BuildContext context, String text) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Teste Bloqueado"),
-          content: Text(text),
-          backgroundColor: secBG,
-          titleTextStyle: TextStyle(color: branco, fontSize: 18),
-          contentTextStyle: TextStyle(color: branco, fontSize: 16),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            TextButton(
-              child: Text(
-                "Virar Premium",
-                style: TextStyle(color: lightgreen, fontSize: 16),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  CupertinoPageRoute(
-                    builder: (context) => GetPremium(),
-                  ),
-                );
-              },
-            ),
-            TextButton(
-              child: Text(
-                "cancelar",
-                style: TextStyle(color: branco, fontSize: 16),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   _actionChip(BuildContext context, String text, int mod, Function f,
       {bool active = true}) {
     bool classic = text == "Classico";
     return ActionChip(
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: preto.withOpacity(0.1), width: 0.5),
-        borderRadius: BorderRadius.circular(40),
-      ),
-      labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      backgroundColor: mod == modo ? mainBG : transparente,
-      elevation: mod == modo ? 4 : 0,
-      label: Row(
-        children: <Widget>[
-          Text(
-            text,
-            style: TextStyle(
-              color: !active && classic
-                  ? Colors.grey
-                  : mod == modo
-                      ? branco
-                      : preto,
-              fontSize: 20,
-              fontWeight: FontWeight.w300,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: preto.withOpacity(0.1), width: 0.5),
+          borderRadius: BorderRadius.circular(40),
+        ),
+        labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        backgroundColor: mod == modo ? mainBG : transparente,
+        elevation: mod == modo ? 4 : 0,
+        label: Row(
+          children: <Widget>[
+            Text(
+              text,
+              style: TextStyle(
+                color: !active && classic
+                    ? Colors.grey
+                    : mod == modo
+                        ? branco
+                        : preto,
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+              ),
             ),
-          ),
-          !active && classic
-              ? Icon(
-                  Icons.lock_outline,
-                  color: Colors.grey,
-                  size: 24,
-                )
-              : Text("")
-        ],
-      ),
-      onPressed: active
-          ? f
-          : () {
-              _getPremium(context,
-                  "Este Modo está disponivel apenas para usuários Premium.");
-            },
-    );
+            !active && classic
+                ? Icon(
+                    Icons.lock_outline,
+                    color: Colors.grey,
+                    size: 24,
+                  )
+                : Text("")
+          ],
+        ),
+        onPressed: f);
   }
 }

@@ -1,8 +1,5 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/ui/home/views/home_view.dart';
-import 'package:codigo_de_estrada_mz/ui/home/views/premium_view.dart';
 import 'package:codigo_de_estrada_mz/ui/loja/loja_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/custom_drawer.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,32 +25,6 @@ class HomeScreen extends StatelessWidget {
               FontAwesomeIcons.user,
               color: branco,
             ),
-            FutureBuilder(
-              future: BlocProvider.getBloc<UsuarioBloc>().getPresentes(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (BlocProvider.getBloc<UsuarioBloc>().presentes['novo'])
-                    return Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Icon(
-                        FontAwesomeIcons.gift,
-                        color: Colors.amber,
-                        size: 15,
-                      ),
-                    );
-                }
-                return Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Icon(
-                    FontAwesomeIcons.gift,
-                    color: Colors.amber,
-                    size: 0,
-                  ),
-                );
-              },
-            )
           ],
         ),
         label: "Menu",
@@ -63,19 +34,10 @@ class HomeScreen extends StatelessWidget {
           FontAwesomeIcons.bagShopping,
           color: branco,
         ),
-        label: "Loja",
+        label: "Ofertas",
       ),
     ];
-    if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium)
-      itens.add(
-        BottomNavigationBarItem(
-          icon: Icon(
-            FontAwesomeIcons.rectangleAd,
-            color: branco,
-          ),
-          label: "Virar Premium",
-        ),
-      );
+
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
@@ -98,13 +60,6 @@ class HomeScreen extends StatelessWidget {
               Navigator.of(context).push(
                 CupertinoPageRoute(
                   builder: (context) => LojaScreen(),
-                ),
-              );
-              break;
-            case 2:
-              Navigator.of(context).push(
-                CupertinoPageRoute(
-                  builder: (context) => GetPremium(),
                 ),
               );
               break;

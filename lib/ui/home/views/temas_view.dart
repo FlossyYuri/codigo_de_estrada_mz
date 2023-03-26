@@ -1,19 +1,15 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/enums/connectivity_status.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
 import 'package:codigo_de_estrada_mz/models/tema.dart';
 import 'package:codigo_de_estrada_mz/models/teste.dart';
 import 'package:codigo_de_estrada_mz/ui/game/game_view.dart';
-import 'package:codigo_de_estrada_mz/ui/home/views/premium_view.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class TemasView extends StatefulWidget {
@@ -35,7 +31,10 @@ class _TemasViewState extends State<TemasView> {
 
   @override
   Widget build(BuildContext context) {
-    var connectivityStatus = Provider.of<ConnectivityStatus>(context);
+    mostPlayed = [];
+    relevant = [];
+    pro = [];
+    final connectivityStatus = Provider.of<ConnectivityStatus>(context);
     temas = BlocProvider.getBloc<QuestaoBloc>().temas;
     mostPlayed.add(Tema(id: 0, tema: "GERAL", icon: ""));
     for (Tema t in temas) {
@@ -62,9 +61,9 @@ class _TemasViewState extends State<TemasView> {
                   children: alertas.map((alerta) {
                     return Container(
                       margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 5),
+                          horizontal: 16, vertical: 4),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
+                          horizontal: 16, vertical: 0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: lightred,
@@ -89,13 +88,18 @@ class _TemasViewState extends State<TemasView> {
                             fit: FlexFit.tight,
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                  textStyle: TextStyle(color: branco)),
+                                textStyle: TextStyle(color: branco),
+                              ),
                               onPressed: () {
                                 setState(() {
                                   alertas.remove(alerta);
                                 });
                               },
-                              child: Icon(Icons.close),
+                              child: Icon(
+                                Icons.close,
+                                color: branco,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ],
@@ -286,16 +290,18 @@ class _TemasViewState extends State<TemasView> {
                         });
                       },
                     ),
-                    _actionChip(context, "Classico", 1, () {
-                      setState(() {
-                        modo = 1;
-                        BlocProvider.getBloc<InGameBloc>().questionMode =
-                            'classico';
-                      });
-                    },
-                        active: BlocProvider.getBloc<UsuarioBloc>()
-                            .userData
-                            .premium),
+                    _actionChip(
+                      context,
+                      "Classico",
+                      1,
+                      () {
+                        setState(() {
+                          modo = 1;
+                          BlocProvider.getBloc<InGameBloc>().questionMode =
+                              'classico';
+                        });
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -303,56 +309,39 @@ class _TemasViewState extends State<TemasView> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    BlocProvider.getBloc<TransacoesBloc>()
-                        .verificarTestesIlimitados()
-                        .then((ativo) {
-                      if (BlocProvider.getBloc<UsuarioBloc>()
-                                  .userData
-                                  .nrTestes >=
-                              1 ||
-                          ativo) {
-                        Navigator.of(context).pop();
-                        switch (modo) {
-                          case 0:
-                            BlocProvider.getBloc<InGameBloc>().questionMode =
-                                'normal';
-                            break;
-                          case 1:
-                            BlocProvider.getBloc<InGameBloc>().questionMode =
-                                'classico';
-                            break;
-                        }
+                    Navigator.of(context).pop();
+                    switch (modo) {
+                      case 0:
+                        BlocProvider.getBloc<InGameBloc>().questionMode =
+                            'normal';
+                        break;
+                      case 1:
+                        BlocProvider.getBloc<InGameBloc>().questionMode =
+                            'classico';
+                        break;
+                    }
 
-                        BlocProvider.getBloc<InGameBloc>().tipoDeTeste = 1;
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                            builder: (context) => GamePage(
-                              gameMode: "random",
-                              teste: Teste(
-                                nome: tema.tema,
-                                categoria: tema.tema,
-                                duracao: 30,
-                                id: 0,
-                                maxErros: 7,
-                                questoes: BlocProvider.getBloc<InGameBloc>()
-                                    .criarQuestoes(
-                                  context: context,
-                                  idTema: tema.id,
-                                ),
-                                idTema: tema.id,
-                              ),
+                    BlocProvider.getBloc<InGameBloc>().tipoDeTeste = 1;
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(
+                        builder: (context) => GamePage(
+                          gameMode: "random",
+                          teste: Teste(
+                            nome: tema.tema,
+                            categoria: tema.tema,
+                            duracao: 30,
+                            id: 0,
+                            maxErros: 7,
+                            questoes: BlocProvider.getBloc<InGameBloc>()
+                                .criarQuestoes(
+                              context: context,
+                              idTema: tema.id,
                             ),
+                            idTema: tema.id,
                           ),
-                        );
-                      } else {
-                        Fluttertoast.showToast(
-                            msg:
-                                "Nao tem testes suficientes, volte ao menu assita um video para ganhar teste ou compre teste na loja",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 2);
-                      }
-                    });
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: mainBG,
@@ -368,9 +357,10 @@ class _TemasViewState extends State<TemasView> {
                     child: Text(
                       "Jogar",
                       style: TextStyle(
-                          color: branco,
-                          fontSize: 24,
-                          fontWeight: FontWeight.normal),
+                        color: branco,
+                        fontSize: 24,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
                   ),
                 )
@@ -382,7 +372,7 @@ class _TemasViewState extends State<TemasView> {
     );
   }
 
-  _actionChip(BuildContext context, String text, int mod, Function f,
+  _actionChip(BuildContext context, String text, int mode, Function callback,
       {bool active = true}) {
     bool classic = text == "Classico";
     return ActionChip(
@@ -391,8 +381,8 @@ class _TemasViewState extends State<TemasView> {
         borderRadius: BorderRadius.circular(40),
       ),
       labelPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
-      backgroundColor: mod == modo ? mainBG : transparente,
-      elevation: mod == modo ? 7 : 0,
+      backgroundColor: mode == modo ? mainBG : transparente,
+      elevation: mode == modo ? 7 : 0,
       label: Row(
         children: <Widget>[
           Text(
@@ -400,7 +390,7 @@ class _TemasViewState extends State<TemasView> {
             style: TextStyle(
               color: !active && classic
                   ? Colors.grey
-                  : mod == modo
+                  : mode == modo
                       ? branco
                       : preto,
               fontSize: 20,
@@ -416,54 +406,7 @@ class _TemasViewState extends State<TemasView> {
               : Text("")
         ],
       ),
-      onPressed: active
-          ? f
-          : () {
-              _getPremium(context,
-                  "Este Modo está disponivel apenas para usuários Premium.");
-            },
-    );
-  }
-
-  void _getPremium(BuildContext context, String text) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Teste Bloqueado"),
-          content: Text(text),
-          backgroundColor: secBG,
-          titleTextStyle: TextStyle(color: branco, fontSize: 18),
-          contentTextStyle: TextStyle(color: branco, fontSize: 16),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            TextButton(
-              child: Text(
-                "Virar Premium",
-                style: TextStyle(color: lightgreen, fontSize: 16),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  CupertinoPageRoute(
-                    builder: (context) => GetPremium(),
-                  ),
-                );
-              },
-            ),
-            TextButton(
-              child: Text(
-                "cancelar",
-                style: TextStyle(color: branco, fontSize: 16),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      onPressed: callback,
     );
   }
 }

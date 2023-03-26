@@ -10,7 +10,7 @@ class TesteCard extends StatelessWidget {
   final int erros;
   final int maxErros;
   final String estado;
-  final Function f;
+  final Function callback;
   TesteCard({
     @required this.icon,
     @required this.titulo,
@@ -19,7 +19,7 @@ class TesteCard extends StatelessWidget {
     @required this.estado,
     @required this.maxErros,
     @required this.erros,
-    @required this.f,
+    @required this.callback,
   });
 
   @override
@@ -142,7 +142,7 @@ class TesteCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      onPressed: f,
+      onPressed: callback,
       color: secBG,
       splashColor: lightBG,
       elevation: 4,

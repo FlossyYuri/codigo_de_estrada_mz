@@ -46,8 +46,6 @@ class _GPLAYCardState extends State<GPLAYCard> {
           case '200_cs':
             BlocProvider.getBloc<TransacoesBloc>().comprarCS(200, context);
             break;
-          case 'premium':
-            BlocProvider.getBloc<TransacoesBloc>().virarPremium(context);
             break;
           case '500_cs':
             BlocProvider.getBloc<TransacoesBloc>().comprarCS(500, context);

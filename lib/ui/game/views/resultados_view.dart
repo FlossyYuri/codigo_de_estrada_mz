@@ -22,8 +22,6 @@ class _ResultadosViewState extends State<ResultadosView> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool conexao = true;
   bool resolucao = false;
-  bool premium;
-  StreamController _loadSub = StreamController<bool>.broadcast();
   @override
   void initState() {
     super.initState();
@@ -38,17 +36,13 @@ class _ResultadosViewState extends State<ResultadosView> {
       BlocProvider.getBloc<InGameBloc>().calcularResultados();
       BlocProvider.getBloc<QuestaoBloc>().lerHistorico();
     }
-    premium = BlocProvider.getBloc<UsuarioBloc>().userData.premium;
+
     Resultados result = BlocProvider.getBloc<InGameBloc>().resultados;
-    if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium && conexao)
-      _loadSub.stream.listen((load) {
-        if (load) {
-          _loadSub.close();
-        }
-      });
 
     if (resolucao == false)
-      Future.delayed(Duration(seconds: 1)).then((v) {
+      Future.delayed(
+        Duration(seconds: 1),
+      ).then((v) {
         BuildContext ctx = context;
         showDialog(
           context: context,
@@ -64,36 +58,20 @@ class _ResultadosViewState extends State<ResultadosView> {
                 // usually buttons at the bottom of the dialog
                 TextButton(
                   child: Text(
-                    premium ? "Sim" : "Sim (5 CS)",
+                    "Sim",
                     style: TextStyle(color: lightred, fontSize: 16),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    if (BlocProvider.getBloc<UsuarioBloc>().userData.cs >= 5 ||
-                        premium) {
-                      BlocProvider.getBloc<TransacoesBloc>()
-                          .pagarResolucao(context);
-                      Navigator.of(context).push(
-                        CupertinoPageRoute(
-                          builder: (context) => GamePage(
-                            gameMode: "resolucao",
-                            teste: BlocProvider.getBloc<InGameBloc>().teste,
-                          ),
+
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(
+                        builder: (context) => GamePage(
+                          gameMode: "resolucao",
+                          teste: BlocProvider.getBloc<InGameBloc>().teste,
                         ),
-                      );
-                    } else
-                      ScaffoldMessenger.of(ctx).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Nao tem cs suficiente, volte ao menu e compre cs na loja",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                                color: branco),
-                          ),
-                          backgroundColor: Colors.redAccent,
-                        ),
-                      );
+                      ),
+                    );
                   },
                 ),
                 TextButton(
@@ -113,191 +91,133 @@ class _ResultadosViewState extends State<ResultadosView> {
       });
 
     return Scaffold(
-        key: _scaffoldKey,
-        body: Container(
-          decoration: BoxDecoration(color: mainBG),
-          child: CustomScrollView(
-            slivers: <Widget>[
-              CustomSliverAppBar(),
-              SliverPadding(
-                  padding: pagePadding,
-                  sliver: SliverToBoxAdapter(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Card(
-                            elevation: 4,
+      key: _scaffoldKey,
+      body: Container(
+        decoration: BoxDecoration(color: mainBG),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            CustomSliverAppBar(),
+            SliverPadding(
+              padding: pagePadding,
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 16),
+                          leading: CircularProgressIndicator(
+                            backgroundColor: Colors.grey[300],
+                            valueColor: AlwaysStoppedAnimation(mainBG),
+                            value: result.valorClassif,
+                          ),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Classificação",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                result.classificacao,
+                                style: TextStyle(
+                                    color: mainBG,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          trailing: MaterialButton(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 16),
-                              leading: CircularProgressIndicator(
-                                backgroundColor: Colors.grey[300],
-                                valueColor: AlwaysStoppedAnimation(mainBG),
-                                value: result.valorClassif,
-                              ),
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Classificação",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Text(
-                                    result.classificacao,
-                                    style: TextStyle(
-                                        color: mainBG,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              trailing: MaterialButton(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  side: BorderSide(
-                                    width: 0.4,
-                                    color: preto.withOpacity(0.2),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  if (result.testPaid) {
-                                    Navigator.of(context).push(
-                                      CupertinoPageRoute(
-                                        builder: (context) => GamePage(
-                                          gameMode: "resolucao",
-                                          teste:
-                                              BlocProvider.getBloc<InGameBloc>()
-                                                  .teste,
-                                        ),
-                                      ),
-                                    );
-                                  } else if (BlocProvider.getBloc<UsuarioBloc>()
-                                          .userData
-                                          .cs >=
-                                      5) {
-                                    BlocProvider.getBloc<TransacoesBloc>()
-                                        .pagarResolucao(context);
-                                    setState(() {
-                                      result.testPaid = true;
-                                    });
-                                    Navigator.of(context).push(
-                                      CupertinoPageRoute(
-                                        builder: (context) => GamePage(
-                                          gameMode: "resolucao",
-                                          teste:
-                                              BlocProvider.getBloc<InGameBloc>()
-                                                  .teste,
-                                        ),
-                                      ),
-                                    );
-                                  } else
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Nao tem cs suficiente, volte ao menu e compre cs na loja",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w300,
-                                              color: branco),
-                                        ),
-                                        backgroundColor: Colors.redAccent,
-                                      ),
-                                    );
-                                },
-                                elevation: 11,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      "Ver resolucao",
-                                      style: TextStyle(
-                                        color: mainBG,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      premium || result.testPaid
-                                          ? "grátis"
-                                          : "custo: 5 cs",
-                                      style: TextStyle(
-                                        color: preto,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              borderRadius: BorderRadius.circular(5),
+                              side: BorderSide(
+                                width: 1.5,
+                                color: lightBG,
                               ),
                             ),
-                          ),
-                          _buildResultCard(
-                            title: "Tema",
-                            trailing: BlocProvider.getBloc<InGameBloc>()
-                                .teste
-                                .nome
-                                .substring(0),
-                          ),
-                          _buildResultCard(
-                            title: "Acertos",
-                            trailing:
-                                "${result.acertos}/${result.teste.questoes.length}",
-                          ),
-                          _buildResultCard(
-                            title: "Erros",
-                            trailing:
-                                "${result.erros}/${result.teste.questoes.length}",
-                          ),
-                          const SizedBox(height: 5),
-                          _buildRaised("Jogar novamente", () {
-                            if (BlocProvider.getBloc<UsuarioBloc>()
-                                    .userData
-                                    .nrTestes >=
-                                1) {
-                              Navigator.of(context).pushReplacement(
+                            onPressed: () async {
+                              Navigator.of(context).push(
                                 CupertinoPageRoute(
                                   builder: (context) => GamePage(
-                                    gameMode: "repetir",
+                                    gameMode: "resolucao",
                                     teste: BlocProvider.getBloc<InGameBloc>()
                                         .teste,
                                   ),
                                 ),
                               );
-                            } else
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Nao tem testes suficientes, volte ao menu e compre cs na loja",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w300,
-                                        color: branco),
+                            },
+                            elevation: 11,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Ver resolução",
+                                  style: TextStyle(
+                                    color: lightBG,
+                                    fontSize: 18,
                                   ),
-                                  backgroundColor: Colors.redAccent,
                                 ),
-                              );
-                          }),
-                          const SizedBox(height: 5),
-                          _buildRaised("Escolher Tema", () async {
-                            Navigator.of(context).pop();
-                          }),
-                          const SizedBox(height: 24),
-                        ]),
-                  ))
-            ],
-          ),
-        ));
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      _buildResultCard(
+                        title: "Tema",
+                        trailing: BlocProvider.getBloc<InGameBloc>()
+                            .teste
+                            .nome
+                            .substring(0),
+                      ),
+                      _buildResultCard(
+                        title: "Acertos",
+                        trailing:
+                            "${result.acertos}/${result.teste.questoes.length}",
+                      ),
+                      _buildResultCard(
+                        title: "Erros",
+                        trailing:
+                            "${result.erros}/${result.teste.questoes.length}",
+                      ),
+                      const SizedBox(height: 5),
+                      _buildRaised("Jogar novamente", () {
+                        Navigator.of(context).pushReplacement(
+                          CupertinoPageRoute(
+                            builder: (context) => GamePage(
+                              gameMode: "repetir",
+                              teste: BlocProvider.getBloc<InGameBloc>().teste,
+                            ),
+                          ),
+                        );
+                      }),
+                      const SizedBox(height: 5),
+                      _buildRaised("Escolher Tema", () async {
+                        Navigator.of(context).pop();
+                      }),
+                      const SizedBox(height: 24),
+                    ]),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildResultCard({@required String title, @required String trailing}) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
         title: Text(
@@ -326,7 +246,9 @@ class _ResultadosViewState extends State<ResultadosView> {
         foregroundColor: Colors.black,
         elevation: 0.5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
         ),
       ),
       child: Container(
@@ -339,11 +261,5 @@ class _ResultadosViewState extends State<ResultadosView> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _loadSub.close();
-    super.dispose();
   }
 }

@@ -270,11 +270,6 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                                           .comprarCS(
                                               200, scaffoldKey.currentContext);
                                       break;
-                                    case 400:
-                                      BlocProvider.getBloc<TransacoesBloc>()
-                                          .virarPremium(
-                                              scaffoldKey.currentContext);
-                                      break;
                                     case 500:
                                       BlocProvider.getBloc<TransacoesBloc>()
                                           .comprarCS(

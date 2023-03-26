@@ -28,6 +28,7 @@ class _GamePageState extends State<GamePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int currentPage = 0;
   bool conexao = false;
+
   @override
   void initState() {
     super.initState();
@@ -41,23 +42,15 @@ class _GamePageState extends State<GamePage> {
     var blocInGame = BlocProvider.getBloc<InGameBloc>();
     if (!blocInGame.jogando) {
       //se nao estiver jogando
-      if (BlocProvider.getBloc<UsuarioBloc>().userData.nrTestes > 0) {
-        //se tiver testes
-        if (widget.gameMode != "resolucao")
-          BlocProvider.getBloc<TransacoesBloc>().usarTeste(context); // usar 1
-        switch (widget.gameMode) {
-          case "repetir":
-            blocInGame.jogarNovamente();
-            break;
-          case "resolucao":
-            break;
-          default:
-            BlocProvider.getBloc<InGameBloc>().salvarHistorico = true;
-            blocInGame.carregarTeste(context: context, teste: widget.teste);
-        }
-      } else {
-        //se nao tiver testes
-        if (widget.gameMode != "resolucao") Navigator.of(context).pop();
+      switch (widget.gameMode) {
+        case "repetir":
+          blocInGame.jogarNovamente();
+          break;
+        case "resolucao":
+          break;
+        default:
+          BlocProvider.getBloc<InGameBloc>().salvarHistorico = true;
+          blocInGame.carregarTeste(context: context, teste: widget.teste);
       }
       if (widget.gameMode != "resolucao") blocInGame.jogando = true;
     }
@@ -106,20 +99,6 @@ class _GamePageState extends State<GamePage> {
         ),
         body: Stack(
           children: <Widget>[
-            !BlocProvider.getBloc<UsuarioBloc>().userData.premium
-                ? Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 80),
-                      child: FutureBuilder<bool>(
-                        future: checkConnection(),
-                        builder: (context, snapshot) {
-                          return Container();
-                        },
-                      ),
-                    ),
-                  )
-                : Container(),
             PageView.builder(
               controller: _controlador,
               scrollDirection: Axis.vertical,
@@ -204,15 +183,6 @@ class _GamePageState extends State<GamePage> {
             stream: BlocProvider.getBloc<InGameBloc>().outQtdQuestoesResp,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium &&
-                    conexao)
-                  switch (snapshot.data) {
-                    case 8:
-                      break;
-                    case 16:
-                      break;
-                    default:
-                  }
                 return ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 4,
@@ -314,12 +284,10 @@ class _GamePageState extends State<GamePage> {
       builder: (context) {
         return AlertDialog(
           title: Text("Voltar Para o menu"),
-          content: Text("Tem certeza que quer voltar para o menu, uma unidade "
-              "de teste ja foi usada para gerar este teste entao se sair vai perder-la"
-              " mesmo assim.\nQuer voltar ao menu?"),
+          content: Text("Tem certeza que quer voltar para o menu?"),
           actions: <Widget>[
             TextButton(
-              child: Text("Nao"),
+              child: Text("Não"),
               onPressed: () {
                 Navigator.pop(context);
               },

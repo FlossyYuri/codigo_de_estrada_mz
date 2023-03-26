@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'package:bloc_pattern/bloc_pattern.dart';
+
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/ui/home/noticias_screen.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/ui/home/sobre_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/home/temas_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/home/views/testes_view.dart';
@@ -11,9 +9,7 @@ import 'package:codigo_de_estrada_mz/ui/home/widgets/modo_card.dart';
 import 'package:codigo_de_estrada_mz/ui/home/widgets/option_card.dart';
 import 'package:codigo_de_estrada_mz/ui/home/widgets/promo-dialogue.dart';
 import 'package:codigo_de_estrada_mz/ui/loja/loja_screen.dart';
-import 'package:codigo_de_estrada_mz/ui/tutoriais/tutoriais_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -144,27 +140,6 @@ class _HomeViewState extends State<HomeView> {
                 },
               ),
               OptionCard(
-                texto: "Noticias",
-                icon: FontAwesomeIcons.newspaper,
-                f: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder: (context) => NoticiasScreen(),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-        SliverPadding(
-          padding: pagePadding,
-          sliver: SliverGrid.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            children: <Widget>[
-              OptionCard(
                 texto: "Sobre",
                 icon: FontAwesomeIcons.circleInfo,
                 f: () {
@@ -175,49 +150,9 @@ class _HomeViewState extends State<HomeView> {
                   );
                 },
               ),
-              OptionCard(
-                texto: "Tutoriais",
-                icon: FontAwesomeIcons.lightbulb,
-                f: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (context) => TutoriaisScreen()),
-                  );
-                },
-              ),
             ],
           ),
         ),
-        /*
-        SliverToBoxAdapter(
-          child: Column(children: <Widget>[
-            ElevatedButton(
-              color: Colors.purple,
-              onPressed: () {
-                setState(() {
-                  BlocProvider.getBloc<QuestaoBloc>().buscarQuestoesDB();
-                });
-              },
-              child: Text("Cancelar"),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              color: Colors.purple,
-              onPressed: () {
-                setState(() {
-                  BlocProvider.getBloc<TransacoesBloc>()
-                      .virarPremium(context);
-                });
-              },
-              child: Text("Virar Premium"),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-          ]),
-        ),
-        */
       ],
     );
   }
@@ -326,27 +261,6 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
     );
-  }
-
-  verificarTestes(Function f) {
-    BlocProvider.getBloc<TransacoesBloc>()
-        .verificarTestesIlimitados()
-        .then((ativo) {
-      if (BlocProvider.getBloc<UsuarioBloc>().userData.nrTestes >= 1 || ativo) {
-        if (!BlocProvider.getBloc<UsuarioBloc>().userData.premium && conexao)
-          f();
-      } else
-        _showSnackBar(
-          "Nao tem testes suficiente, compre testes na loja ou assista um anuncio e ganhe testes",
-          lightred,
-          action: SnackBarAction(
-            label: "Assistir video",
-            onPressed: () {
-              _showRewardedVideo();
-            },
-          ),
-        );
-    });
   }
 
   Widget raised(Function f, String text) {

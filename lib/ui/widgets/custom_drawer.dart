@@ -6,8 +6,6 @@ import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
 import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:codigo_de_estrada_mz/models/usuario.dart';
 import 'package:codigo_de_estrada_mz/ui/home/views/historico_view.dart';
-import 'package:codigo_de_estrada_mz/ui/home/views/premium_view.dart';
-import 'package:codigo_de_estrada_mz/ui/tutoriais/tutoriais_screen.dart';
 import 'package:codigo_de_estrada_mz/ui/widgets/load_all_images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,19 +35,6 @@ class CustomDrawer extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(left: 16),
-                          child: Text(
-                            BlocProvider.getBloc<UsuarioBloc>().userData.premium
-                                ? "Versão Premium"
-                                : "",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w300,
-                              color: branco,
-                            ),
-                          ),
-                        ),
                         IconButton(
                           padding: EdgeInsets.all(10),
                           splashColor: mainBG,
@@ -124,33 +109,6 @@ class CustomDrawer extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      BlocProvider.getBloc<UsuarioBloc>().userData.premium
-                          ? Container()
-                          : _buildButton(
-                              "VIRAR PREMIUM", FontAwesomeIcons.rectangleAd,
-                              () {
-                              Navigator.of(context).push(
-                                CupertinoPageRoute(
-                                  builder: (context) => GetPremium(),
-                                ),
-                              );
-                            }),
-                      BlocProvider.getBloc<UsuarioBloc>().presentes['novo']
-                          ? _buildButton(
-                              "Resgatar presente",
-                              FontAwesomeIcons.gifts,
-                              () {
-                                Navigator.pop(context);
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    // return object of type Dialog
-                                    return _giftDialogue(context);
-                                  },
-                                );
-                              },
-                            )
-                          : Container(),
                       _buildButton(
                         "Historico de testes",
                         FontAwesomeIcons.clockRotateLeft,
@@ -163,12 +121,6 @@ class CustomDrawer extends StatelessWidget {
                           );
                         },
                       ),
-                      _buildButton("Tutoriais", FontAwesomeIcons.lightbulb, () {
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                              builder: (context) => TutoriaisScreen()),
-                        );
-                      }),
                       _buildButton("Testes ofline", FontAwesomeIcons.plug, () {
                         Navigator.push(
                           context,
@@ -332,24 +284,7 @@ class CustomDrawer extends StatelessWidget {
                           );
                         },
                       );
-                      bool premium = await BlocProvider.getBloc<UsuarioBloc>()
-                          .coletarPresente(context, gift);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Presente resgatado com sucesso. " +
-                                (premium
-                                    ? "Reinicie para que reconfigurar a aplicação."
-                                    : ""),
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                                color: branco),
-                          ),
-                          backgroundColor: Colors.blueGrey,
-                          duration: Duration(seconds: 4),
-                        ),
-                      );
+
                       scaffoldKey.currentState.setState(() {});
                     },
                     child: Text(
