@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class AuthButton extends StatelessWidget {
@@ -7,10 +7,10 @@ class AuthButton extends StatelessWidget {
   final Icon icon;
   final VoidCallback onPressed;
   AuthButton(
-      {@required this.text,
-      @required this.action,
-      @required this.icon,
-      @required this.onPressed});
+      {required this.text,
+      required this.action,
+      required this.icon,
+      required this.onPressed});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

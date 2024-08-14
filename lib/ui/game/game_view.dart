@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:codigo_de_estrada_mz/ui/game/views/resultados_view.dart';
-import 'package:codigo_de_estrada_mz/ui/game/widgets/questao_view.dart';
+import 'package:latest_codigo_de_estrada/blocs/in_game_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
+import 'package:latest_codigo_de_estrada/ui/game/views/resultados_view.dart';
+import 'package:latest_codigo_de_estrada/ui/game/widgets/questao_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +14,8 @@ class GamePage extends StatefulWidget {
   final String gameMode;
   final Teste teste;
   GamePage({
-    @required this.gameMode,
-    this.teste,
+    required this.gameMode,
+    required this.teste,
   });
   @override
   _GamePageState createState() => _GamePageState();
@@ -72,7 +70,7 @@ class _GamePageState extends State<GamePage> {
               widget.gameMode == "resolucao"
                   ? Container()
                   : StreamBuilder<int>(
-                      stream: blocInGame.outQtdQuestoesResp,
+                      stream: blocInGame.outQtdQuestoesResp as Stream<int>?,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return Text(
@@ -107,15 +105,15 @@ class _GamePageState extends State<GamePage> {
                 currentPage = index;
                 if (widget.gameMode == "resolucao")
                   return QuestaoView(
-                    questao: blocInGame.teste.questoes2[index],
+                    questao: blocInGame.teste!.questoes2[index],
                     resposta:
-                        blocInGame.teste.questoes2[index].portugues.resposta,
-                    alternativa: blocInGame.resultados.opcoesEscolhidas[index]
-                        [blocInGame.teste.questoes2[index].id],
+                        blocInGame.teste!.questoes2[index].portugues.resposta,
+                    alternativa: blocInGame.resultados!.opcoesEscolhidas[index]
+                        [blocInGame.teste!.questoes2[index].id]!,
                   );
                 else {
                   return QuestaoView(
-                    questao: blocInGame.teste.questoes2[index],
+                    questao: blocInGame.teste!.questoes2[index],
                     questionMode: blocInGame.questionMode,
                   );
                 }
@@ -180,7 +178,8 @@ class _GamePageState extends State<GamePage> {
                 duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
           }),
           StreamBuilder<int>(
-            stream: BlocProvider.getBloc<InGameBloc>().outQtdQuestoesResp,
+            stream: BlocProvider.getBloc<InGameBloc>().outQtdQuestoesResp
+                as Stream<int>?,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ElevatedButton(

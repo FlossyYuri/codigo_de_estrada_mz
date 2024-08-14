@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField2 extends StatefulWidget {
@@ -7,17 +7,17 @@ class CustomTextField2 extends StatefulWidget {
   final IconData prefix;
   final TextInputType keyboard;
   final bool asSufix;
-  final Function valid;
+  final Function(String) valid;
   final TextEditingController controller;
-  final int size;
+  final int? size;
   CustomTextField2(
-      {@required this.hint,
-      @required this.isObscure,
-      @required this.prefix,
-      @required this.keyboard,
-      @required this.asSufix,
-      @required this.controller,
-      @required this.valid,
+      {required this.hint,
+      required this.isObscure,
+      required this.prefix,
+      required this.keyboard,
+      required this.asSufix,
+      required this.controller,
+      required this.valid,
       this.size});
 
   @override
@@ -39,7 +39,12 @@ class _CustomTextField2State extends State<CustomTextField2> {
         maxLength: widget.size != null ? widget.size : null,
         style: TextStyle(color: branco, fontSize: 22),
         obscureText: widget.isObscure,
-        validator: widget.valid,
+        validator: (String? text){
+          if (text == null || text.isEmpty) {
+            return null;
+          }
+          return widget.valid(text);
+        },
         keyboardType: widget.keyboard,
         decoration: InputDecoration(
           counterStyle: TextStyle(color: Colors.white),

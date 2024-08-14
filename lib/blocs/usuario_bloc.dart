@@ -3,18 +3,18 @@ import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/enums/app_session_status.dart';
-import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/helpers/usuario_helper.dart';
-import 'package:codigo_de_estrada_mz/models/usuario.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/cadastro_screen.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/criar_conta_auth.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/login_screen.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_view.dart';
-import 'package:codigo_de_estrada_mz/ui/home/home_screen.dart';
-import 'package:codigo_de_estrada_mz/ui/utils/common_utils.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/enums/app_session_status.dart';
+import 'package:latest_codigo_de_estrada/enums/signup_method.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/helpers/usuario_helper.dart';
+import 'package:latest_codigo_de_estrada/models/usuario.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/cadastro_screen.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/criar_conta_auth.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/login_screen.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/widgets/auth_view.dart';
+import 'package:latest_codigo_de_estrada/ui/home/home_screen.dart';
+import 'package:latest_codigo_de_estrada/ui/utils/common_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,19 +28,19 @@ enum AuthProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class UsuarioBloc extends BlocBase {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  User firebaseUser;
-  Usuario userData;
+  User? firebaseUser;
+  Usuario? userData;
   Map<String, dynamic> presentes = {'novo': false};
   UsuarioHelper userHelper = UsuarioHelper();
   final StreamController _userController = BehaviorSubject<Usuario>();
-  Stream get outUsuario => _userController.stream;
+  Stream<Usuario> get outUsuario => _userController.stream as Stream<Usuario>;
 
   userSink() {
     _userController.sink.add(userData);
   }
 
   fullUpdateUser() async {
-    userHelper.updateUsuario(userData);
+    userHelper.updateUsuario(userData!);
     userSink();
     if (await checkConnection()) {
       await updateUserData();
@@ -55,12 +55,12 @@ class UsuarioBloc extends BlocBase {
 
   Future<AppSessionStatus> sessionStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    int estadoHelper;
+    int estadoHelper = -1;
     try {
-      estadoHelper = prefs.getInt(APP_CONSTANTS.SESSION_STATE);
+      estadoHelper = prefs.getInt(APP_CONSTANTS.SESSION_STATE)!;
     } catch (e) {}
 
-    if (estadoHelper != null && estadoHelper >= 0) {
+    if (estadoHelper >= 0) {
       if (estadoHelper == 0) {
         prefs.remove(APP_CONSTANTS.SESSION_STATE);
         prefs.setString(APP_CONSTANTS.SESSION_STATE,
@@ -76,18 +76,25 @@ class UsuarioBloc extends BlocBase {
         (element) =>
             element.toString() == prefs.getString(APP_CONSTANTS.SESSION_STATE),
         orElse: () => AppSessionStatus.NOT_LOGGED_IN);
-
-    if (estado == null) return AppSessionStatus.NOT_LOGGED_IN;
     return estado;
   }
 
   Future<AppSessionStatus> offlineLogin() async {
     switch (await sessionStatus()) {
       case AppSessionStatus.LOGGED_IN:
-        await userHelper.getTodosusuarios().then((usuario) {
-          this.userData = usuario[0];
+        await userHelper.getTodosusuarios().then((usuario) async {
+          try {
+            this.userData = usuario[0];
+          } catch (e) {
+            final prefs = await SharedPreferences.getInstance();
+            prefs.clear();
+          }
         });
-        _userController.sink.add(userData);
+        if (this.userData != null) {
+          _userController.sink.add(userData);
+        } else {
+          return AppSessionStatus.NOT_LOGGED_IN;
+        }
         return AppSessionStatus.LOGGED_IN;
       default:
         return AppSessionStatus.NOT_LOGGED_IN;
@@ -96,43 +103,52 @@ class UsuarioBloc extends BlocBase {
 
   autoLogin() {}
   Future<Null> criarContaComEmail(
-      {@required Usuario dados,
-      @required String pass,
-      @required GlobalKey<ScaffoldState> key}) async {
+      {required Usuario dados,
+      required String pass,
+      required GlobalKey<ScaffoldState> key}) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: dados.email, password: pass);
 
+      print(result.toString());
       await saveUserData(dados, result);
-      await result.user.sendEmailVerification();
+      await result.user?.sendEmailVerification();
       _snackBar(key,
           "Usuario cadastrado com sucesso. Verique seu email para poder entrar.");
 
-      Navigator.pop(key.currentContext);
-      Navigator.pop(key.currentContext);
-      Navigator.of(key.currentContext).push(
-        CupertinoPageRoute(
-          builder: (context) => LoginScreen(),
-        ),
-      );
+      if (key.currentContext != null && key.currentContext!.mounted) {
+        Navigator.pop(key.currentContext!);
+        Navigator.pop(key.currentContext!);
+        Navigator.of(key.currentContext!).push(
+          CupertinoPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+      }
     } catch (e) {
       if (Platform.isAndroid) {
-        Navigator.pop(key.currentContext);
-        switch (e.message) {
-          case 'The email address is already in use by another account.':
-            _snackBar(key, "Esse email já está sendo usado.");
-            break;
-          default:
-            _snackBar(key, "Não foi possivel criar uma conta.");
+        Navigator.pop(key.currentContext!);
+        if (e is FirebaseAuthException) {
+          switch (e.code) {
+            case 'email-already-in-use':
+              _snackBar(key, "Esse email já está sendo usado.");
+              break;
+            default:
+              _snackBar(key, "Não foi possivel criar uma conta.");
+          }
+        } else {
+          _snackBar(key, "Ocorreu um erro inesperado.");
+          print('-----------------');
+          print(e);
         }
       }
     }
   }
 
   Future<Null> criarContaComMedia(
-      {@required Usuario dados,
-      @required UserCredential result,
-      @required GlobalKey<ScaffoldState> key}) async {
+      {required Usuario dados,
+      required UserCredential result,
+      required GlobalKey<ScaffoldState> key}) async {
     await saveUserData(dados, result);
     _authDone(key);
   }
@@ -143,13 +159,13 @@ class UsuarioBloc extends BlocBase {
     );
     switch (result.status) {
       case LoginStatus.success:
-        _firebaseAuthWithFacebook(accessToken: result.accessToken, key: key);
+        _firebaseAuthWithFacebook(accessToken: result.accessToken!, key: key);
         return;
       case LoginStatus.cancelled:
-        Navigator.pop(key.currentContext);
+        Navigator.pop(key.currentContext!);
         return;
       case LoginStatus.failed:
-        Navigator.pop(key.currentContext);
+        Navigator.pop(key.currentContext!);
         return;
       default:
         return null;
@@ -157,36 +173,42 @@ class UsuarioBloc extends BlocBase {
   }
 
   _firebaseAuthWithFacebook(
-      {@required AccessToken accessToken,
-      @required GlobalKey<ScaffoldState> key}) async {
+      {required AccessToken accessToken,
+      required GlobalKey<ScaffoldState> key}) async {
     final AuthCredential facebookCredential =
-        FacebookAuthProvider.credential(accessToken.token);
+        FacebookAuthProvider.credential(accessToken.tokenString);
     try {
       final userCredential =
           await _auth.signInWithCredential(facebookCredential);
       _finishAuthProcess(userCredential, SignUpMethod.FACEBOOK, key);
-    } catch (error) {
+    } on FirebaseAuthException catch (error) {
       switch (error.code) {
-        case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
+        case "account-exists-with-different-credential":
           _snackBar(
               key, "Esta conta já foi criada usando outro método (provedor).");
-          break;
-        case "ERROR_CREDENTIAL_ALREADY_IN_USE":
-          _snackBar(key, "Esta conta já existe");
-          break;
-        case "ERROR_EMAIL_ALREADY_IN_USE":
-          _snackBar(key, "Esta conta ja está sendo usada.");
-          break;
-        case "account-exists-with-different-credential":
-          List<String> emailList =
-              await _auth.fetchSignInMethodsForEmail(error.email);
-          if (emailList.first == "google.com") {
-            await googleAuthentication(key);
+
+          // Handling the specific case where the account exists with a Google credential
+          final email = error.email;
+          if (email != null) {
+            final List<String> methods =
+                await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+            if (methods.isNotEmpty && methods.first == "google.com") {
+              await googleAuthentication(key);
+            }
           }
           break;
+        case "credential-already-in-use":
+          _snackBar(key, "Esta conta já existe");
+          break;
+        case "email-already-in-use":
+          _snackBar(key, "Esta conta ja está sendo usada.");
+          break;
         default:
-          _snackBar(key, "Não foi possivel criar uma conta.");
+          _snackBar(key, "Não foi possivel criar uma conta: ${error.message}");
       }
+    } catch (error) {
+      _snackBar(key, "Ocorreu um erro inesperado: $error");
+    } finally {
       await resetLOGS();
     }
   }
@@ -198,38 +220,33 @@ class UsuarioBloc extends BlocBase {
         'https://www.googleapis.com/auth/contacts.readonly',
       ],
     );
-    GoogleSignInAccount googleUser = gglSign.currentUser;
+    // GoogleSignInAccount? googleUser = gglSign.currentUser!;
     try {
-      if (await gglSign.isSignedIn()) {
-        if (googleUser == null) {
-          googleUser = await gglSign.signInSilently(suppressErrors: false);
-        }
-      }
-      if (googleUser == null) await gglSign.signIn();
+      if (await gglSign.isSignedIn()) {}
       GoogleSignInAuthentication credenciais =
-          await gglSign.currentUser.authentication;
+          await gglSign.currentUser!.authentication;
       UserCredential userCredential = await _auth.signInWithCredential(
         GoogleAuthProvider.credential(
             idToken: credenciais.idToken, accessToken: credenciais.accessToken),
       );
       _finishAuthProcess(userCredential, SignUpMethod.GOOGLE, key);
       if (!await gglSign.isSignedIn()) {
-        Navigator.pop(key.currentContext);
+        Navigator.pop(key.currentContext!);
         _snackBar(key,
             "Não foi possível fazer o login, certifique se de criar uma conta.");
         Future.delayed(Duration(seconds: 3)).then((value) {
-          Navigator.of(key.currentContext).pushReplacement(
+          Navigator.of(key.currentContext!).pushReplacement(
             CupertinoPageRoute(
               builder: (context) => CriarContaAuth(),
             ),
           );
         });
       }
-    } catch (error) {
-      Navigator.pop(key.currentContext);
+    } on FirebaseAuthException catch (error) {
+      Navigator.pop(key.currentContext!);
       try {
         switch (error.code) {
-          case "ERROR_USER_NOT_FOUND":
+          case "user-not-found":
             _snackBar(key, "Não existe nenhum usuario em estas credenciais");
             break;
           default:
@@ -240,7 +257,7 @@ class UsuarioBloc extends BlocBase {
         _snackBar(key,
             "Não foi possível fazer o login, certifique se de criar uma conta.");
         Future.delayed(Duration(seconds: 3)).then((value) {
-          Navigator.of(key.currentContext).pushReplacement(
+          Navigator.of(key.currentContext!).pushReplacement(
             CupertinoPageRoute(
               builder: (context) => CriarContaAuth(),
             ),
@@ -257,21 +274,19 @@ class UsuarioBloc extends BlocBase {
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
       firebaseUser = authResult.user;
       this.userData = await getUserData();
-      await userHelper.salvarUsuario(userData);
+      await userHelper.salvarUsuario(userData!);
       _userController.sink.add(userData);
       final prefs = await SharedPreferences.getInstance();
       prefs.setString(
           APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
       _authDone(key);
     } on PlatformException catch (e) {
-      Navigator.pop(key.currentContext);
-      Navigator.pop(key.currentContext);
-      AuthProblems errorType;
+      Navigator.pop(key.currentContext!);
+      Navigator.pop(key.currentContext!);
       if (Platform.isAndroid) {
         switch (e.message) {
           case 'There is no user record corresponding to this identifier. The user may have been deleted.':
-            errorType = AuthProblems.UserNotFound;
-            ScaffoldMessenger.of(key.currentContext).showSnackBar(
+            ScaffoldMessenger.of(key.currentContext!).showSnackBar(
               SnackBar(
                 content: Text(
                   "Verifique seu email, nao existe nenhum usuario com esse email.",
@@ -284,8 +299,7 @@ class UsuarioBloc extends BlocBase {
             );
             break;
           case 'The password is invalid or the user does not have a password.':
-            errorType = AuthProblems.PasswordNotValid;
-            ScaffoldMessenger.of(key.currentContext).showSnackBar(
+            ScaffoldMessenger.of(key.currentContext!).showSnackBar(
               SnackBar(
                 content: Text(
                   "Senha errada. Tente novamente.",
@@ -298,8 +312,7 @@ class UsuarioBloc extends BlocBase {
             );
             break;
           case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
-            errorType = AuthProblems.NetworkError;
-            ScaffoldMessenger.of(key.currentContext).showSnackBar(
+            ScaffoldMessenger.of(key.currentContext!).showSnackBar(
               SnackBar(
                 content: Text(
                   "Erro ao tentar conectar",
@@ -315,10 +328,10 @@ class UsuarioBloc extends BlocBase {
           default:
             print('Case ${e.message} is not yet implemented');
         }
-        print('The error is $errorType');
+        print('The error is ${e.message}');
       }
     } catch (e) {
-      Navigator.pop(key.currentContext);
+      Navigator.pop(key.currentContext!);
       print("Podre:  $e");
     }
   }
@@ -329,7 +342,7 @@ class UsuarioBloc extends BlocBase {
     } catch (e) {}
     // firebaseUser = null;
     try {
-      await userHelper.deleteUsuario(userData.id);
+      await userHelper.deleteUsuario(userData!.id!);
     } catch (e) {}
     userData = null;
     _userController.sink.add(userData);
@@ -341,9 +354,9 @@ class UsuarioBloc extends BlocBase {
   logout(BuildContext context) async {
     await _auth.signOut();
     firebaseUser = null;
-    await userHelper.deleteUsuario(userData.id);
+    await userHelper.deleteUsuario(userData!.id!);
     userData = null;
-    _userController.sink.add(userData);
+    _userController.sink.done;
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         APP_CONSTANTS.SESSION_STATE, AppSessionStatus.NOT_LOGGED_IN.toString());
@@ -367,14 +380,14 @@ class UsuarioBloc extends BlocBase {
 
   Future<Null> saveUserData(Usuario dados, UserCredential user) async {
     firebaseUser = user.user;
-    dados.id = firebaseUser.uid;
-    dados.imgUrl = user.user.photoURL;
-    this.userData = dados;
+    dados.id = firebaseUser?.uid;
+    dados.imgUrl = user.user?.photoURL;
+    userData = dados;
     await FirebaseFirestore.instance
         .collection("usuarios")
-        .doc(firebaseUser.uid)
-        .set(dados.toMap(forDB: false));
-    await userHelper.salvarUsuario(userData);
+        .doc(firebaseUser?.uid)
+        .set(dados.toMap(forDB: false) as Map<String, dynamic>);
+    await userHelper.salvarUsuario(userData!);
     _userController.sink.add(userData);
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
@@ -384,8 +397,8 @@ class UsuarioBloc extends BlocBase {
   Future<Null> updateUserData() async {
     FirebaseFirestore.instance
         .collection("usuarios")
-        .doc(userData.id)
-        .update(userData.toMap(forDB: false));
+        .doc(userData!.id)
+        .update(userData!.toMap(forDB: false) as Map<String, dynamic>);
   }
 
   Future<bool> verifyUser(String uid) async {
@@ -395,8 +408,8 @@ class UsuarioBloc extends BlocBase {
   }
 
   _authDone(GlobalKey<ScaffoldState> key) {
-    CommonUtils().popUntilRoot(key.currentContext);
-    Navigator.of(key.currentContext).pushReplacement(
+    CommonUtils().popUntilRoot(key.currentContext!);
+    Navigator.of(key.currentContext!).pushReplacement(
       CupertinoPageRoute(
         builder: (context) => HomeScreen(),
       ),
@@ -406,9 +419,9 @@ class UsuarioBloc extends BlocBase {
   Future<Usuario> getUserData() async {
     DocumentSnapshot document = await FirebaseFirestore.instance
         .collection("usuarios")
-        .doc(firebaseUser.uid)
+        .doc(firebaseUser!.uid)
         .get();
-    return Usuario.fromJson(document.data());
+    return Usuario.fromJson(document.data() as Map<String, dynamic>);
   }
 
   Future<bool> existeCell(String cell) async {
@@ -436,7 +449,7 @@ class UsuarioBloc extends BlocBase {
   }
 
   void _snackBar(GlobalKey<ScaffoldState> key, String message) {
-    ScaffoldMessenger.of(key.currentContext).showSnackBar(
+    ScaffoldMessenger.of(key.currentContext!).showSnackBar(
       SnackBar(
         content: Text(
           message,
@@ -453,19 +466,19 @@ class UsuarioBloc extends BlocBase {
 
   void _finishAuthProcess(UserCredential userCredential, SignUpMethod method,
       GlobalKey<ScaffoldState> key) async {
-    if (await existeEmail(userCredential.user.email)) {
+    if (await existeEmail(userCredential.user!.email!)) {
       firebaseUser = userCredential.user;
       this.userData = await getUserData();
-      await userHelper.salvarUsuario(userData);
+      await userHelper.salvarUsuario(userData!);
       _userController.sink.add(userData);
       final prefs = await SharedPreferences.getInstance();
       prefs.setString(
           APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
       _authDone(key);
     } else {
-      CommonUtils().popUntilRoot(key.currentContext);
+      CommonUtils().popUntilRoot(key.currentContext!);
       Navigator.pushReplacement(
-        key.currentContext,
+        key.currentContext!,
         CupertinoPageRoute(
           builder: (context) => CadastroScreen(
             userCredencial: userCredential,

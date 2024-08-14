@@ -1,5 +1,4 @@
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:flutter/material.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
 
 class Resultados {
   List<Map<int, String>> opcoesEscolhidas;
@@ -12,14 +11,14 @@ class Resultados {
   int tipoDeTeste;
   DateTime data;
   Resultados({
-    @required this.opcoesEscolhidas,
-    @required this.teste,
-    @required this.acertos,
-    @required this.erros,
-    @required this.classificacao,
-    @required this.valorClassif,
-    @required this.tipoDeTeste,
-    @required this.data,
+    required this.opcoesEscolhidas,
+    required this.teste,
+    required this.acertos,
+    required this.erros,
+    required this.classificacao,
+    required this.valorClassif,
+    required this.tipoDeTeste,
+    required this.data,
   });
 
   String getTipoDeTeste() {

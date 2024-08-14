@@ -5,9 +5,7 @@ class DividerTitledRow extends StatelessWidget {
   final Color lineColor;
   final String text;
   DividerTitledRow(
-      {@required this.text,
-      @required this.lineColor,
-      @required this.textColor});
+      {required this.text, required this.lineColor, required this.textColor});
   @override
   Widget build(BuildContext context) {
     return Row(

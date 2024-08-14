@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/historico.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/historico.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
@@ -35,7 +35,7 @@ class HistoricoHelper {
   Future<ResultadoHistorico> salvarHistorico(ResultadoHistorico hist) async {
     Database dbCDE = await db;
     await criarTabela();
-    await dbCDE.insert(tabHistorico, hist.toMapDB());
+    await dbCDE.insert(tabHistorico, hist.toMapDB() as Map<String, dynamic>);
     return hist;
   }
 
@@ -56,15 +56,15 @@ class HistoricoHelper {
     List listaMapa = await dbCDE.rawQuery("SELECT * FROM $tabHistorico");
     List<ResultadoHistorico> listadados = [];
     for (Map m in listaMapa) {
-      listadados.add(ResultadoHistorico.fromMapDB(m));
+      listadados.add(ResultadoHistorico.fromMapDB(m as Map<String, dynamic>));
     }
     return listadados;
   }
 
   Future<int> getNumber() async {
     Database dbCDE = await db;
-    return Sqflite.firstIntValue(
-        await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabHistorico"));
+    final result = await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabHistorico");
+    return Sqflite.firstIntValue(result) ?? -1;
   }
 
   Future fechar() async {

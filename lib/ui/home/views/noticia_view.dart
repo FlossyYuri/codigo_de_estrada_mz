@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/models/noticia.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/models/noticia.dart';
 import 'package:flutter/material.dart';
 
 class NoticiaView extends StatelessWidget {

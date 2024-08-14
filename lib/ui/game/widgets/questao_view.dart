@@ -1,19 +1,19 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada_mz/models/questao.dart';
-import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/ui/game/views/image_view.dart';
+import 'package:latest_codigo_de_estrada/models/questao.dart';
+import 'package:latest_codigo_de_estrada/blocs/in_game_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/ui/game/views/image_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class QuestaoView extends StatefulWidget {
   final Questao questao;
-  final String alternativa;
-  final String resposta;
-  final String questionMode;
+  final String? alternativa;
+  final String? resposta;
+  final String? questionMode;
   QuestaoView({
-    @required this.questao,
+    required this.questao,
     this.alternativa,
     this.resposta,
     this.questionMode,
@@ -24,8 +24,8 @@ class QuestaoView extends StatefulWidget {
 }
 
 class _QuestaoViewState extends State<QuestaoView> {
-  bool temFoto;
-  String selectedOption;
+  bool temFoto = false;
+  String selectedOption = "";
   bool respondido = false;
   void initState() {
     super.initState();
@@ -175,7 +175,7 @@ class _QuestaoViewState extends State<QuestaoView> {
     );
   }
 
-  _alternativa({@required String texto, @required Function f}) {
+  _alternativa({required String texto, required Function f}) {
     Color cor = Colors.white;
     if (widget.alternativa == null) {
       cor = texto == selectedOption ? mainBG : preto;
@@ -207,7 +207,7 @@ class _QuestaoViewState extends State<QuestaoView> {
       child: RadioListTile(
         value: texto,
         groupValue: selectedOption,
-        onChanged: f,
+        onChanged: f as void Function(String?)?,
         activeColor: mainBG,
         title: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),

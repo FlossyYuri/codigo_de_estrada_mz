@@ -1,17 +1,15 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/models/historico.dart';
-import 'package:codigo_de_estrada_mz/models/tema.dart';
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:codigo_de_estrada_mz/ui/game/game_view.dart';
-import 'package:codigo_de_estrada_mz/ui/home/widgets/tema_card.dart';
-import 'package:codigo_de_estrada_mz/ui/home/widgets/teste_card.dart';
-import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
-import 'package:codigo_de_estrada_mz/ui/widgets/custom_drawer.dart';
+import 'package:latest_codigo_de_estrada/blocs/in_game_bloc.dart';
+import 'package:latest_codigo_de_estrada/blocs/questao_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/models/historico.dart';
+import 'package:latest_codigo_de_estrada/models/tema.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
+import 'package:latest_codigo_de_estrada/ui/game/game_view.dart';
+import 'package:latest_codigo_de_estrada/ui/home/widgets/tema_card.dart';
+import 'package:latest_codigo_de_estrada/ui/home/widgets/teste_card.dart';
+import 'package:latest_codigo_de_estrada/ui/widgets/custom_app_bar.dart';
+import 'package:latest_codigo_de_estrada/ui/widgets/custom_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,9 +26,9 @@ class _TestesViewState extends State<TestesView>
   final Color branco = Colors.white;
 
   final Color preto = Colors.black;
-  List<Tema> temas;
-  List<Teste> testes;
-  List<ResultadoHistorico> historico;
+  List<Tema>? temas = [];
+  List<Teste>? testes = [];
+  List<ResultadoHistorico>? historico = [];
   int modo = 0;
 
   final LinearGradient mainGrad = LinearGradient(colors: [
@@ -39,9 +37,9 @@ class _TestesViewState extends State<TestesView>
   ], begin: Alignment.topCenter, end: Alignment.bottomCenter);
   bool toogle = false;
   bool isOpened = false;
-  AnimationController _animationController;
-  Animation<Color> _animateColor;
-  Animation<double> _animateIcon;
+  AnimationController? _animationController;
+  late Animation<Color?> _animateColor;
+  Animation<double>? _animateIcon;
   Curve _curve = Curves.easeOut;
   @override
   initState() {
@@ -52,34 +50,34 @@ class _TestesViewState extends State<TestesView>
             setState(() {});
           });
     _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController!);
     _animateColor = ColorTween(
       begin: secBG,
       end: lightred,
     ).animate(
       CurvedAnimation(
-        parent: _animationController,
+        parent: _animationController!,
         curve: Interval(
           0.00,
           1.00,
           curve: _curve,
         ),
       ),
-    );
+    ) ;
   }
 
   @override
   dispose() {
-    _animationController.dispose();
+    if (_animationController != null) _animationController?.dispose();
     super.dispose();
   }
 
   animate() {
     if (!isOpened) {
-      _animationController.forward();
+      if (_animationController != null) _animationController?.forward();
       _showBottomSheet();
     } else {
-      _animationController.reverse();
+      if (_animationController != null) _animationController?.reverse();
       Navigator.pop(context);
     }
     isOpened = !isOpened;
@@ -87,14 +85,14 @@ class _TestesViewState extends State<TestesView>
 
   Widget toggle() {
     return FloatingActionButton(
-      backgroundColor: _animateColor.value,
+      backgroundColor: _animateColor?.value,
       onPressed: () {
         animate();
       },
       tooltip: 'Toggle',
       child: AnimatedIcon(
         icon: AnimatedIcons.menu_close,
-        progress: _animateIcon,
+        progress: _animateIcon!,
       ),
     );
   }
@@ -140,15 +138,15 @@ class _TestesViewState extends State<TestesView>
                           return Container();
                         } else {
                           return Column(
-                            children: temas.map((Tema tema) {
+                            children: temas!.map((Tema tema) {
                               List<Widget> w = [_tituloTema(tema.tema)];
-                              int cont = 0, porTema = 0;
-                              for (Teste t in testes) {
+                              int cont = 0; //porTema = 0
+                              for (Teste t in testes!) {
                                 if (t.idTema == tema.id) {
-                                  ResultadoHistorico hi;
+                                  ResultadoHistorico? hi;
                                   for (ResultadoHistorico his
                                       in BlocProvider.getBloc<QuestaoBloc>()
-                                          .listaHistorico) {
+                                          .listaHistorico!) {
                                     if (t.id == his.teste.id) {
                                       hi = his;
                                       break;
@@ -186,10 +184,9 @@ class _TestesViewState extends State<TestesView>
                                     ),
                                   );
                                   cont++;
-                                  porTema++;
+
                                 }
                               }
-                              porTema = 0;
 
                               if (cont > 0) {
                                 w.add(_divider());
@@ -247,7 +244,7 @@ class _TestesViewState extends State<TestesView>
   }
 
   _showBottomSheet() {
-    _scaffoldKey.currentState.showBottomSheet((context) {
+    _scaffoldKey.currentState!.showBottomSheet((context) {
       return Container(
         color: mainBG,
         height: 240,
@@ -284,7 +281,7 @@ class _TestesViewState extends State<TestesView>
                         height: 10,
                       ),
                       Column(
-                        children: temas.map((Tema tema) {
+                        children: temas!.map((Tema tema) {
                           return TemaCard(tema: tema.tema);
                         }).toList(),
                       ),
@@ -527,7 +524,7 @@ class _TestesViewState extends State<TestesView>
     );
   }
 
-  _actionChip(BuildContext context, String text, int mod, Function f,
+  _actionChip(BuildContext context, String text, int mod, void Function()? f,
       {bool active = true}) {
     bool classic = text == "Classico";
     return ActionChip(

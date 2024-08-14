@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/data/usuario_api.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada_mz/ui/loja/widgets/gplay_card.dart';
-import 'package:codigo_de_estrada_mz/ui/utils/common_utils.dart';
+import 'package:latest_codigo_de_estrada/blocs/transacoes_bloc.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/data/usuario_api.dart';
+import 'package:latest_codigo_de_estrada/ui/loja/widgets/gplay_card.dart';
+import 'package:latest_codigo_de_estrada/ui/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,10 +14,10 @@ class PurchaseBox extends StatefulWidget {
   final LinearGradient gradient;
   final GlobalKey<ScaffoldState> scaffoldKey;
   PurchaseBox({
-    @required this.cs,
-    @required this.cor,
-    @required this.gradient,
-    @required this.scaffoldKey,
+    required this.cs,
+    required this.cor,
+    required this.gradient,
+    required this.scaffoldKey,
   });
 
   @override
@@ -41,7 +40,10 @@ class _PurchaseBoxState extends State<PurchaseBox> {
 
   dialogContent(GlobalKey<ScaffoldState> scaffoldKey) {
     String icon = "gold1";
-    BoxDecoration d;
+    BoxDecoration d = BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.blueAccent,
+    );
     int item = 1;
     switch (widget.cs) {
       case 100:
@@ -87,7 +89,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
         item = 2;
         break;
     }
-    _cellController.text = BlocProvider.getBloc<UsuarioBloc>().userData.cell;
+    _cellController.text = BlocProvider.getBloc<UsuarioBloc>().userData!.cell;
     return Stack(
       children: <Widget>[
         Container(
@@ -119,7 +121,8 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: branco,
-                    border: Border.all(color: Colors.blueGrey[100], width: 1),
+                    border:
+                        Border.all(color: Colors.blueGrey.shade100, width: 1),
                     boxShadow: [
                       BoxShadow(
                         blurRadius: 5,
@@ -157,8 +160,8 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                           autocorrect: false,
                           maxLength: 9,
                           style: TextStyle(color: preto, fontSize: 22),
-                          validator: (String text) {
-                            if (text.length != 9) {
+                          validator: (String? text) {
+                            if (text != null && text.length != 9) {
                               return "Deve conter 9 digitos";
                             }
                             return null;
@@ -250,12 +253,12 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                             _cellController.text,
                             widget.cs,
                             BlocProvider.getBloc<UsuarioBloc>()
-                                .userData
+                                .userData!
                                 .username,
                           ).then(
                             (http.Response response) {
                               CommonUtils()
-                                  .popUntilRoot(scaffoldKey.currentContext);
+                                  .popUntilRoot(scaffoldKey.currentContext!);
                               switch (response.statusCode) {
                                 case 200:
                                 case 201:
@@ -263,17 +266,17 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                                     case 100:
                                       BlocProvider.getBloc<TransacoesBloc>()
                                           .comprarCS(
-                                              100, scaffoldKey.currentContext);
+                                              100, scaffoldKey.currentContext!);
                                       break;
                                     case 200:
                                       BlocProvider.getBloc<TransacoesBloc>()
                                           .comprarCS(
-                                              200, scaffoldKey.currentContext);
+                                              200, scaffoldKey.currentContext!);
                                       break;
                                     case 500:
                                       BlocProvider.getBloc<TransacoesBloc>()
                                           .comprarCS(
-                                              500, scaffoldKey.currentContext);
+                                              500, scaffoldKey.currentContext!);
                                       break;
                                   }
                                   setState(() {
@@ -390,7 +393,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
 }
 
 _showToast(String text, bool success, GlobalKey<ScaffoldState> scaffoldKey) {
-  ScaffoldMessenger.of(scaffoldKey.currentContext).showSnackBar(SnackBar(
+  ScaffoldMessenger.of(scaffoldKey.currentContext!).showSnackBar(SnackBar(
     content: Text(
       text,
       style:

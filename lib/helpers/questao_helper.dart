@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/questao.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/questao.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
@@ -38,12 +38,13 @@ class QuestaoHelper {
     if (map.length > 0) {
       updateQuestao(questao);
     } else {
-      await dbCDE.insert(tabQuestao, questao.toMap(forDB: true));
+      await dbCDE.insert(
+          tabQuestao, questao.toMap(forDB: true) as Map<String, dynamic>);
     }
     return questao;
   }
 
-  Future<Questao> getQuestao(String id) async {
+  Future<Questao?> getQuestao(String id) async {
     Database dbCDE = await db;
     List<Map> map = await dbCDE.query(tabQuestao,
         columns: [
@@ -57,9 +58,9 @@ class QuestaoHelper {
         where: "$idColumn = ?",
         whereArgs: [id]);
     if (map.length > 0)
-      return Questao.fromMap(map.first, fromDB: true);
-    else
-      return null;
+      return Questao.fromMap(map.first as Map<String, dynamic>, fromDB: true);
+
+    return null;
   }
 
   Future<int> deleteQuestao(String id) async {
@@ -70,7 +71,8 @@ class QuestaoHelper {
 
   Future<int> updateQuestao(Questao questao) async {
     Database dbCDE = await db;
-    return await dbCDE.update(tabQuestao, questao.toMap(forDB: true),
+    return await dbCDE.update(
+        tabQuestao, questao.toMap(forDB: true) as Map<String, dynamic>,
         where: "$idColumn = ?", whereArgs: [questao.id]);
   }
 
@@ -79,15 +81,17 @@ class QuestaoHelper {
     List listaMapa = await dbCDE.rawQuery("SELECT * FROM $tabQuestao");
     List<Questao> listaQuestao = [];
     for (Map m in listaMapa) {
-      listaQuestao.add(Questao.fromMap(m, fromDB: true));
+      listaQuestao
+          .add(Questao.fromMap(m as Map<String, dynamic>, fromDB: true));
     }
     return listaQuestao;
   }
 
   Future<int> getNumber() async {
     Database dbCDE = await db;
-    return Sqflite.firstIntValue(
-        await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabQuestao"));
+
+    final result = await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabQuestao");
+    return Sqflite.firstIntValue(result) ?? -1;
   }
 
   Future fechar() async {

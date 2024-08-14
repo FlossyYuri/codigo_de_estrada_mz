@@ -1,8 +1,8 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
+import 'package:latest_codigo_de_estrada/blocs/questao_bloc.dart';
 
 class LoadScreen extends StatelessWidget {
   @override
@@ -31,7 +31,7 @@ class LoadScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children:
-                  BlocProvider.getBloc<QuestaoBloc>().questoes.map((quest) {
+                  BlocProvider.getBloc<QuestaoBloc>().questoes!.map((quest) {
                 if (quest.foto.length > 0) {
                   return Container(
                       width: 200,

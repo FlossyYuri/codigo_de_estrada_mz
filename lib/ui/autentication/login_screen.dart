@@ -1,10 +1,10 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/custom_text_field2.dart';
-import 'package:codigo_de_estrada_mz/ui/home/home_screen.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/widgets/background.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
+import 'package:latest_codigo_de_estrada/ui/home/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -87,13 +87,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefix: Icons.mail,
                             keyboard: TextInputType.emailAddress,
                             valid: (String text) {
-                              Pattern pattern =
+                              var pattern =
                                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                               RegExp regex = new RegExp(pattern);
-                              if (!regex.hasMatch(text))
+                              if (!regex.hasMatch(text)){
                                 return 'Introduza um email valido.';
-                              else
-                                return null;
+                              }
+                              return null;
                             },
                           ),
                           CustomTextField2(
@@ -118,8 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     ElevatedButton(
                       style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40),
                           ),
@@ -127,11 +126,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: !loading
                           ? () async {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 if (!await checkConnection()) {
                                   loading = false;
                                   Navigator.pop(context);
-                                  ScaffoldMessenger.of(_scaffKey.currentContext)
+                                  ScaffoldMessenger.of(
+                                          _scaffKey.currentContext!)
                                       .showSnackBar(
                                     SnackBar(
                                       content: Text(

@@ -1,18 +1,16 @@
-import 'package:flutter/material.dart';
-
 class AppInfo {
   String platform;
   String version;
   int bundle;
   bool state;
   AppInfo({
-    @required this.platform,
-    @required this.bundle,
-    @required this.state,
-    @required this.version,
+    required this.platform,
+    required this.bundle,
+    required this.state,
+    required this.version,
   });
 
-  factory AppInfo.fromJson(Map<String, dynamic> json){
+  factory AppInfo.fromJson(Map<String, dynamic> json) {
     return AppInfo(
       platform: json['platform'],
       version: json['version'],
@@ -21,15 +19,16 @@ class AppInfo {
     );
   }
 
-  AppInfo.fromMap(Map<String,dynamic> map) {
-    platform = map["platform"];
-    bundle = map["bundle"];
-    state = map["state"];
-    version = map["version"];
+  factory AppInfo.fromMap(Map<String, dynamic> map) {
+    return AppInfo(
+      platform: map["platform"],
+      bundle: map["bundle"],
+      state: map["state"],
+      version: map["version"],
+    );
   }
 
-
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       "platform": version,
       "version": version,
@@ -37,6 +36,7 @@ class AppInfo {
       "state": state,
     };
   }
+
   Map toMap() {
     var map = new Map<String, dynamic>();
     map["platform"] = version;

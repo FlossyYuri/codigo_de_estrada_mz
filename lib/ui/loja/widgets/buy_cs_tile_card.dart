@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_purchase/modules.dart';
 
@@ -13,21 +13,21 @@ class BuyCSTileDollar extends StatelessWidget {
   final Widget image;
   final VoidCallback f;
   BuyCSTileDollar(
-      {@required this.titulo,
-      @required this.item,
-      @required this.valor,
-      @required this.f,
-      this.cor,
-      this.gradient,
-      this.image});
+      {required this.titulo,
+      required this.item,
+      required this.valor,
+      required this.f,
+      required this.cor,
+      required this.gradient,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       decoration: BoxDecoration(
-        color: cor != null ? cor : null,
-        gradient: gradient != null ? gradient : null,
+        color:  cor ,
+        gradient: gradient ,
         borderRadius: BorderRadius.circular(20),
       ),
       child: MaterialButton(
@@ -50,7 +50,7 @@ class BuyCSTileDollar extends StatelessWidget {
                       fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  "Custo: ${double.parse(item.price).toStringAsPrecision(2)}${item.currency}",
+                  "Custo: ${double.parse(item.price!).toStringAsPrecision(2)}${item.currency}",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
                 SizedBox(

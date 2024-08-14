@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 const String TIME_URL = "http://flossyyuri.com/app/dataAtual.php";
 const String MPESA_URL = "https://mpesa.flossyyuri.com/test/pay";
 
-Future<Map<String, dynamic>> createPost({Map body}) async {
+Future<Map<String, dynamic>> createPost({required Map body}) async {
   return http.post(Uri.parse(TIME_URL), body: body).then(
     (http.Response response) {
       final int statusCode = response.statusCode;
-      if (statusCode < 200 || statusCode > 400 || json == null) {
+      if (statusCode < 200 || statusCode > 400) {
         throw new Exception("Error while fetching data");
       }
       return json.decode(response.body);

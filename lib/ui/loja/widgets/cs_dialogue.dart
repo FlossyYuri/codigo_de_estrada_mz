@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,9 +12,9 @@ class CSDialogue extends StatefulWidget {
   final LinearGradient gradient;
 
   CSDialogue({
-    @required this.cs,
-    @required this.cor,
-    @required this.gradient,
+    required this.cs,
+    required this.cor,
+    required this.gradient,
   });
 
   @override
@@ -37,8 +37,8 @@ class _CSDialogueState extends State<CSDialogue> {
   }
 
   dialogContent(BuildContext context) {
-    String codigoTransacao, numero;
-    double valor;
+    String codigoTransacao = "", numero = "";
+    double valor = 0;
     int icon = 1;
     switch (widget.cs) {
       case 100:
@@ -224,10 +224,11 @@ class _CSDialogueState extends State<CSDialogue> {
                               backgroundColor: Colors.blueGrey,
                             ),
                             onPressed: () async {
-                              ClipboardData cb =
+                              ClipboardData? cb =
                                   await Clipboard.getData('text/plain');
-                              if (cb.text.contains("Transferiste")) {
-                                for (String texto in cb.text.split(". ")) {
+                              if (cb != null && cb.text != null) return;
+                              if (cb!.text!.contains("Transferiste")) {
+                                for (String texto in cb.text!.split(". ")) {
                                   if (texto.contains("Confirmado")) {
                                     for (String texto in texto.split(" ")) {
                                       if (texto.length >= 11 &&
@@ -286,7 +287,7 @@ class _CSDialogueState extends State<CSDialogue> {
                             style: TextStyle(color: mainBG),
                             cursorColor: mainBG,
                             validator: (text) {
-                              if (text.length < 10) {
+                              if (text!.length < 10) {
                                 return "codigo com formato errado";
                               }
                               if (valor < 100) {
@@ -314,16 +315,8 @@ class _CSDialogueState extends State<CSDialogue> {
                           alignment: Alignment.bottomCenter,
                           child: TextButton(
                             onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                if (codigoTransacao != null)
-                                  await enviarMensagem(codigoTransacao, valor);
-                                else
-                                  Fluttertoast.showToast(
-                                    msg: "Dados incorectos",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                  );
+                              if (_formKey.currentState!.validate()) {
+                                await enviarMensagem(codigoTransacao, valor);
                               }
                             },
                             style: TextButton.styleFrom(

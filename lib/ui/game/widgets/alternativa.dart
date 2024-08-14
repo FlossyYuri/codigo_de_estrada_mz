@@ -1,10 +1,10 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class Alternativa extends StatelessWidget {
   final String texto;
   final VoidCallback f;
-Alternativa({@required this.texto, @required this.f});
+  Alternativa({required this.texto, required this.f});
   @override
   Widget build(BuildContext context) {
     return MaterialButton(

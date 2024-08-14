@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Noticia {
   int id;
@@ -7,13 +7,14 @@ class Noticia {
   DateTime data;
   String imgUrl;
   bool ativo;
+
   Noticia(
-      {@required this.titulo,
-      @required this.body,
-      @required this.data,
-      @required this.id,
-      @required this.ativo,
-      @required this.imgUrl});
+      {required this.titulo,
+      required this.body,
+      required this.data,
+      required this.id,
+      required this.ativo,
+      required this.imgUrl});
 
   factory Noticia.fromJson(Map<String, dynamic> json) {
     return Noticia(
@@ -26,13 +27,15 @@ class Noticia {
     );
   }
 
-  Noticia.fromMap(Map<String, dynamic> map) {
-    id = map["id"];
-    titulo = map["titulo"];
-    body = map["body"];
-    imgUrl = map["imgUrl"];
-    ativo = map["ativo"];
-    data = map["data"].toDate();
+  factory Noticia.fromMap(Map<String, dynamic> map) {
+    return Noticia(
+      id: map["id"] as int,
+      titulo: map["titulo"] as String,
+      body: map["body"] as String,
+      imgUrl: map["imgUrl"] as String,
+      ativo: map["ativo"] as bool,
+      data: (map["data"] as Timestamp).toDate(),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -61,10 +64,8 @@ class Noticia {
     switch (data.difference(DateTime.now()).inDays) {
       case 0:
         return "Hoje, as ${data.hour}:${data.minute}";
-        break;
       case 1:
         return "Ontem, as ${data.hour}:${data.minute}";
-        break;
       default:
         return "Dia ${data.day} pelas ${data.hour}:${data.minute}";
     }

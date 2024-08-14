@@ -1,7 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/enums/app_session_status.dart';
+import 'package:latest_codigo_de_estrada/blocs/questao_bloc.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/enums/app_session_status.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 

@@ -1,20 +1,23 @@
 import 'dart:async';
-
-import 'package:codigo_de_estrada_mz/enums/connectivity_status.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:latest_codigo_de_estrada/enums/connectivity_status.dart';
 
 class ConnectivityService {
   StreamController<ConnectivityStatus> statusController =
       StreamController<ConnectivityStatus>();
 
   ConnectivityService() {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      Connectivity().checkConnectivity().then((value) {
-        statusController.sink.add(_getStatusFromResult(value));
-        var connectionStatus = _getStatusFromResult(result);
-        statusController.add(connectionStatus);
-      });
-    });
+    // Inicializa o ConnectivityPlus
+    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+
+          // Obtém o status atual de conectividade
+          Connectivity().checkConnectivity().then((List<ConnectivityResult> value) {
+            statusController.sink
+                .add(_getStatusFromResult(value.first));
+            var connectionStatus = _getStatusFromResult(result.first);
+            statusController.add(connectionStatus);
+          },);
+        },);
   }
 
   ConnectivityStatus _getStatusFromResult(ConnectivityResult result) {
@@ -28,5 +31,10 @@ class ConnectivityService {
       default:
         return ConnectivityStatus.OFFLINE;
     }
+  }
+
+  // Fechar o StreamController quando não for mais necessário
+  void dispose() {
+    statusController.close();
   }
 }

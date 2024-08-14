@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/data/usuario_api.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/cuppon.dart';
-import 'package:codigo_de_estrada_mz/ui/home/widgets/promo-dialogue.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/cuppon.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,14 +37,14 @@ class TransacoesBloc extends BlocBase {
           .doc(codigo.toUpperCase())
           .get();
       if (snapshot.exists) {
-        Cupom cupom = Cupom.fromJson(snapshot.data());
+        Cupom cupom = Cupom.fromJson(snapshot.data() as Map<String, dynamic>);
         if (!cupom.usado) {
           var bloc = BlocProvider.getBloc<UsuarioBloc>();
-          bloc.userData.cs += cupom.cs;
+          bloc.userData!.cs += cupom.cs;
           await FirebaseFirestore.instance
               .collection("cupons")
               .doc(cupom.codigo)
-              .update({"usado": true, "username": bloc.userData.username});
+              .update({"usado": true, "username": bloc.userData!.username});
           await bloc.fullUpdateUser();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -122,8 +120,8 @@ class TransacoesBloc extends BlocBase {
     DateTime agora = DateTime.now();
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey("dITestesInfinitos")) {
-      DateTime init = DateTime.parse(prefs.getString("dITestesInfinitos"));
-      DateTime fim = DateTime.parse(prefs.getString("dFTestesInfinitos"));
+      DateTime init = DateTime.parse(prefs.getString("dITestesInfinitos")!);
+      DateTime fim = DateTime.parse(prefs.getString("dFTestesInfinitos")!);
       if (agora.isAfter(init) && agora.isBefore(fim))
         return true;
       else
@@ -135,8 +133,8 @@ class TransacoesBloc extends BlocBase {
 
   comprarTestes(int testes, int cs, BuildContext context) async {
     var bloc = BlocProvider.getBloc<UsuarioBloc>();
-    if (bloc.userData.cs >= cs) {
-      bloc.userData.cs -= cs;
+    if (bloc.userData!.cs >= cs) {
+      bloc.userData!.cs -= cs;
       switch (testes) {
         case -1:
           gerarTestesIlimitados();
@@ -150,7 +148,7 @@ class TransacoesBloc extends BlocBase {
           );
           break;
         default:
-          bloc.userData.nrTestes += testes;
+          bloc.userData!.nrTestes += testes;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Comprou $testes testes com sucesso.",
@@ -184,7 +182,7 @@ class TransacoesBloc extends BlocBase {
 
   comprarCS(int cs, BuildContext context) async {
     var bloc = BlocProvider.getBloc<UsuarioBloc>();
-    bloc.userData.cs += cs;
+    bloc.userData!.cs += cs;
     bloc.fullUpdateUser();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

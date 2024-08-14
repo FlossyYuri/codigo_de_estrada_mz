@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class ModoCard extends StatelessWidget {
@@ -9,18 +9,18 @@ class ModoCard extends StatelessWidget {
   final IconData icon1;
   final IconData icon2;
   final String add2;
-  final Function f;
+  final void Function()? f;
   final Color bgcolor;
   ModoCard(
-      {@required this.img,
-      @required this.titulo,
-      @required this.subtitulo,
-      @required this.bgcolor,
-      @required this.f,
-      @required this.icon1,
-      @required this.icon2,
-      @required this.add1,
-      @required this.add2});
+      {required this.img,
+      required this.titulo,
+      required this.subtitulo,
+      required this.bgcolor,
+      required this.f,
+      required this.icon1,
+      required this.icon2,
+      required this.add1,
+      required this.add2});
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,8 @@ class CardEntity extends StatelessWidget {
   final String entidade;
   final int valor;
   final IconData icon;
-  CardEntity({@required this.entidade, @required this.valor, this.icon});
+  CardEntity(
+      {required this.entidade, required this.valor, this.icon = Icons.add});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +35,7 @@ class CardEntity extends StatelessWidget {
                     ),
                   ),
                   trailing: Icon(
-                    icon != null ? icon : Icons.add,
+                    icon,
                     color: Colors.black,
                   ),
                 ),

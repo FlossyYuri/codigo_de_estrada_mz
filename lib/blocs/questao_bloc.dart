@@ -3,25 +3,25 @@ import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/helpers/historico_helper.dart';
-import 'package:codigo_de_estrada_mz/helpers/questao_helper.dart';
-import 'package:codigo_de_estrada_mz/helpers/tema_helper.dart';
-import 'package:codigo_de_estrada_mz/helpers/teste_helper.dart';
-import 'package:codigo_de_estrada_mz/models/app_info.dart';
-import 'package:codigo_de_estrada_mz/models/historico.dart';
-import 'package:codigo_de_estrada_mz/models/questao.dart';
-import 'package:codigo_de_estrada_mz/models/tema.dart';
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:package_info/package_info.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/helpers/historico_helper.dart';
+import 'package:latest_codigo_de_estrada/helpers/questao_helper.dart';
+import 'package:latest_codigo_de_estrada/helpers/tema_helper.dart';
+import 'package:latest_codigo_de_estrada/helpers/teste_helper.dart';
+import 'package:latest_codigo_de_estrada/models/app_info.dart';
+import 'package:latest_codigo_de_estrada/models/historico.dart';
+import 'package:latest_codigo_de_estrada/models/questao.dart';
+import 'package:latest_codigo_de_estrada/models/tema.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QuestaoBloc extends BlocBase {
-  List<Questao> questoes;
-  List<Teste> testes;
-  List<Tema> temas;
-  List<ResultadoHistorico> listaHistorico;
+  List<Questao>? questoes;
+  List<Teste>? testes;
+  List<Tema>? temas;
+  List<ResultadoHistorico>? listaHistorico;
   load() async {
     if (questoes == null || testes == null || temas == null) {
       if (await checkConnection()) {
@@ -37,13 +37,13 @@ class QuestaoBloc extends BlocBase {
         await downloadQuestoes();
         await downloadTestes();
         await downloadTemas();
-        for (Questao q in questoes) {
+        for (Questao q in questoes!) {
           questaoHelper.salvarQuestao(q);
         }
-        for (Teste t in testes) {
+        for (Teste t in testes!) {
           testeHelper.salvarTeste(t);
         }
-        for (Tema m in temas) {
+        for (Tema m in temas!) {
           temaHelper.salvarTema(m);
         }
       } else {
@@ -56,8 +56,8 @@ class QuestaoBloc extends BlocBase {
     return true;
   }
 
-  Questao questaoPorID(int id) {
-    for (Questao q in questoes) {
+  Questao? questaoPorID(int id) {
+    for (Questao q in questoes!) {
       if (q.id == id) return q;
     }
     return null;
@@ -66,7 +66,8 @@ class QuestaoBloc extends BlocBase {
   List<Questao> questoesPorIDs(List<int> ids) {
     List<Questao> l = [];
     for (int i in ids) {
-      l.add(questaoPorID(i));
+      Questao? questaoPID = questaoPorID(i);
+      if (questaoPID != null) l.add(questaoPID);
     }
     return l;
   }
@@ -93,7 +94,7 @@ class QuestaoBloc extends BlocBase {
         .get()
         .then((QuerySnapshot snapshot) {
       apps = snapshot.docs.map((doc) {
-        return AppInfo.fromMap(doc.data());
+        return AppInfo.fromMap(doc.data() as Map<String, dynamic>);
       }).toList();
     });
     // percorer todas apps e verificar se
@@ -109,45 +110,47 @@ class QuestaoBloc extends BlocBase {
 
   deleteDATA() async {
     QuestaoHelper questaoHelper = QuestaoHelper();
-    for (Questao q in questoes) {
+    for (Questao q in questoes!) {
       questaoHelper.salvarQuestao(q);
     }
   }
 
   Future<Null> downloadQuestoes() async {
-    if (questoes.length == 0) {
+    if (questoes!.length == 0) {
       await FirebaseFirestore.instance
           .collection("questao")
           .get()
           .then((QuerySnapshot snapshot) {
         questoes = snapshot.docs.map((doc) {
-          return Questao.fromMap(doc.data(), fromDB: false);
+          return Questao.fromMap(doc.data() as Map<String, dynamic>,
+              fromDB: false);
         }).toList();
       });
     }
   }
 
   Future<Null> downloadTestes() async {
-    if (testes.length == 0) {
+    if (testes!.length == 0) {
       await FirebaseFirestore.instance
           .collection("teste")
           .get()
           .then((QuerySnapshot snapshot) {
         testes = snapshot.docs.map((doc) {
-          return Teste.fromMap(doc.data(), fromDB: false);
+          return Teste.fromMap(doc.data() as Map<String, dynamic>,
+              fromDB: false);
         }).toList();
       });
     }
   }
 
   Future<Null> downloadTemas() async {
-    if (temas.length == 0) {
+    if (temas!.length == 0) {
       await FirebaseFirestore.instance
           .collection("tema")
           .get()
           .then((QuerySnapshot snapshot) {
         temas = snapshot.docs.map((doc) {
-          return Tema.fromMap(doc.data());
+          return Tema.fromMap(doc.data() as Map<String, dynamic>);
         }).toList();
       });
     }
@@ -206,7 +209,7 @@ class QuestaoBloc extends BlocBase {
 
   String temaPorID(int id) {
     String tema = "Este";
-    for (Tema t in temas) {
+    for (Tema t in temas!) {
       if (t.id == id) {
         tema = t.tema;
         break;
@@ -223,7 +226,7 @@ class QuestaoBloc extends BlocBase {
   Future<bool> lerHistorico() async {
     HistoricoHelper histoHelper = HistoricoHelper();
     listaHistorico = await histoHelper.getTodosdados();
-    listaHistorico.reversed;
+    listaHistorico!.reversed;
     return true;
   }
 

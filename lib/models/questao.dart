@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:codigo_de_estrada_mz/helpers/questao_helper.dart';
-import 'package:codigo_de_estrada_mz/models/portugues.dart';
-import 'package:flutter/widgets.dart';
+import 'package:latest_codigo_de_estrada/helpers/questao_helper.dart';
+import 'package:latest_codigo_de_estrada/models/portugues.dart';
 
 class Questao {
   int id;
@@ -12,12 +11,12 @@ class Questao {
   String foto;
   Portugues portugues;
   Questao({
-    @required this.id,
-    @required this.idTema,
-    @required this.dificuldade,
-    @required this.categoria,
-    @required this.foto,
-    @required this.portugues,
+    required this.id,
+    required this.idTema,
+    required this.dificuldade,
+    required this.categoria,
+    required this.foto,
+    required this.portugues,
   });
 
   factory Questao.fromJson(Map<String, dynamic> json) {
@@ -42,7 +41,7 @@ class Questao {
     };
   }
 
-  Map toMap({@required bool forDB}) {
+  Map toMap({required bool forDB}) {
     var map = new Map<String, dynamic>();
     map["id_questao"] = id;
     map["id_tema"] = idTema;
@@ -50,25 +49,25 @@ class Questao {
     map["categoria"] = categoria;
     map["foto"] = foto;
     if (forDB)
-      map["portugues"] = jsonEncode(portugues.toMap(forDB: true));
+      map["portugues"] =
+          jsonEncode(portugues.toMap(forDB: true) as Map<String, dynamic>);
     else
       map["portugues"] = portugues.toMap(forDB: false);
     return map;
   }
 
-  Questao.fromMap(Map<String, dynamic> map, {@required bool fromDB}) {
-    id = map[idColumn];
-    dificuldade = map[dificuldadeColumn];
-    idTema = map[idTemaColumn];
-    categoria = map[categoriaColumn];
-    foto = map[fotoColumn];
-    if (fromDB)
-      portugues =
-          Portugues.fromMap(jsonDecode(map[portuguesColumn]), fromDB: true);
-    else {
-      portugues = Portugues.fromMap(
-          Map<String, dynamic>.from(map[portuguesColumn]),
-          fromDB: false);
-    }
+  factory Questao.fromMap(Map<String, dynamic> map, {required bool fromDB}) {
+    final portuguesData = fromDB
+        ? jsonDecode(map[portuguesColumn] as String) as Map<String, dynamic>
+        : map[portuguesColumn] as Map<String, dynamic>;
+
+    return Questao(
+      id: map[idColumn] as int,
+      dificuldade: map[dificuldadeColumn] as int,
+      idTema: map[idTemaColumn] as int,
+      categoria: map[categoriaColumn] as String,
+      foto: map[fotoColumn] as String,
+      portugues: Portugues.fromMap(portuguesData, fromDB: fromDB),
+    );
   }
 }

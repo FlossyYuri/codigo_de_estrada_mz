@@ -1,10 +1,10 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class MediaButton extends StatelessWidget {
   final String text;
   final Color background;
-  MediaButton({@required this.text, @required this.background});
+  MediaButton({required this.text, required this.background});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

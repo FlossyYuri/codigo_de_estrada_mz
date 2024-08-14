@@ -1,10 +1,9 @@
-import 'package:codigo_de_estrada_mz/ui/loja/widgets/buy_cs_tile.dart';
+import 'package:latest_codigo_de_estrada/ui/loja/widgets/buy_cs_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BuyCS extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
-  BuyCS({@required this.scaffoldKey});
+  BuyCS({required this.scaffoldKey});
   @override
   _BuyCSState createState() => _BuyCSState();
 }

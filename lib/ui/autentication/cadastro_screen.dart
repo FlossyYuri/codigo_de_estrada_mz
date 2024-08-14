@@ -1,18 +1,19 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
-import 'package:codigo_de_estrada_mz/models/usuario.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/custom_text_field2.dart';
-import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/enums/signup_method.dart';
+import 'package:latest_codigo_de_estrada/models/usuario.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/widgets/background.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
+import 'package:latest_codigo_de_estrada/ui/utils/screen_notification_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CadastroScreen extends StatefulWidget {
-  final UserCredential userCredencial;
+  final UserCredential? userCredencial;
   final SignUpMethod method;
-  CadastroScreen({@required this.userCredencial, @required this.method});
+  CadastroScreen(
+      {super.key, required this.userCredencial, required this.method});
   @override
   _CadastroScreenState createState() => _CadastroScreenState();
 }
@@ -30,12 +31,12 @@ class _CadastroScreenState extends State<CadastroScreen> {
   void initState() {
     super.initState();
     if (widget.userCredencial != null) {
-      String username = widget.userCredencial.user.displayName
-          .substring(0, widget.userCredencial.user.displayName.indexOf(" "))
+      String username = widget.userCredencial!.user!.displayName!
+          .substring(0, widget.userCredencial!.user!.displayName!.indexOf(" "))
           .toLowerCase();
       _usernameController.text = username;
-      _emailController.text = widget.userCredencial.user.email;
-      _cellController.text = widget.userCredencial.user.phoneNumber;
+      _emailController.text = widget.userCredencial!.user!.email!;
+      _cellController.text = widget.userCredencial!.user!.phoneNumber!;
     }
   }
 
@@ -45,7 +46,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
       key: _scafKey,
       body: Stack(
         children: <Widget>[
-          Background(),
+          const Background(),
           Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
@@ -60,7 +61,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     children: <Widget>[
                       Container(
                         margin: const EdgeInsets.only(top: 40, bottom: 20),
-                        child: Column(
+                        child: const Column(
                           children: <Widget>[
                             Text(
                               "Bem-Vindo!",
@@ -111,7 +112,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         keyboard: TextInputType.emailAddress,
                         asSufix: false,
                         valid: (String value) {
-                          Pattern pattern =
+                          var pattern =
                               r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                           RegExp regex = new RegExp(pattern);
                           if (!regex.hasMatch(value))
@@ -167,7 +168,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                               },
                             )
                           : Container(),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ElevatedButton(
@@ -177,20 +178,15 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             ),
                             backgroundColor: branco),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             ScreenNotificationUtils().showLoadingModal(context);
-                            if (await BlocProvider.getBloc<UsuarioBloc>()
-                                .existeCell(_cellController.text)) {
-                              ScreenNotificationUtils().showToast(
-                                  "Ja existe um usuario com esse contacto");
-                              return;
-                            }
-                            if (await BlocProvider.getBloc<UsuarioBloc>()
-                                .existeUsername(_usernameController.text)) {
-                              ScreenNotificationUtils().showToast(
-                                  "Ja existe um usuario com esse nome");
-                              return;
-                            }
+
+                            // Check if the phone number already exists
+                            if (await _checkIfCellExists(context)) return;
+
+                            // Check if the username already exists
+                            if (await _checkIfUsernameExists(context)) return;
+
                             final Usuario user = Usuario(
                               id: null,
                               email: _emailController.text,
@@ -215,7 +211,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                                 BlocProvider.getBloc<UsuarioBloc>()
                                     .criarContaComMedia(
                                   dados: user,
-                                  result: widget.userCredencial,
+                                  result: widget.userCredencial!,
                                   key: _scafKey,
                                 );
                                 break;
@@ -223,18 +219,18 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           }
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           alignment: Alignment.center,
-                          child: Text(
+                          child: const Text(
                             "Finalizar cadastro",
                             style: TextStyle(fontSize: 20.0, color: preto),
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text(
+                      const Text(
                         "Ao clicar em \"Finalizar cadastro\" voce concorda com nossos Termos de uso e nossa Política de privacidade.",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: branco, fontSize: 18),
@@ -248,5 +244,30 @@ class _CadastroScreenState extends State<CadastroScreen> {
         ],
       ),
     );
+  }
+
+  Future<bool> _checkIfCellExists(BuildContext context) async {
+    if (await BlocProvider.getBloc<UsuarioBloc>()
+        .existeCell(_cellController.text)) {
+      ScreenNotificationUtils()
+          .showToast("Já existe um usuário com esse contato");
+      if (context.mounted) {
+        Navigator.of(context).pop(); // Close loading modal
+      }
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> _checkIfUsernameExists(BuildContext context) async {
+    if (await BlocProvider.getBloc<UsuarioBloc>()
+        .existeUsername(_usernameController.text)) {
+      ScreenNotificationUtils().showToast("Já existe um usuário com esse nome");
+      if (context.mounted) {
+        Navigator.of(context).pop(); // Close loading modal
+      }
+      return true;
+    }
+    return false;
   }
 }

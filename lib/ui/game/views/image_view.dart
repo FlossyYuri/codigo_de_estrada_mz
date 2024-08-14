@@ -1,13 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/models/questao.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/models/questao.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class ImageView extends StatelessWidget {
   final Questao questao;
-  final bool resposta;
-  ImageView({@required this.questao, this.resposta});
+  final bool? resposta;
+  ImageView({required this.questao, this.resposta});
   @override
   Widget build(BuildContext context) {
     bool temFoto = questao.foto == "";

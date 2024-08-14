@@ -1,17 +1,18 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/blocs/transacoes_bloc.dart';
 import 'package:flutter/material.dart';
 
 class BuyTesteTile extends StatelessWidget {
   final int teste;
   final int cs;
   final Color fundo;
-  BuyTesteTile({@required this.fundo, @required this.cs, @required this.teste});
+  BuyTesteTile({required this.fundo, required this.cs, required this.teste});
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       onPressed: () {
         BuildContext ctx = context;
         showDialog(
@@ -53,51 +54,51 @@ class BuyTesteTile extends StatelessWidget {
       },
       color: fundo,
       splashColor: preto,
-      child: ListTile(
-        contentPadding: EdgeInsets.all(5),
-        title: SizedBox(
-          height: 60,
-        ),
-        leading: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              "ganhe",
-              style: TextStyle(
-                  color: branco, fontSize: 18, fontWeight: FontWeight.w300),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        child: Row(children: <Widget>[
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Text(
+                  "ganhe",
+                  style: TextStyle(
+                      color: branco, fontSize: 18, fontWeight: FontWeight.w300),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  "$teste Testes",
+                  style: const TextStyle(
+                    color: branco,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              "$teste Testes",
-              style: TextStyle(
-                color: branco,
-                fontSize: 24,
+          ),
+          Column(
+            children: <Widget>[
+              const Text(
+                "por",
+                style: TextStyle(
+                    color: branco, fontSize: 18, fontWeight: FontWeight.w300),
               ),
-            ),
-          ],
-        ),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Text(
-              "por",
-              style: TextStyle(
-                  color: branco, fontSize: 18, fontWeight: FontWeight.w300),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              "$cs CS",
-              style: TextStyle(
-                color: branco,
-                fontSize: 24,
+              const SizedBox(
+                height: 2,
               ),
-            ),
-          ],
-        ),
+              Text(
+                "$cs CS",
+                style: const TextStyle(
+                  color: branco,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ]),
       ),
     );
   }

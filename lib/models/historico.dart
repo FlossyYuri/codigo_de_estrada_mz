@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:flutter/material.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
 
 class ResultadoHistorico {
   int nrErros;
@@ -9,10 +8,10 @@ class ResultadoHistorico {
   int tipoDeTeste;
   Teste teste;
   ResultadoHistorico({
-    @required this.nrErros,
-    @required this.data,
-    @required this.tipoDeTeste,
-    @required this.teste,
+    required this.nrErros,
+    required this.data,
+    required this.tipoDeTeste,
+    required this.teste,
   });
 
   factory ResultadoHistorico.fromJson(Map<String, dynamic> json) {
@@ -23,18 +22,22 @@ class ResultadoHistorico {
       teste: Teste.fromJson(json['teste']),
     );
   }
-  ResultadoHistorico.fromMap(Map<String, dynamic> map) {
-    nrErros = map["nrErros"];
-    data = DateTime.parse(map['data']);
-    tipoDeTeste = map['tipoDeTeste'];
-    teste = Teste.fromJson(map['teste']);
+  factory ResultadoHistorico.fromMap(Map<String, dynamic> map) {
+    return ResultadoHistorico(
+      nrErros: map["nrErros"] as int,
+      data: DateTime.parse(map['data'] as String),
+      tipoDeTeste: map['tipoDeTeste'] as int,
+      teste: Teste.fromJson(map['teste'] as Map<String, dynamic>),
+    );
   }
-  ResultadoHistorico.fromMapDB(Map<String, dynamic> map) {
-    var dados = json.decode(map['dados']);
-    nrErros = dados["nrErros"];
-    data = DateTime.parse(dados['data']);
-    tipoDeTeste = dados['tipoDeTeste'];
-    teste = Teste.fromJsonDB(dados['teste']);
+  factory ResultadoHistorico.fromMapDB(Map<String, dynamic> map) {
+    final dados = json.decode(map['dados'] as String) as Map<String, dynamic>;
+    return ResultadoHistorico(
+      nrErros: dados["nrErros"] as int,
+      data: DateTime.parse(dados['data'] as String),
+      tipoDeTeste: dados['tipoDeTeste'] as int,
+      teste: Teste.fromJsonDB(dados['teste'] as Map<String, dynamic>),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -60,7 +63,7 @@ class ResultadoHistorico {
     map["nrErros"] = nrErros;
     map["data"] = data.toString();
     map["tipoDeTeste"] = tipoDeTeste;
-    map["teste"] = teste.toMap(forDB: true);
+    map["teste"] = teste.toMap(forDB: true) as Map<String, dynamic>;
     var map2 = {"dados": jsonEncode(map)};
 
     return map2;

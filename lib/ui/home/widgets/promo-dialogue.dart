@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class Consts {
@@ -10,12 +10,12 @@ class Consts {
 
 class PromoDialogue extends StatelessWidget {
   final String title, description, buttonText;
-  final Image image;
+  final Image? image;
 
   PromoDialogue({
-    @required this.title,
-    @required this.description,
-    @required this.buttonText,
+    required this.title,
+    required this.description,
+    required this.buttonText,
     this.image,
   });
 

@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/resultados.dart';
-import 'package:codigo_de_estrada_mz/ui/game/game_view.dart';
-import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
+import 'package:latest_codigo_de_estrada/blocs/in_game_bloc.dart';
+import 'package:latest_codigo_de_estrada/blocs/questao_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/resultados.dart';
+import 'package:latest_codigo_de_estrada/ui/game/game_view.dart';
+import 'package:latest_codigo_de_estrada/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,13 +35,12 @@ class _ResultadosViewState extends State<ResultadosView> {
       BlocProvider.getBloc<QuestaoBloc>().lerHistorico();
     }
 
-    Resultados result = BlocProvider.getBloc<InGameBloc>().resultados;
+    Resultados result = BlocProvider.getBloc<InGameBloc>().resultados!;
 
     if (resolucao == false)
       Future.delayed(
         Duration(seconds: 1),
       ).then((v) {
-        BuildContext ctx = context;
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -68,7 +65,7 @@ class _ResultadosViewState extends State<ResultadosView> {
                       CupertinoPageRoute(
                         builder: (context) => GamePage(
                           gameMode: "resolucao",
-                          teste: BlocProvider.getBloc<InGameBloc>().teste,
+                          teste: BlocProvider.getBloc<InGameBloc>().teste!,
                         ),
                       ),
                     );
@@ -149,7 +146,7 @@ class _ResultadosViewState extends State<ResultadosView> {
                                   builder: (context) => GamePage(
                                     gameMode: "resolucao",
                                     teste: BlocProvider.getBloc<InGameBloc>()
-                                        .teste,
+                                        .teste!,
                                   ),
                                 ),
                               );
@@ -173,7 +170,7 @@ class _ResultadosViewState extends State<ResultadosView> {
                       _buildResultCard(
                         title: "Tema",
                         trailing: BlocProvider.getBloc<InGameBloc>()
-                            .teste
+                            .teste!
                             .nome
                             .substring(0),
                       ),
@@ -193,7 +190,7 @@ class _ResultadosViewState extends State<ResultadosView> {
                           CupertinoPageRoute(
                             builder: (context) => GamePage(
                               gameMode: "repetir",
-                              teste: BlocProvider.getBloc<InGameBloc>().teste,
+                              teste: BlocProvider.getBloc<InGameBloc>().teste!,
                             ),
                           ),
                         );
@@ -212,7 +209,7 @@ class _ResultadosViewState extends State<ResultadosView> {
     );
   }
 
-  Widget _buildResultCard({@required String title, @required String trailing}) {
+  Widget _buildResultCard({required String title, required String trailing}) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(

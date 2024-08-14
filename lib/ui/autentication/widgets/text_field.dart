@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -8,11 +8,11 @@ class CustomTextField extends StatelessWidget {
   final bool asSufix;
   final TextInputType keyboard;
   CustomTextField(
-      {@required this.asSufix,
-      @required this.hint,
-      @required this.isObscure,
-      @required this.prefix,
-      @required this.keyboard});
+      {required this.asSufix,
+      required this.hint,
+      required this.isObscure,
+      required this.prefix,
+      required this.keyboard});
   @override
   Widget build(BuildContext context) {
     return Card(

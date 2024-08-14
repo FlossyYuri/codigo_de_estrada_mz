@@ -1,6 +1,6 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/ui/widgets/divider_titled_row.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/ui/widgets/divider_titled_row.dart';
 import 'package:flutter/material.dart';
 
 class RemoverAnunciosCard extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/models/usuario.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/models/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -27,7 +27,7 @@ class CustomBottomBar extends StatelessWidget {
                   size: 22,
                 ),
                 onPressed: () {
-                  _keys.currentState.openDrawer();
+                  _keys.currentState!.openDrawer();
                 },
               ),
               StreamBuilder<Usuario>(
@@ -35,7 +35,7 @@ class CustomBottomBar extends StatelessWidget {
                 builder: (context, user) {
                   if (user.hasData) {
                     return Text(
-                      user.data.username,
+                      user.data!.username,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 22, color: branco),
                     );

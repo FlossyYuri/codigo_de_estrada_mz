@@ -1,7 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:latest_codigo_de_estrada/blocs/transacoes_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -105,7 +104,7 @@ class _UsarCupomState extends State<UsarCupom> {
                 key: _formKey,
                 child: TextFormField(
                   validator: (text) {
-                    if (text.length != 12) {
+                    if (text != null && text.length != 12) {
                       return "Codigo incompleto! O codigo deve ter 12 digitos";
                     }
                     return null;
@@ -158,7 +157,7 @@ class _UsarCupomState extends State<UsarCupom> {
                     ),
                     backgroundColor: corPrincipal),
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
+                  if (_formKey.currentState!.validate()) {
                     print("xs");
                     BlocProvider.getBloc<TransacoesBloc>()
                         .usarCupom(context, _codigoController.text);
@@ -185,9 +184,9 @@ class _UsarCupomState extends State<UsarCupom> {
   }
 
   buscarCodigo() async {
-    ClipboardData cb = await Clipboard.getData('text/plain');
-    if (cb.text.contains("Estrada - MZ.")) {
-      for (String texto in cb.text.split(".")) {
+    ClipboardData? cb = await Clipboard.getData('text/plain');
+    if (cb != null && cb.text != null && cb.text!.contains("Estrada - MZ.")) {
+      for (String texto in cb.text!.split(".")) {
         if (texto.contains("Código do cupom: ")) {
           _codigoController.text =
               texto.substring(texto.indexOf('"') + 1, texto.lastIndexOf('"'));

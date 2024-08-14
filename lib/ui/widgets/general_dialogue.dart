@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GeneralDialogue extends StatefulWidget {
-  GeneralDialogue({Key key}) : super(key: key);
+  GeneralDialogue({required Key key}) : super(key: key);
 
   @override
   _GeneralDialogueState createState() => _GeneralDialogueState();

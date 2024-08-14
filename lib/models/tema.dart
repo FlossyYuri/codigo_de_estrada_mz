@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 
 class Tema {
   int id;
   String tema;
   String icon;
   Tema({
-    @required this.tema,
-    @required this.icon,
-    @required this.id,
+    required this.tema,
+    required this.icon,
+    required this.id,
   });
 
   factory Tema.fromJson(Map<String, dynamic> json) {
@@ -18,13 +17,15 @@ class Tema {
     );
   }
 
-  Tema.fromMap(Map<String, dynamic> map) {
-    id = int.parse(map["id_tema"]);
-    tema = map["tema"];
-    icon = map["icon"];
+  factory Tema.fromMap(Map<String, dynamic> map) {
+    return Tema(
+      tema: map["tema"],
+      icon: map["icon"],
+      id: int.parse(
+        map["id_tema"],
+      ),
+    );
   }
-
-  
 
   Map<String, dynamic> toJson() {
     return {

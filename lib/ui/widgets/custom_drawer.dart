@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/models/usuario.dart';
-import 'package:codigo_de_estrada_mz/ui/home/views/historico_view.dart';
-import 'package:codigo_de_estrada_mz/ui/widgets/load_all_images.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/models/usuario.dart';
+import 'package:latest_codigo_de_estrada/ui/home/views/historico_view.dart';
+import 'package:latest_codigo_de_estrada/ui/widgets/load_all_images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,7 +16,8 @@ class CustomDrawer extends StatelessWidget {
   CustomDrawer(this.scaffoldKey);
   @override
   Widget build(BuildContext context) {
-    bool temFoto = BlocProvider.getBloc<UsuarioBloc>().userData.imgUrl != null;
+    bool temFoto =
+        BlocProvider.getBloc<UsuarioBloc>().userData!.imgUrl?.isNotEmpty ?? false;
     return Drawer(
       child: Container(
         padding: const EdgeInsets.only(top: 20),
@@ -55,8 +56,8 @@ class CustomDrawer extends StatelessWidget {
                             ? DecorationImage(
                                 image: CachedNetworkImageProvider(
                                   BlocProvider.getBloc<UsuarioBloc>()
-                                      .userData
-                                      .imgUrl,
+                                      .userData!
+                                      .imgUrl!,
                                 ),
                               )
                             : null,
@@ -66,8 +67,8 @@ class CustomDrawer extends StatelessWidget {
                           ? Image(
                               image: CachedNetworkImageProvider(
                                 BlocProvider.getBloc<UsuarioBloc>()
-                                    .userData
-                                    .imgUrl,
+                                    .userData!
+                                    .imgUrl!,
                               ),
                               fit: BoxFit.fill,
                             )
@@ -87,7 +88,7 @@ class CustomDrawer extends StatelessWidget {
                         builder: (context, user) {
                           if (user.hasData) {
                             return Text(
-                              user.data.username,
+                              user.data!.username,
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -285,7 +286,7 @@ class CustomDrawer extends StatelessWidget {
                         },
                       );
 
-                      scaffoldKey.currentState.setState(() {});
+                      scaffoldKey.currentState!.setState(() {});
                     },
                     child: Text(
                       "Coletar",

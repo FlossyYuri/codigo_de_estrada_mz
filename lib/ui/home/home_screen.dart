@@ -1,7 +1,7 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/ui/home/views/home_view.dart';
-import 'package:codigo_de_estrada_mz/ui/loja/loja_screen.dart';
-import 'package:codigo_de_estrada_mz/ui/widgets/custom_drawer.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/ui/home/views/home_view.dart';
+import 'package:latest_codigo_de_estrada/ui/loja/loja_screen.dart';
+import 'package:latest_codigo_de_estrada/ui/widgets/custom_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
         onTap: (index) {
           switch (index) {
             case 0:
-              _scaffoldKey.currentState.openDrawer();
+              _scaffoldKey.currentState!.openDrawer();
               break;
             case 1:
               Navigator.of(context).push(

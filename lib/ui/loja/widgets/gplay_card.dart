@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
+import 'package:latest_codigo_de_estrada/blocs/transacoes_bloc.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 
 class GPLAYCard extends StatefulWidget {
   final int item;
-  GPLAYCard({@required this.item});
+  GPLAYCard({required this.item});
   @override
   _GPLAYCardState createState() => _GPLAYCardState();
 }
 
 class _GPLAYCardState extends State<GPLAYCard> {
-  StreamSubscription _purchaseUpdatedSubscription;
+  late StreamSubscription _purchaseUpdatedSubscription;
 
-  StreamSubscription _purchaseErrorSubscription;
+  late StreamSubscription _purchaseErrorSubscription;
 
   bool comprando = false;
 
@@ -39,13 +39,12 @@ class _GPLAYCardState extends State<GPLAYCard> {
     await _getProduct();
     _purchaseUpdatedSubscription = FlutterInappPurchase.purchaseUpdated.listen(
       (productItem) {
-        switch (productItem.productId) {
+        switch (productItem?.productId) {
           case '100_cs':
             BlocProvider.getBloc<TransacoesBloc>().comprarCS(100, context);
             break;
           case '200_cs':
             BlocProvider.getBloc<TransacoesBloc>().comprarCS(200, context);
-            break;
             break;
           case '500_cs':
             BlocProvider.getBloc<TransacoesBloc>().comprarCS(500, context);
@@ -73,7 +72,7 @@ class _GPLAYCardState extends State<GPLAYCard> {
   }
 
   Future<Null> _requestPurchase(IAPItem item) async {
-    await FlutterInappPurchase.instance.requestPurchase(item.productId);
+    await FlutterInappPurchase.instance.requestPurchase(item.productId!);
   }
 
   Future<bool> _getProduct() async {
@@ -87,9 +86,8 @@ class _GPLAYCardState extends State<GPLAYCard> {
 
   @override
   void dispose() {
-    if (_purchaseErrorSubscription != null) _purchaseErrorSubscription.cancel();
-    if (_purchaseUpdatedSubscription != null)
-      _purchaseUpdatedSubscription.cancel();
+    _purchaseErrorSubscription.cancel();
+    _purchaseUpdatedSubscription.cancel();
     super.dispose();
   }
 
@@ -101,7 +99,7 @@ class _GPLAYCardState extends State<GPLAYCard> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
-        border: Border.all(color: Colors.blueGrey[100], width: 1),
+        border: Border.all(color: Colors.blueGrey.shade100, width: 1),
         boxShadow: [
           BoxShadow(
             blurRadius: 5,

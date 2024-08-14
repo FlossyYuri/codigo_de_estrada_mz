@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,20 +12,20 @@ class TesteCard extends StatelessWidget {
   final String estado;
   final Function callback;
   TesteCard({
-    @required this.icon,
-    @required this.titulo,
-    @required this.nrQuestoes,
-    @required this.duracao,
-    @required this.estado,
-    @required this.maxErros,
-    @required this.erros,
-    @required this.callback,
+    required this.icon,
+    required this.titulo,
+    required this.nrQuestoes,
+    required this.duracao,
+    required this.estado,
+    required this.maxErros,
+    required this.erros,
+    required this.callback,
   });
 
   @override
   Widget build(BuildContext context) {
-    Widget item2;
-    Widget item1;
+    Widget item2 = Placeholder();
+    Widget item1 = Placeholder();
     switch (estado) {
       case "novo":
         item1 = Column(
@@ -142,7 +142,7 @@ class TesteCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      onPressed: callback,
+      onPressed: callback as void Function()?,
       color: secBG,
       splashColor: lightBG,
       elevation: 4,

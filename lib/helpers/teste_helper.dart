@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/teste.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
@@ -39,12 +39,13 @@ class TesteHelper {
     if (map.length > 0) {
       updateTeste(categoria);
     } else {
-      await dbCDE.insert(tabTeste, categoria.toMap(forDB: true));
+      await dbCDE.insert(
+          tabTeste, categoria.toMap(forDB: true) as Map<String, dynamic>);
     }
     return categoria;
   }
 
-  Future<Teste> getTeste(String id) async {
+  Future<Teste?> getTeste(String id) async {
     Database dbCDE = await db;
     List<Map> map = await dbCDE.query(tabTeste,
         columns: [
@@ -59,7 +60,7 @@ class TesteHelper {
         where: "$idColumn = ?",
         whereArgs: [id]);
     if (map.length > 0)
-      return Teste.fromMap(map.first, fromDB: true);
+      return Teste.fromMap(map.first as Map<String, dynamic>, fromDB: true);
     else
       return null;
   }
@@ -71,7 +72,8 @@ class TesteHelper {
 
   Future<int> updateTeste(Teste categoria) async {
     Database dbCDE = await db;
-    return await dbCDE.update(tabTeste, categoria.toMap(forDB: true),
+    return await dbCDE.update(
+        tabTeste, categoria.toMap(forDB: true) as Map<String, dynamic>,
         where: "$idColumn = ?", whereArgs: [categoria.id]);
   }
 
@@ -81,15 +83,15 @@ class TesteHelper {
     List listaMapa = await dbCDE.rawQuery("SELECT * FROM $tabTeste");
     List<Teste> listaTeste = [];
     for (Map m in listaMapa) {
-      listaTeste.add(Teste.fromMap(m, fromDB: true));
+      listaTeste.add(Teste.fromMap(m as Map<String, dynamic>, fromDB: true));
     }
     return listaTeste;
   }
 
   Future<int> getNumber() async {
     Database dbCDE = await db;
-    return Sqflite.firstIntValue(
-        await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabTeste"));
+    final result = await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabTeste");
+    return Sqflite.firstIntValue(result) ?? -1;
   }
 
   Future fechar() async {

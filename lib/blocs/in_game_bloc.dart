@@ -1,34 +1,34 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/models/historico.dart';
-import 'package:codigo_de_estrada_mz/models/questao.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/models/resultados.dart';
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:codigo_de_estrada_mz/helpers/historico_helper.dart';
+import 'package:latest_codigo_de_estrada/models/historico.dart';
+import 'package:latest_codigo_de_estrada/models/questao.dart';
+import 'package:latest_codigo_de_estrada/blocs/questao_bloc.dart';
+import 'package:latest_codigo_de_estrada/models/resultados.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
+import 'package:latest_codigo_de_estrada/helpers/historico_helper.dart';
 import 'package:flutter/material.dart';
 
 class InGameBloc extends BlocBase {
-  Teste teste;
+  Teste? teste;
   bool jogando = false;
   bool salvarHistorico = false;
   String questionMode = "normal";
   int tipoDeTeste = 1;
-  List<Map<int, String>> opcoesEscolhidas;
-  Resultados resultados;
+  List<Map<int, String>> opcoesEscolhidas = [];
+  Resultados? resultados;
   final StreamController _questoesRespController =
       StreamController<int>.broadcast();
   Stream get outQtdQuestoesResp => _questoesRespController.stream;
 
   List<int> criarQuestoes({
-    @required BuildContext context,
-    @required int idTema,
+    required BuildContext context,
+    required int idTema,
   }) {
     int qtdQuestoes = 25;
     int dificuldade = 0;
     //carregar todas questoes
-    List<Questao> questoes = BlocProvider.getBloc<QuestaoBloc>().questoes;
+    List<Questao> questoes = BlocProvider.getBloc<QuestaoBloc>().questoes!;
     List<Questao> questoesTemaDificuldade = [];
     //selecionar todas questoes relacionadas com o idTema e a difuculdade
     for (Questao q in questoes) {
@@ -72,7 +72,7 @@ class InGameBloc extends BlocBase {
     return listaQuestoes;
   }
 
-  carregarTeste({@required BuildContext context, @required Teste teste}) {
+  carregarTeste({required BuildContext context, required Teste teste}) {
     teste.questoes2 =
         BlocProvider.getBloc<QuestaoBloc>().questoesPorIDs(teste.questoes);
     this.teste = teste;
@@ -109,25 +109,25 @@ class InGameBloc extends BlocBase {
     double valorClassif = 0;
     String classificacao = "";
 
-    for (int i = 0; i < teste.questoes.length; i++) {
-      if (teste.questoes2[i].portugues.resposta ==
-          opcoesEscolhidas[i][teste.questoes2[i].id])
+    for (int i = 0; i < teste!.questoes.length; i++) {
+      if (teste!.questoes2[i].portugues.resposta ==
+          opcoesEscolhidas[i][teste!.questoes2[i].id])
         acertos++;
       else
         erros++;
     }
-    if (teste.questoes.length < 25) {
-      valorClassif = acertos / teste.questoes.length;
-      if (acertos == teste.questoes.length) {
+    if (teste!.questoes.length < 25) {
+      valorClassif = acertos / teste!.questoes.length;
+      if (acertos == teste!.questoes.length) {
         classificacao = "Excelente!";
       } else {
-        if (acertos >= teste.questoes.length * 3 / 4) {
+        if (acertos >= teste!.questoes.length * 3 / 4) {
           classificacao = "Muito bom!";
         } else {
-          if (acertos >= teste.questoes.length / 2) {
+          if (acertos >= teste!.questoes.length / 2) {
             classificacao = "Bom!";
           } else {
-            if (acertos >= teste.questoes.length / 4) {
+            if (acertos >= teste!.questoes.length / 4) {
               classificacao = "Mau!";
             } else {
               classificacao = "Muito mau!";
@@ -176,7 +176,7 @@ class InGameBloc extends BlocBase {
     }
     resultados = Resultados(
         opcoesEscolhidas: opcoesEscolhidas,
-        teste: teste,
+        teste: teste!,
         acertos: acertos,
         erros: erros,
         classificacao: classificacao,
@@ -188,7 +188,7 @@ class InGameBloc extends BlocBase {
       data: DateTime.now(),
       nrErros: erros,
       tipoDeTeste: tipoDeTeste,
-      teste: teste,
+      teste: teste!,
     );
     histoHelper.salvarHistorico(historico);
     salvarHistorico = false;
@@ -196,7 +196,7 @@ class InGameBloc extends BlocBase {
 
   jogarNovamente() {
     opcoesEscolhidas = [];
-    for (int quests in teste.questoes) {
+    for (int quests in teste!.questoes) {
       opcoesEscolhidas.add({quests: ""});
     }
     salvarHistorico = true;

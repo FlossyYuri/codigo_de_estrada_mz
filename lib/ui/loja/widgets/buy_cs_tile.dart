@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/ui/loja/widgets/purchase_box.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/ui/loja/widgets/purchase_box.dart';
 import 'package:flutter/material.dart';
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -7,15 +7,15 @@ const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 class BuyCSTile extends StatelessWidget {
   final String titulo;
   final int valor;
-  final Color cor;
-  final LinearGradient gradient;
-  final Widget image;
+  final Color? cor;
+  final LinearGradient? gradient;
+  final Widget? image;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   BuyCSTile({
-    @required this.titulo,
-    @required this.valor,
-    @required this.scaffoldKey,
+    required this.titulo,
+    required this.valor,
+    required this.scaffoldKey,
     this.cor,
     this.gradient,
     this.image,
@@ -38,8 +38,8 @@ class BuyCSTile extends StatelessWidget {
             context: context,
             builder: (BuildContext context) => PurchaseBox(
               cs: valor,
-              cor: cor,
-              gradient: gradient,
+              cor: cor!,
+              gradient: gradient!,
               scaffoldKey: scaffoldKey,
             ),
           );

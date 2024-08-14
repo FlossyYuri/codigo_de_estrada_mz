@@ -1,13 +1,13 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/cadastro_screen.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/criar_conta_auth.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/login_screen.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_button.dart';
-import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
-import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
+import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/enums/signup_method.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/cadastro_screen.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/criar_conta_auth.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/login_screen.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/widgets/auth_button.dart';
+import 'package:latest_codigo_de_estrada/ui/autentication/widgets/background.dart';
+import 'package:latest_codigo_de_estrada/ui/utils/screen_notification_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class AuthView extends StatefulWidget {
   final bool isLogin;
-  AuthView({@required this.isLogin});
+  AuthView({required this.isLogin});
   @override
   _AuthViewState createState() => _AuthViewState();
 }

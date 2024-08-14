@@ -8,7 +8,7 @@ const APP_URL =
 const pagePadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
 
 showSnackBar(BuildContext context, String mensagem, Color cor,
-    {SnackBarAction action}) {
+    {SnackBarAction? action}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(

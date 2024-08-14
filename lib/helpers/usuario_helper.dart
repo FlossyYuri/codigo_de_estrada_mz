@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/usuario.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/usuario.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
@@ -49,12 +49,13 @@ class UsuarioHelper {
     if (map.length > 0) {
       return user;
     } else {
-      await dbCDE.insert(tabUsuario, user.toMap(forDB: true));
+      await dbCDE.insert(
+          tabUsuario, user.toMap(forDB: true) as Map<String, dynamic>);
       return user;
     }
   }
 
-  Future<Usuario> getUsuario(String id) async {
+  Future<Usuario?> getUsuario(String id) async {
     Database dbCDE = await db;
     List<Map> map = await dbCDE.query(tabUsuario,
         columns: [
@@ -83,7 +84,8 @@ class UsuarioHelper {
 
   Future<int> updateUsuario(Usuario usuario) async {
     Database dbCDE = await db;
-    return await dbCDE.update(tabUsuario, usuario.toMap(forDB: true),
+    return await dbCDE.update(
+        tabUsuario, usuario.toMap(forDB: true) as Map<String, dynamic>,
         where: "$idColumn = ?", whereArgs: [usuario.id]);
   }
 
@@ -99,8 +101,9 @@ class UsuarioHelper {
 
   Future<int> getNumber() async {
     Database dbCDE = await db;
-    return Sqflite.firstIntValue(
-        await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabUsuario"));
+
+    final result = await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabUsuario");
+    return Sqflite.firstIntValue(result) ?? -1;
   }
 
   Future fechar() async {

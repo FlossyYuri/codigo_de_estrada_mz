@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:codigo_de_estrada_mz/helpers/teste_helper.dart';
-import 'package:codigo_de_estrada_mz/models/questao.dart';
-import 'package:flutter/widgets.dart';
+import 'package:latest_codigo_de_estrada/helpers/teste_helper.dart';
+import 'package:latest_codigo_de_estrada/models/questao.dart';
 
 class Teste {
   int id;
@@ -12,15 +11,15 @@ class Teste {
   int maxErros;
   int idTema;
   List<int> questoes;
-  List<Questao> questoes2;
+  late List<Questao> questoes2;
   Teste(
-      {@required this.nome,
-      @required this.categoria,
-      @required this.duracao,
-      @required this.id,
-      @required this.maxErros,
-      @required this.questoes,
-      @required this.idTema});
+      {required this.nome,
+      required this.categoria,
+      required this.duracao,
+      required this.id,
+      required this.maxErros,
+      required this.questoes,
+      required this.idTema});
 
   factory Teste.fromJson(Map<String, dynamic> json) {
     return Teste(
@@ -46,21 +45,27 @@ class Teste {
     );
   }
 
-  Teste.fromMap(Map<String, dynamic> map, {@required bool fromDB}) {
-    nome = map["nome"];
-    categoria = map["categoria"];
+  factory Teste.fromMap(Map<String, dynamic> map, {required bool fromDB}) {
     if (fromDB) {
-      id = map["id_teste"];
-      idTema = map["id_tema"];
-      maxErros = map["max_erros"];
-      duracao = map["duracao"];
-      questoes = List<int>.from(jsonDecode(map[questoesColumn]));
+      return Teste(
+        nome: map["nome"],
+        categoria: map["categoria"],
+        duracao: map["duracao"],
+        id: map["id_teste"],
+        maxErros: map["max_erros"],
+        questoes: List<int>.from(jsonDecode(map[questoesColumn])),
+        idTema: map["id_tema"],
+      );
     } else {
-      id = int.parse(map["id_teste"]);
-      idTema = int.parse(map["id_tema"]);
-      maxErros = int.parse(map["max_erros"]);
-      duracao = int.parse(map["duracao"]);
-      questoes = List<int>.from(map["questoes"]);
+      return Teste(
+        nome: map["nome"],
+        categoria: map["categoria"],
+        duracao: int.parse(map["duracao"]),
+        id: int.parse(map["id_teste"]),
+        maxErros: int.parse(map["max_erros"]),
+        questoes: List<int>.from(map["questoes"]),
+        idTema: int.parse(map["id_tema"]),
+      );
     }
   }
 
@@ -76,7 +81,7 @@ class Teste {
     };
   }
 
-  Map toMap({@required bool forDB}) {
+  Map toMap({required bool forDB}) {
     var map = new Map<String, dynamic>();
     map["id_teste"] = id;
     map["nome"] = nome;

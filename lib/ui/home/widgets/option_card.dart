@@ -1,11 +1,11 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class OptionCard extends StatelessWidget {
   final String texto;
   final IconData icon;
   final VoidCallback f;
-  OptionCard({@required this.texto, @required this.icon, @required this.f});
+  OptionCard({required this.texto, required this.icon, required this.f});
   @override
   Widget build(BuildContext context) {
     return MaterialButton(

@@ -1,9 +1,9 @@
-import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class TemaCard extends StatelessWidget {
   final String tema;
-  TemaCard({@required this.tema});
+  TemaCard({required this.tema});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

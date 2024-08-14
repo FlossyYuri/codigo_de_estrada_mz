@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
-import 'package:codigo_de_estrada_mz/models/tema.dart';
+import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
+import 'package:latest_codigo_de_estrada/models/tema.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
@@ -43,12 +43,12 @@ class TemaHelper {
     if (map.length > 0) {
       return user;
     } else {
-      await dbCDE.insert(tabTema, user.toMap());
+      await dbCDE.insert(tabTema, user.toMap() as Map<String, dynamic>);
       return user;
     }
   }
 
-  Future<Tema> getTema(String id) async {
+  Future<Tema?> getTema(String id) async {
     Database dbCDE = await db;
     List<Map> map = await dbCDE.query(tabTema,
         columns: [
@@ -59,7 +59,7 @@ class TemaHelper {
         where: "$idColumn = ?",
         whereArgs: [id]);
     if (map.length > 0)
-      return Tema.fromMap(map.first);
+      return Tema.fromMap(map.first as Map<String, dynamic>);
     else
       return null;
   }
@@ -71,7 +71,7 @@ class TemaHelper {
 
   Future<int> updateTema(Tema tema) async {
     Database dbCDE = await db;
-    return await dbCDE.update(tabTema, tema.toMap(),
+    return await dbCDE.update(tabTema, tema.toMap() as Map<String, dynamic>,
         where: "$idColumn = ?", whereArgs: [tema.id]);
   }
 
@@ -81,15 +81,15 @@ class TemaHelper {
     List listaMapa = await dbCDE.rawQuery("SELECT * FROM $tabTema");
     List<Tema> listatema = [];
     for (Map m in listaMapa) {
-      listatema.add(Tema.fromMap(m));
+      listatema.add(Tema.fromMap(m as Map<String, dynamic>));
     }
     return listatema;
   }
 
   Future<int> getNumber() async {
     Database dbCDE = await db;
-    return Sqflite.firstIntValue(
-        await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabTema"));
+    final result = await dbCDE.rawQuery("SELECT COUNT(*) FROM $tabTema");
+    return Sqflite.firstIntValue(result) ?? -1;
   }
 
   Future fechar() async {

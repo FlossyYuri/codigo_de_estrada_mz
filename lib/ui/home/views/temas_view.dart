@@ -1,13 +1,12 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada_mz/blocs/in_game_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada_mz/constantes.dart';
-import 'package:codigo_de_estrada_mz/enums/connectivity_status.dart';
-import 'package:codigo_de_estrada_mz/models/tema.dart';
-import 'package:codigo_de_estrada_mz/models/teste.dart';
-import 'package:codigo_de_estrada_mz/ui/game/game_view.dart';
-import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
+import 'package:latest_codigo_de_estrada/blocs/in_game_bloc.dart';
+import 'package:latest_codigo_de_estrada/blocs/questao_bloc.dart';
+import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:latest_codigo_de_estrada/enums/connectivity_status.dart';
+import 'package:latest_codigo_de_estrada/models/tema.dart';
+import 'package:latest_codigo_de_estrada/models/teste.dart';
+import 'package:latest_codigo_de_estrada/ui/game/game_view.dart';
+import 'package:latest_codigo_de_estrada/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,7 @@ class _TemasViewState extends State<TemasView> {
     'Sem conexão a internet!',
     'Algumas imagens não poderam ser carregadas.'
   ];
-  List<Tema> temas;
+  List<Tema> temas = [];
   List<Tema> mostPlayed = [];
   List<Tema> relevant = [];
   List<Tema> pro = [];
@@ -35,7 +34,7 @@ class _TemasViewState extends State<TemasView> {
     relevant = [];
     pro = [];
     final connectivityStatus = Provider.of<ConnectivityStatus>(context);
-    temas = BlocProvider.getBloc<QuestaoBloc>().temas;
+    temas = BlocProvider.getBloc<QuestaoBloc>().temas ?? [];
     mostPlayed.add(Tema(id: 0, tema: "GERAL", icon: ""));
     for (Tema t in temas) {
       if (t.id == 1 || t.id == 4 || t.id == 14) {
@@ -372,7 +371,8 @@ class _TemasViewState extends State<TemasView> {
     );
   }
 
-  _actionChip(BuildContext context, String text, int mode, Function callback,
+  _actionChip(
+      BuildContext context, String text, int mode, void Function()? callback,
       {bool active = true}) {
     bool classic = text == "Classico";
     return ActionChip(

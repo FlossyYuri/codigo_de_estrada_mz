@@ -1,16 +1,14 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
 class Portugues {
   String resposta;
   String questao;
   List<String> alternativas;
 
   Portugues({
-    @required this.resposta,
-    @required this.questao,
-    @required this.alternativas,
+    required this.resposta,
+    required this.questao,
+    required this.alternativas,
   });
 
   factory Portugues.fromJson(Map<String, dynamic> json) {
@@ -21,14 +19,16 @@ class Portugues {
     );
   }
 
-  Portugues.fromMap(Map<String, dynamic> map, {@required bool fromDB}) {
-    resposta = map["resposta"];
-    questao = map["questao"];
-    if (fromDB)
-      alternativas = List<String>.from(jsonDecode(map['alternativas']));
-    else {
-      alternativas = List<String>.from(jsonDecode(map['alternativas']));
-    }
+  factory Portugues.fromMap(Map<String, dynamic> map, {required bool fromDB}) {
+    final alternativasData = fromDB
+        ? jsonDecode(map['alternativas'] as String)
+        : jsonDecode(map['alternativas'] as String);
+
+    return Portugues(
+      resposta: map["resposta"] as String,
+      questao: map["questao"] as String,
+      alternativas: List<String>.from(alternativasData),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -39,7 +39,7 @@ class Portugues {
     };
   }
 
-  Map toMap({@required bool forDB}) {
+  Map toMap({required bool forDB}) {
     var map = new Map<String, dynamic>();
     if (forDB)
       map["alternativas"] = jsonEncode(alternativas);
