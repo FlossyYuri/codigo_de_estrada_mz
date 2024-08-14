@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:latest_codigo_de_estrada/ui/utils/screen_notification_utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -109,8 +110,6 @@ class UsuarioBloc extends BlocBase {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: dados.email, password: pass);
-
-      print(result.toString());
       await saveUserData(dados, result);
       await result.user?.sendEmailVerification();
       _snackBar(key,
@@ -280,56 +279,32 @@ class UsuarioBloc extends BlocBase {
       prefs.setString(
           APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
       _authDone(key);
-    } on PlatformException catch (e) {
+    } on FirebaseAuthException catch (e) {
       Navigator.pop(key.currentContext!);
-      Navigator.pop(key.currentContext!);
-      if (Platform.isAndroid) {
-        switch (e.message) {
-          case 'There is no user record corresponding to this identifier. The user may have been deleted.':
-            ScaffoldMessenger.of(key.currentContext!).showSnackBar(
-              SnackBar(
-                content: Text(
-                  "Verifique seu email, nao existe nenhum usuario com esse email.",
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w300, color: branco),
-                ),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 2),
-              ),
-            );
-            break;
-          case 'The password is invalid or the user does not have a password.':
-            ScaffoldMessenger.of(key.currentContext!).showSnackBar(
-              SnackBar(
-                content: Text(
-                  "Senha errada. Tente novamente.",
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w300, color: branco),
-                ),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 2),
-              ),
-            );
-            break;
-          case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
-            ScaffoldMessenger.of(key.currentContext!).showSnackBar(
-              SnackBar(
-                content: Text(
-                  "Erro ao tentar conectar",
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w300, color: branco),
-                ),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 2),
-              ),
-            );
-            break;
-          // ...
-          default:
-            print('Case ${e.message} is not yet implemented');
-        }
-        print('The error is ${e.message}');
+      String currentError = "";
+
+      switch (e.code) {
+        case 'user-not-found':
+          currentError = "Nenhum usuário encontrado com esse e-mail.";
+          break;
+        case 'wrong-password':
+          currentError = "Credenciais erradas. tente novamente.";
+          break;
+        case 'invalid-email':
+          currentError = "The email address is not valid.";
+          break;
+        case 'user-disabled':
+          currentError =
+              "Esta conta foi desativada. Entre em contato com o suporte.";
+          break;
+        case 'too-many-requests':
+          currentError =
+              "Muitas tentativas de login. Por favor, tente novamente mais tarde.";
+          break;
+        default:
+          currentError = "Occoreu algum erro: ${e.message}";
       }
+      ScreenNotificationUtils().showSnackBar(key.currentContext!, currentError);
     } catch (e) {
       Navigator.pop(key.currentContext!);
       print("Podre:  $e");
@@ -379,19 +354,23 @@ class UsuarioBloc extends BlocBase {
   }
 
   Future<Null> saveUserData(Usuario dados, UserCredential user) async {
-    firebaseUser = user.user;
-    dados.id = firebaseUser?.uid;
-    dados.imgUrl = user.user?.photoURL;
-    userData = dados;
-    await FirebaseFirestore.instance
-        .collection("usuarios")
-        .doc(firebaseUser?.uid)
-        .set(dados.toMap(forDB: false) as Map<String, dynamic>);
-    await userHelper.salvarUsuario(userData!);
-    _userController.sink.add(userData);
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
+    try {
+      firebaseUser = user.user;
+      dados.id = firebaseUser?.uid;
+      dados.imgUrl = user.user?.photoURL;
+      userData = dados;
+      await FirebaseFirestore.instance
+          .collection("usuarios")
+          .doc(firebaseUser?.uid)
+          .set(dados.toMap(forDB: false) as Map<String, dynamic>);
+      await userHelper.salvarUsuario(userData!);
+      _userController.sink.add(userData);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString(
+          APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
+    } catch (e) {
+      _auth.currentUser?.delete();
+    }
   }
 
   Future<Null> updateUserData() async {

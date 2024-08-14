@@ -42,9 +42,26 @@ class ScreenNotificationUtils {
     );
   }
 
+  void showSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w300,
+            color: branco,
+          ),
+        ),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 5),
+      ),
+    );
+  }
+
   void showToast(String text) {
     Fluttertoast.showToast(
-      msg: "Ja existe um usuario com esse contacto",
+      msg: text,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
