@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "910817423270-dgekvn235o7uacat68tda6m6rt8ebv2r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
+            "certificate_hash": "4cc9d74b5f41e841b6fae812f4ff0817960a54eb"
+          }
+        },
+        {
+          "client_id": "910817423270-r5f7fmeosas5m73skopc53sbd5994n12.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mz.co.chillstudio.codigo_de_estrada_mz",
+            "certificate_hash": "39e7832fdfd157edb194fd66aa1b5dbd1c1f1809"
+          }
+        },
+        {
           "client_id": "910817423270-u0gp047f772nfpp2t3lme4sg4u1e5ick.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -66,50 +82,6 @@
         }
       },
       "admob_app_id": "ca-app-pub-7627687887475703~9931353819"
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:910817423270:android:1d6d1ce1b437c611bfe967",
-        "android_client_info": {
-          "package_name": "mz.co.chillstudio.cs_monetization"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "910817423270-qbsi6df5rj5e3pdkdmdvm4taiu11n1qe.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "mz.co.chillstudio.cs_monetization",
-            "certificate_hash": "482a2fd079cf2baed7bf1d13fd7ee5c96d4e1a8c"
-          }
-        },
-        {
-          "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBxSXRyGlFCprHPeeQo4WwAfxP0idi9KpU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "910817423270-l649aniu7l31av7pnhg056lu2a82i9vk.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "910817423270-3p3av2mcrrnei4jncom2g180k8oju6gf.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "mz.co.chillstudio.codigoDeEstradaMz"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"

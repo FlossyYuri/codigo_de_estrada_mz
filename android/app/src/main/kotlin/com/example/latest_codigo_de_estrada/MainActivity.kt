@@ -1,4 +1,4 @@
-package com.example.latest_codigo_de_estrada
+package mz.co.chillstudio.codigo_de_estrada_mz
 
 import io.flutter.embedding.android.FlutterActivity
 

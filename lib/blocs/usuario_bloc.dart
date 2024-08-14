@@ -221,23 +221,24 @@ class UsuarioBloc extends BlocBase {
   }
 
   Future<Null> googleAuthentication(GlobalKey<ScaffoldState> key) async {
-    final GoogleSignIn gglSign = GoogleSignIn(
+    final GoogleSignIn googleSignIn = GoogleSignIn(
       scopes: [
         'email',
         'https://www.googleapis.com/auth/contacts.readonly',
       ],
     );
-    // GoogleSignInAccount? googleUser = gglSign.currentUser!;
+    GoogleSignInAccount? googleUser = await googleSignIn.signIn();
     try {
-      if (await gglSign.isSignedIn()) {}
-      GoogleSignInAuthentication credenciais =
-          await gglSign.currentUser!.authentication;
+      if (await googleSignIn.isSignedIn()) {}
+      GoogleSignInAuthentication? credenciais =
+          await googleUser?.authentication;
       UserCredential userCredential = await _auth.signInWithCredential(
         GoogleAuthProvider.credential(
-            idToken: credenciais.idToken, accessToken: credenciais.accessToken),
+            idToken: credenciais?.idToken,
+            accessToken: credenciais?.accessToken),
       );
       _finishAuthProcess(userCredential, SignUpMethod.GOOGLE, key);
-      if (!await gglSign.isSignedIn()) {
+      if (!await googleSignIn.isSignedIn()) {
         Navigator.pop(key.currentContext!);
         ScreenNotificationUtils().showSnackBar(key.currentContext!,
             "Não foi possível fazer o login, certifique se de criar uma conta.");
