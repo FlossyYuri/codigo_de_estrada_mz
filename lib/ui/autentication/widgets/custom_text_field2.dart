@@ -1,4 +1,4 @@
-import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField2 extends StatefulWidget {
@@ -39,7 +39,7 @@ class _CustomTextField2State extends State<CustomTextField2> {
         maxLength: widget.size != null ? widget.size : null,
         style: TextStyle(color: branco, fontSize: 22),
         obscureText: widget.isObscure,
-        validator: (String? text){
+        validator: (String? text) {
           if (text == null || text.isEmpty) {
             return null;
           }

@@ -1,5 +1,5 @@
-import 'package:latest_codigo_de_estrada/ui/widgets/card_entity.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/ui/widgets/card_entity.dart';
+import 'package:codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class CustomSliverAppBar extends StatelessWidget {

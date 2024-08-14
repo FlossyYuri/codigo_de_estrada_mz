@@ -1,10 +1,10 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/widgets/background.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
-import 'package:latest_codigo_de_estrada/ui/home/home_screen.dart';
+import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/helpers/conexao.dart';
+import 'package:codigo_de_estrada/ui/autentication/widgets/background.dart';
+import 'package:codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
+import 'package:codigo_de_estrada/ui/home/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               var pattern =
                                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                               RegExp regex = new RegExp(pattern);
-                              if (!regex.hasMatch(text)){
+                              if (!regex.hasMatch(text)) {
                                 return 'Introduza um email valido.';
                               }
                               return null;

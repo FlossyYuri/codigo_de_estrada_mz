@@ -1,4 +1,4 @@
-import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 
 class MediaButton extends StatelessWidget {

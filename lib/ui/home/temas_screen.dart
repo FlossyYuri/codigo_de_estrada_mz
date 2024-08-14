@@ -1,8 +1,8 @@
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/enums/connectivity_status.dart';
-import 'package:latest_codigo_de_estrada/services/connectivity_service.dart';
-import 'package:latest_codigo_de_estrada/ui/home/views/temas_view.dart';
-import 'package:latest_codigo_de_estrada/ui/widgets/custom_drawer.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/enums/connectivity_status.dart';
+import 'package:codigo_de_estrada/services/connectivity_service.dart';
+import 'package:codigo_de_estrada/ui/home/views/temas_view.dart';
+import 'package:codigo_de_estrada/ui/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

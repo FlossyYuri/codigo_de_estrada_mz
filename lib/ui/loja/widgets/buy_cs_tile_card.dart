@@ -1,4 +1,4 @@
-import 'package:latest_codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_purchase/modules.dart';
 
@@ -26,8 +26,8 @@ class BuyCSTileDollar extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       decoration: BoxDecoration(
-        color:  cor ,
-        gradient: gradient ,
+        color: cor,
+        gradient: gradient,
         borderRadius: BorderRadius.circular(20),
       ),
       child: MaterialButton(

@@ -3,32 +3,31 @@ import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/enums/app_session_status.dart';
-import 'package:latest_codigo_de_estrada/enums/signup_method.dart';
-import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
-import 'package:latest_codigo_de_estrada/helpers/usuario_helper.dart';
-import 'package:latest_codigo_de_estrada/models/usuario.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/cadastro_screen.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/criar_conta_auth.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/login_screen.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/widgets/auth_view.dart';
-import 'package:latest_codigo_de_estrada/ui/home/home_screen.dart';
-import 'package:latest_codigo_de_estrada/ui/utils/common_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:latest_codigo_de_estrada/ui/utils/screen_notification_utils.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/enums/app_session_status.dart';
+import 'package:codigo_de_estrada/enums/signup_method.dart';
+import 'package:codigo_de_estrada/helpers/conexao.dart';
+import 'package:codigo_de_estrada/helpers/usuario_helper.dart';
+import 'package:codigo_de_estrada/models/usuario.dart';
+import 'package:codigo_de_estrada/ui/autentication/cadastro_screen.dart';
+import 'package:codigo_de_estrada/ui/autentication/criar_conta_auth.dart';
+import 'package:codigo_de_estrada/ui/autentication/login_screen.dart';
+import 'package:codigo_de_estrada/ui/autentication/widgets/auth_view.dart';
+import 'package:codigo_de_estrada/ui/home/home_screen.dart';
+import 'package:codigo_de_estrada/ui/utils/common_utils.dart';
+import 'package:codigo_de_estrada/ui/utils/screen_notification_utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class UsuarioBloc extends BlocBase {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   User? firebaseUser;
   Usuario? userData;
   Map<String, dynamic> presentes = {'novo': false};
@@ -59,7 +58,9 @@ class UsuarioBloc extends BlocBase {
     int estadoHelper = -1;
     try {
       estadoHelper = prefs.getInt(APP_CONSTANTS.SESSION_STATE)!;
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
 
     if (estadoHelper >= 0) {
       if (estadoHelper == 0) {
@@ -85,13 +86,13 @@ class UsuarioBloc extends BlocBase {
       case AppSessionStatus.LOGGED_IN:
         await userHelper.getTodosusuarios().then((usuario) async {
           try {
-            this.userData = usuario[0];
+            userData = usuario[0];
           } catch (e) {
             final prefs = await SharedPreferences.getInstance();
             prefs.clear();
           }
         });
-        if (this.userData != null) {
+        if (userData != null) {
           _userController.sink.add(userData);
         } else {
           return AppSessionStatus.NOT_LOGGED_IN;
@@ -112,7 +113,7 @@ class UsuarioBloc extends BlocBase {
           email: dados.email, password: pass);
       await saveUserData(dados, result);
       await result.user?.sendEmailVerification();
-      _snackBar(key,
+      ScreenNotificationUtils().showSnackBar(key.currentContext!,
           "Usuario cadastrado com sucesso. Verique seu email para poder entrar.");
 
       if (key.currentContext != null && key.currentContext!.mounted) {
@@ -130,13 +131,16 @@ class UsuarioBloc extends BlocBase {
         if (e is FirebaseAuthException) {
           switch (e.code) {
             case 'email-already-in-use':
-              _snackBar(key, "Esse email já está sendo usado.");
+              ScreenNotificationUtils().showSnackBar(
+                  key.currentContext!, "Esse email já está sendo usado.");
               break;
             default:
-              _snackBar(key, "Não foi possivel criar uma conta.");
+              ScreenNotificationUtils().showSnackBar(
+                  key.currentContext!, "Não foi possivel criar uma conta.");
           }
         } else {
-          _snackBar(key, "Ocorreu um erro inesperado.");
+          ScreenNotificationUtils()
+              .showSnackBar(key.currentContext!, "Ocorreu um erro inesperado.");
           print('-----------------');
           print(e);
         }
@@ -183,8 +187,8 @@ class UsuarioBloc extends BlocBase {
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case "account-exists-with-different-credential":
-          _snackBar(
-              key, "Esta conta já foi criada usando outro método (provedor).");
+          ScreenNotificationUtils().showSnackBar(key.currentContext!,
+              "Esta conta já foi criada usando outro método (provedor).");
 
           // Handling the specific case where the account exists with a Google credential
           final email = error.email;
@@ -197,16 +201,20 @@ class UsuarioBloc extends BlocBase {
           }
           break;
         case "credential-already-in-use":
-          _snackBar(key, "Esta conta já existe");
+          ScreenNotificationUtils()
+              .showSnackBar(key.currentContext!, "Esta conta já existe");
           break;
         case "email-already-in-use":
-          _snackBar(key, "Esta conta ja está sendo usada.");
+          ScreenNotificationUtils().showSnackBar(
+              key.currentContext!, "Esta conta ja está sendo usada.");
           break;
         default:
-          _snackBar(key, "Não foi possivel criar uma conta: ${error.message}");
+          ScreenNotificationUtils().showSnackBar(key.currentContext!,
+              "Não foi possivel criar uma conta: ${error.message}");
       }
     } catch (error) {
-      _snackBar(key, "Ocorreu um erro inesperado: $error");
+      ScreenNotificationUtils().showSnackBar(
+          key.currentContext!, "Ocorreu um erro inesperado: $error");
     } finally {
       await resetLOGS();
     }
@@ -231,9 +239,9 @@ class UsuarioBloc extends BlocBase {
       _finishAuthProcess(userCredential, SignUpMethod.GOOGLE, key);
       if (!await gglSign.isSignedIn()) {
         Navigator.pop(key.currentContext!);
-        _snackBar(key,
+        ScreenNotificationUtils().showSnackBar(key.currentContext!,
             "Não foi possível fazer o login, certifique se de criar uma conta.");
-        Future.delayed(Duration(seconds: 3)).then((value) {
+        Future.delayed(const Duration(seconds: 3)).then((value) {
           Navigator.of(key.currentContext!).pushReplacement(
             CupertinoPageRoute(
               builder: (context) => CriarContaAuth(),
@@ -246,16 +254,17 @@ class UsuarioBloc extends BlocBase {
       try {
         switch (error.code) {
           case "user-not-found":
-            _snackBar(key, "Não existe nenhum usuario em estas credenciais");
+            ScreenNotificationUtils().showSnackBar(key.currentContext!,
+                "Não existe nenhum usuario em estas credenciais");
             break;
           default:
-            _snackBar(key,
+            ScreenNotificationUtils().showSnackBar(key.currentContext!,
                 "Não foi possível fazer o login, certifique se de criar uma conta.");
         }
       } catch (error) {
-        _snackBar(key,
+        ScreenNotificationUtils().showSnackBar(key.currentContext!,
             "Não foi possível fazer o login, certifique se de criar uma conta.");
-        Future.delayed(Duration(seconds: 3)).then((value) {
+        Future.delayed(const Duration(seconds: 3)).then((value) {
           Navigator.of(key.currentContext!).pushReplacement(
             CupertinoPageRoute(
               builder: (context) => CriarContaAuth(),
@@ -272,7 +281,7 @@ class UsuarioBloc extends BlocBase {
       UserCredential authResult =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
       firebaseUser = authResult.user;
-      this.userData = await getUserData();
+      userData = await getUserData();
       await userHelper.salvarUsuario(userData!);
       _userController.sink.add(userData);
       final prefs = await SharedPreferences.getInstance();
@@ -335,13 +344,15 @@ class UsuarioBloc extends BlocBase {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         APP_CONSTANTS.SESSION_STATE, AppSessionStatus.NOT_LOGGED_IN.toString());
-    Navigator.of(context).pushReplacement(
-      CupertinoPageRoute(
-        builder: (context) => AuthView(
-          isLogin: true,
+    if (context.mounted) {
+      Navigator.of(context).pushReplacement(
+        CupertinoPageRoute(
+          builder: (context) => AuthView(
+            isLogin: true,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   apagarTabela() {
@@ -408,7 +419,7 @@ class UsuarioBloc extends BlocBase {
         .collection("usuarios")
         .where("cell", isEqualTo: cell)
         .get();
-    return !snapshot.docs.isEmpty;
+    return snapshot.docs.isNotEmpty;
   }
 
   Future<bool> existeUsername(String username) async {
@@ -416,7 +427,7 @@ class UsuarioBloc extends BlocBase {
         .collection("usuarios")
         .where("username", isEqualTo: username)
         .get();
-    return !snapshot.docs.isEmpty;
+    return snapshot.docs.isNotEmpty;
   }
 
   Future<bool> existeEmail(String email) async {
@@ -424,21 +435,7 @@ class UsuarioBloc extends BlocBase {
         .collection("usuarios")
         .where("email", isEqualTo: email)
         .get();
-    return !docs.docs.isEmpty;
-  }
-
-  void _snackBar(GlobalKey<ScaffoldState> key, String message) {
-    ScaffoldMessenger.of(key.currentContext!).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w300, color: branco),
-        ),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 4),
-      ),
-    );
+    return docs.docs.isNotEmpty;
   }
 
   recuperarConta() {}
@@ -447,7 +444,7 @@ class UsuarioBloc extends BlocBase {
       GlobalKey<ScaffoldState> key) async {
     if (await existeEmail(userCredential.user!.email!)) {
       firebaseUser = userCredential.user;
-      this.userData = await getUserData();
+      userData = await getUserData();
       await userHelper.salvarUsuario(userData!);
       _userController.sink.add(userData);
       final prefs = await SharedPreferences.getInstance();

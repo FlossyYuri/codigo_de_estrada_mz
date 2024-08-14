@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/models/usuario.dart';
-import 'package:latest_codigo_de_estrada/ui/home/views/historico_view.dart';
-import 'package:latest_codigo_de_estrada/ui/widgets/load_all_images.dart';
+import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/models/usuario.dart';
+import 'package:codigo_de_estrada/ui/home/views/historico_view.dart';
+import 'package:codigo_de_estrada/ui/widgets/load_all_images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,7 +17,8 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool temFoto =
-        BlocProvider.getBloc<UsuarioBloc>().userData!.imgUrl?.isNotEmpty ?? false;
+        BlocProvider.getBloc<UsuarioBloc>().userData!.imgUrl?.isNotEmpty ??
+            false;
     return Drawer(
       child: Container(
         padding: const EdgeInsets.only(top: 20),

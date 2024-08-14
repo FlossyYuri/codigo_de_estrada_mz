@@ -1,13 +1,10 @@
 import 'dart:io';
 
-import 'package:latest_codigo_de_estrada/helpers/historico_helper.dart'
-    as h_helper;
-import 'package:latest_codigo_de_estrada/helpers/questao_helper.dart'
-    as q_helper;
-import 'package:latest_codigo_de_estrada/helpers/tema_helper.dart' as m_helper;
-import 'package:latest_codigo_de_estrada/helpers/teste_helper.dart' as t_helper;
-import 'package:latest_codigo_de_estrada/helpers/usuario_helper.dart'
-    as u_helper;
+import 'package:codigo_de_estrada/helpers/historico_helper.dart' as h_helper;
+import 'package:codigo_de_estrada/helpers/questao_helper.dart' as q_helper;
+import 'package:codigo_de_estrada/helpers/tema_helper.dart' as m_helper;
+import 'package:codigo_de_estrada/helpers/teste_helper.dart' as t_helper;
+import 'package:codigo_de_estrada/helpers/usuario_helper.dart' as u_helper;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

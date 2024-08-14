@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:latest_codigo_de_estrada/enums/connectivity_status.dart';
+import 'package:codigo_de_estrada/enums/connectivity_status.dart';
 
 class ConnectivityService {
   StreamController<ConnectivityStatus> statusController =
@@ -8,16 +8,18 @@ class ConnectivityService {
 
   ConnectivityService() {
     // Inicializa o ConnectivityPlus
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-
-          // Obtém o status atual de conectividade
-          Connectivity().checkConnectivity().then((List<ConnectivityResult> value) {
-            statusController.sink
-                .add(_getStatusFromResult(value.first));
+    Connectivity().onConnectivityChanged.listen(
+      (List<ConnectivityResult> result) {
+        // Obtém o status atual de conectividade
+        Connectivity().checkConnectivity().then(
+          (List<ConnectivityResult> value) {
+            statusController.sink.add(_getStatusFromResult(value.first));
             var connectionStatus = _getStatusFromResult(result.first);
             statusController.add(connectionStatus);
-          },);
-        },);
+          },
+        );
+      },
+    );
   }
 
   ConnectivityStatus _getStatusFromResult(ConnectivityResult result) {

@@ -1,4 +1,4 @@
-import 'package:latest_codigo_de_estrada/ui/loja/widgets/buy_cs_tile.dart';
+import 'package:codigo_de_estrada/ui/loja/widgets/buy_cs_tile.dart';
 import 'package:flutter/material.dart';
 
 class BuyCS extends StatefulWidget {

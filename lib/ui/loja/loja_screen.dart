@@ -1,8 +1,8 @@
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/ui/loja/tabs/buy_cs.dart';
-import 'package:latest_codigo_de_estrada/ui/loja/tabs/buy_teste.dart';
-import 'package:latest_codigo_de_estrada/ui/loja/tabs/usar_cupom.dart';
-import 'package:latest_codigo_de_estrada/ui/widgets/card_entity.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/ui/loja/tabs/buy_cs.dart';
+import 'package:codigo_de_estrada/ui/loja/tabs/buy_teste.dart';
+import 'package:codigo_de_estrada/ui/loja/tabs/usar_cupom.dart';
+import 'package:codigo_de_estrada/ui/widgets/card_entity.dart';
 import 'package:flutter/material.dart';
 
 class LojaScreen extends StatelessWidget {

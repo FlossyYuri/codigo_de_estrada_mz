@@ -1,7 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:latest_codigo_de_estrada/blocs/transacoes_bloc.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/ui/loja/widgets/buy_teste_tile.dart';
+import 'package:codigo_de_estrada/blocs/transacoes_bloc.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/ui/loja/widgets/buy_teste_tile.dart';
 import 'package:flutter/material.dart';
 
 class BuyTeste extends StatelessWidget {

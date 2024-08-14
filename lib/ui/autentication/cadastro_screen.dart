@@ -1,11 +1,11 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:latest_codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/enums/signup_method.dart';
-import 'package:latest_codigo_de_estrada/models/usuario.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/widgets/background.dart';
-import 'package:latest_codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
-import 'package:latest_codigo_de_estrada/ui/utils/screen_notification_utils.dart';
+import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/enums/signup_method.dart';
+import 'package:codigo_de_estrada/models/usuario.dart';
+import 'package:codigo_de_estrada/ui/autentication/widgets/background.dart';
+import 'package:codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
+import 'package:codigo_de_estrada/ui/utils/screen_notification_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:latest_codigo_de_estrada/blocs/in_game_bloc.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/helpers/conexao.dart';
-import 'package:latest_codigo_de_estrada/models/teste.dart';
-import 'package:latest_codigo_de_estrada/ui/game/views/resultados_view.dart';
-import 'package:latest_codigo_de_estrada/ui/game/widgets/questao_view.dart';
+import 'package:codigo_de_estrada/blocs/in_game_bloc.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/helpers/conexao.dart';
+import 'package:codigo_de_estrada/models/teste.dart';
+import 'package:codigo_de_estrada/ui/game/views/resultados_view.dart';
+import 'package:codigo_de_estrada/ui/game/widgets/questao_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

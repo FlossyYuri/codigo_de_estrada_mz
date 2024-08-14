@@ -1,8 +1,8 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/models/historico.dart';
-import 'package:latest_codigo_de_estrada/blocs/questao_bloc.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/models/historico.dart';
+import 'package:codigo_de_estrada/blocs/questao_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

@@ -1,5 +1,5 @@
-import 'package:latest_codigo_de_estrada/constantes.dart';
-import 'package:latest_codigo_de_estrada/ui/loja/widgets/purchase_box.dart';
+import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada/ui/loja/widgets/purchase_box.dart';
 import 'package:flutter/material.dart';
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
