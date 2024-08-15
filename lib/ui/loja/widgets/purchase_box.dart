@@ -10,10 +10,11 @@ import 'package:http/http.dart' as http;
 
 class PurchaseBox extends StatefulWidget {
   final int cs;
-  final Color cor;
-  final LinearGradient gradient;
+  final Color? cor;
+  final LinearGradient? gradient;
   final GlobalKey<ScaffoldState> scaffoldKey;
-  PurchaseBox({
+  const PurchaseBox({
+    super.key,
     required this.cs,
     required this.cor,
     required this.gradient,
@@ -40,14 +41,14 @@ class _PurchaseBoxState extends State<PurchaseBox> {
 
   dialogContent(GlobalKey<ScaffoldState> scaffoldKey) {
     String icon = "gold1";
-    BoxDecoration d = BoxDecoration(
+    BoxDecoration d = const BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.blueAccent,
     );
     int item = 1;
     switch (widget.cs) {
       case 100:
-        d = BoxDecoration(
+        d = const BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.blueAccent,
         );
@@ -55,7 +56,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
         item = 0;
         break;
       case 200:
-        d = BoxDecoration(
+        d = const BoxDecoration(
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
@@ -68,7 +69,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
         item = 1;
         break;
       case 400:
-        d = BoxDecoration(
+        d = const BoxDecoration(
           shape: BoxShape.circle,
           color: lightgreen,
         );
@@ -76,7 +77,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
         item = 3;
         break;
       case 500:
-        d = BoxDecoration(
+        d = const BoxDecoration(
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
@@ -93,22 +94,22 @@ class _PurchaseBoxState extends State<PurchaseBox> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             top: Consts.avatarRadius + Consts.padding,
             bottom: Consts.padding,
             left: Consts.padding,
             right: Consts.padding,
           ),
-          margin: EdgeInsets.only(top: Consts.avatarRadius),
-          decoration: new BoxDecoration(
+          margin: const EdgeInsets.only(top: Consts.avatarRadius),
+          decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(Consts.padding),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 10.0,
-                offset: const Offset(0.0, 10.0),
+                offset: Offset(0.0, 10.0),
               ),
             ],
           ),
@@ -116,8 +117,10 @@ class _PurchaseBoxState extends State<PurchaseBox> {
             child: Column(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: branco,
@@ -127,12 +130,12 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                       BoxShadow(
                         blurRadius: 5,
                         color: Colors.black.withOpacity(.1),
-                        offset: Offset(0, 0),
+                        offset: const Offset(0, 0),
                       ),
                       BoxShadow(
                         color: Colors.black.withOpacity(.2),
                         blurRadius: 5,
-                        offset: Offset(2.0, 4.0),
+                        offset: const Offset(2.0, 4.0),
                       ),
                     ],
                   ),
@@ -147,19 +150,19 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 0,
                           vertical: 0,
                         ),
                         child: TextFormField(
                           cursorColor: Colors.black,
                           cursorWidth: 4,
-                          cursorRadius: Radius.circular(10),
+                          cursorRadius: const Radius.circular(10),
                           controller: _cellController,
                           textCapitalization: TextCapitalization.none,
                           autocorrect: false,
                           maxLength: 9,
-                          style: TextStyle(color: preto, fontSize: 22),
+                          style: const TextStyle(color: preto, fontSize: 22),
                           validator: (String? text) {
                             if (text != null && text.length != 9) {
                               return "Deve conter 9 digitos";
@@ -167,7 +170,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                             return null;
                           },
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             errorStyle: TextStyle(
                               color: Colors.red,
                               fontSize: 18,
@@ -206,7 +209,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                               size: 18,
                               color: Colors.red,
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
+                            contentPadding: EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 20),
                           ),
                         ),
@@ -221,14 +224,14 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Container(
+                                child: const SizedBox(
                                   height: 200,
                                   width: 200,
                                   child: Center(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 60,
                                           width: 60,
                                           child: CircularProgressIndicator(
@@ -336,7 +339,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                         child: Container(
                           height: 40,
                           alignment: Alignment.center,
-                          child: Text(
+                          child: const Text(
                             "Comprar",
                             style: TextStyle(
                               color: branco,
@@ -346,13 +349,13 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       )
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 GPLAYCard(
@@ -377,7 +380,7 @@ class _PurchaseBoxState extends State<PurchaseBox> {
                 ),
                 Text(
                   "${widget.cs} MZN",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -396,11 +399,11 @@ _showToast(String text, bool success, GlobalKey<ScaffoldState> scaffoldKey) {
   ScaffoldMessenger.of(scaffoldKey.currentContext!).showSnackBar(SnackBar(
     content: Text(
       text,
-      style:
-          TextStyle(fontSize: 18, fontWeight: FontWeight.w300, color: branco),
+      style: const TextStyle(
+          fontSize: 18, fontWeight: FontWeight.w300, color: branco),
     ),
     backgroundColor: success ? Colors.greenAccent : Colors.redAccent,
-    duration: Duration(seconds: 4),
+    duration: const Duration(seconds: 4),
   ));
 }
 

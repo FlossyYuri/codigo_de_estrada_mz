@@ -10,7 +10,10 @@ class LoadScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainBG,
-        title: Text("Carregar todas imagens",
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the color you want for the back button
+        ),
+        title: const Text("Carregar todas imagens",
             style: TextStyle(
                 color: branco,
                 fontSize: 22,

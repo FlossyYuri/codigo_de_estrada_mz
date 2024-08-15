@@ -10,6 +10,9 @@ class SobreScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainBG,
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the color you want for the back button
+        ),
         title: Text("Sobre a app",
             style: TextStyle(
                 color: branco,

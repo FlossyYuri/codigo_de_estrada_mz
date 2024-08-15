@@ -12,7 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TransacoesBloc extends BlocBase {
   var sub;
   bool timerSet = false;
-  StreamController _streamController = StreamController<Duration>.broadcast();
+  final StreamController _streamController =
+      StreamController<Duration>.broadcast();
   get outTimer => _streamController.stream;
   void setTimer() {
     if (!timerSet) {
@@ -46,22 +47,39 @@ class TransacoesBloc extends BlocBase {
               .doc(cupom.codigo)
               .update({"usado": true, "username": bloc.userData!.username});
           await bloc.fullUpdateUser();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "Cupom de ${cupom.cs} cs usado com sucesso",
-                style: TextStyle(
-                    fontSize: 22, fontWeight: FontWeight.w300, color: branco),
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  "Cupom de ${cupom.cs} cs usado com sucesso",
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.w300, color: branco),
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
               ),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
+            );
+          }
         } else {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Este cupom ja foi usado.",
+                  style: TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.w300, color: branco),
+                ),
+                backgroundColor: lightred,
+              ),
+            );
+          }
+        }
+      } else {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text(
-                "Este cupom ja foi usado.",
+                "Codigo invalido! porfavor, digite um codigo valido",
                 style: TextStyle(
                     fontSize: 22, fontWeight: FontWeight.w300, color: branco),
               ),
@@ -69,11 +87,13 @@ class TransacoesBloc extends BlocBase {
             ),
           );
         }
-      } else {
+      }
+    } else {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text(
-              "Codigo invalido! porfavor, digite um codigo valido",
+              "Falha ao verificar o cupom por falta de conexao a internet!",
               style: TextStyle(
                   fontSize: 22, fontWeight: FontWeight.w300, color: branco),
             ),
@@ -81,17 +101,6 @@ class TransacoesBloc extends BlocBase {
           ),
         );
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "Falha ao verificar o cupom por falta de conexao a internet!",
-            style: TextStyle(
-                fontSize: 22, fontWeight: FontWeight.w300, color: branco),
-          ),
-          backgroundColor: lightred,
-        ),
-      );
     }
   }
 
@@ -104,7 +113,7 @@ class TransacoesBloc extends BlocBase {
       );
       prefs.setString(
         "dFTestesInfinitos",
-        dataInicioTestesInfinitos.add(Duration(hours: 12)).toString(),
+        dataInicioTestesInfinitos.add(const Duration(hours: 12)).toString(),
       );
     });
   }
@@ -122,10 +131,11 @@ class TransacoesBloc extends BlocBase {
     if (prefs.containsKey("dITestesInfinitos")) {
       DateTime init = DateTime.parse(prefs.getString("dITestesInfinitos")!);
       DateTime fim = DateTime.parse(prefs.getString("dFTestesInfinitos")!);
-      if (agora.isAfter(init) && agora.isBefore(fim))
+      if (agora.isAfter(init) && agora.isBefore(fim)) {
         return true;
-      else
+      } else {
         return false;
+      }
     } else {
       return false;
     }
@@ -139,7 +149,7 @@ class TransacoesBloc extends BlocBase {
         case -1:
           gerarTestesIlimitados();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text("Comprou testes infinitos por 12h com sucesso.",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
               duration: Duration(seconds: 1),
@@ -151,9 +161,12 @@ class TransacoesBloc extends BlocBase {
           bloc.userData!.nrTestes += testes;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Comprou $testes testes com sucesso.",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
-              duration: Duration(seconds: 1),
+              content: Text(
+                "Comprou $testes testes com sucesso.",
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+              ),
+              duration: const Duration(seconds: 1),
               backgroundColor: lightgreen,
             ),
           );
@@ -162,11 +175,11 @@ class TransacoesBloc extends BlocBase {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
+          content: const Text(
             "Nao tem cs suficientes",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
           ),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
           backgroundColor: lightred,
           action: SnackBarAction(
             label: "Comprar cs",
@@ -188,9 +201,9 @@ class TransacoesBloc extends BlocBase {
       SnackBar(
         content: Text(
           "Comprou $cs cs com sucesso.",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.green,
       ),
     );

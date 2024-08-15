@@ -24,6 +24,9 @@ class _HistoricoViewState extends State<HistoricoView> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the color you want for the back button
+        ),
         title: Text(
           "Historico",
           overflow: TextOverflow.ellipsis,

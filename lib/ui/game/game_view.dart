@@ -58,13 +58,16 @@ class _GamePageState extends State<GamePage> {
         key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: mainBG,
+          iconTheme: const IconThemeData(
+            color: Colors.white, // Set the color you want for the back button
+          ),
           title: Row(
             children: <Widget>[
               Expanded(
                 child: Text(
                   widget.teste.nome,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 24),
+                  style: const TextStyle(color: Colors.white, fontSize: 24),
                 ),
               ),
               widget.gameMode == "resolucao"
@@ -75,7 +78,7 @@ class _GamePageState extends State<GamePage> {
                         if (snapshot.hasData) {
                           return Text(
                             "${snapshot.data}/${widget.teste.questoes.length} Questoes",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w300),
@@ -132,13 +135,14 @@ class _GamePageState extends State<GamePage> {
   }
 
   Widget _btsBuilder() {
-    if (widget.gameMode == "resolucao")
+    if (widget.gameMode == "resolucao") {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildIconButton(Icons.arrow_drop_up, () {
             _controlador.previousPage(
-                duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut);
           }),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -147,10 +151,10 @@ class _GamePageState extends State<GamePage> {
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
-                  side: BorderSide(width: 2, color: branco),
+                  side: const BorderSide(width: 2, color: branco),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 "Voltar",
                 style: TextStyle(
                   color: branco,
@@ -169,7 +173,7 @@ class _GamePageState extends State<GamePage> {
           }),
         ],
       );
-    else
+    } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -262,6 +266,7 @@ class _GamePageState extends State<GamePage> {
           }),
         ],
       );
+    }
   }
 
   Widget _buildIconButton(IconData icon, VoidCallback f) {

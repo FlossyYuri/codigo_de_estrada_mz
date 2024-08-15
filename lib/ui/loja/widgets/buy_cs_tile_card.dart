@@ -1,20 +1,18 @@
 import 'package:codigo_de_estrada/constantes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inapp_purchase/modules.dart';
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 class BuyCSTileDollar extends StatelessWidget {
-  final IAPItem item;
   final String titulo;
   final int valor;
   final Color cor;
   final LinearGradient gradient;
   final Widget image;
   final VoidCallback f;
-  BuyCSTileDollar(
-      {required this.titulo,
-      required this.item,
+  const BuyCSTileDollar(
+      {super.key,
+      required this.titulo,
       required this.valor,
       required this.f,
       required this.cor,
@@ -35,33 +33,31 @@ class BuyCSTileDollar extends StatelessWidget {
         onPressed: f,
         splashColor: preto,
         focusColor: transparente,
-        child: Container(
-          child: ListTile(
-            trailing: image,
-            title: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  valor.toString() + " CS",
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400),
-                ),
-                Text(
-                  "Custo: ${double.parse(item.price!).toStringAsPrecision(2)}${item.currency}",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  titulo,
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                ),
-              ],
-            ),
+        child: ListTile(
+          trailing: image,
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "$valor CS",
+                style: const TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400),
+              ),
+              Text(
+                "Custo: $valor MT",
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                titulo,
+                style: const TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ],
           ),
         ),
       ),

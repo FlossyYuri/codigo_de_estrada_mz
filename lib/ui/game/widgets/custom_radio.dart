@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomRadio extends StatefulWidget {
   @override
   createState() {
-    return new CustomRadioState();
+    return CustomRadioState();
   }
 }
 
@@ -13,22 +13,22 @@ class CustomRadioState extends State<CustomRadio> {
   @override
   void initState() {
     super.initState();
-    sampleData.add(new RadioModel(false, 'A', 'April 18'));
-    sampleData.add(new RadioModel(false, 'B', 'April 17'));
-    sampleData.add(new RadioModel(false, 'C', 'April 16'));
-    sampleData.add(new RadioModel(false, 'D', 'April 15'));
+    sampleData.add(RadioModel(false, 'A', 'April 18'));
+    sampleData.add(RadioModel(false, 'B', 'April 17'));
+    sampleData.add(RadioModel(false, 'C', 'April 16'));
+    sampleData.add(RadioModel(false, 'D', 'April 15'));
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("ListItem"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("ListItem"),
       ),
-      body: new ListView.builder(
+      body: ListView.builder(
         itemCount: sampleData.length,
         itemBuilder: (BuildContext context, int index) {
-          return new InkWell(
+          return InkWell(
             //highlightColor: Colors.red,
             splashColor: Colors.blueAccent,
             onTap: () {
@@ -37,7 +37,7 @@ class CustomRadioState extends State<CustomRadio> {
                 sampleData[index].isSelected = true;
               });
             },
-            child: new RadioItem(sampleData[index]),
+            child: RadioItem(sampleData[index]),
           );
         },
       ),
@@ -50,32 +50,32 @@ class RadioItem extends StatelessWidget {
   RadioItem(this._item);
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      margin: new EdgeInsets.all(15.0),
-      child: new Row(
+    return Container(
+      margin: EdgeInsets.all(15.0),
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          new Container(
+          Container(
             height: 50.0,
             width: 50.0,
-            child: new Center(
-              child: new Text(_item.buttonText,
-                  style: new TextStyle(
+            child: Center(
+              child: Text(_item.buttonText,
+                  style: TextStyle(
                       color: _item.isSelected ? Colors.white : Colors.black,
                       //fontWeight: FontWeight.bold,
                       fontSize: 18.0)),
             ),
-            decoration: new BoxDecoration(
+            decoration: BoxDecoration(
               color: _item.isSelected ? Colors.blueAccent : Colors.transparent,
-              border: new Border.all(
+              border: Border.all(
                   width: 1.0,
                   color: _item.isSelected ? Colors.blueAccent : Colors.grey),
               borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
             ),
           ),
-          new Container(
-            margin: new EdgeInsets.only(left: 10.0),
-            child: new Text(_item.text),
+          Container(
+            margin: EdgeInsets.only(left: 10.0),
+            child: Text(_item.text),
           )
         ],
       ),

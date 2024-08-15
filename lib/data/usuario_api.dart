@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 const String TIME_URL = "http://flossyyuri.com/app/dataAtual.php";
-const String MPESA_URL = "https://mpesa.flossyyuri.com/test/pay";
+const String MPESA_URL = "https://mpesa.flossyyuri.com/pay";
 
 Future<Map<String, dynamic>> createPost({required Map body}) async {
   return http.post(Uri.parse(TIME_URL), body: body).then(

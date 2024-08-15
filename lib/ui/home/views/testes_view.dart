@@ -85,7 +85,7 @@ class _TestesViewState extends State<TestesView>
 
   Widget toggle() {
     return FloatingActionButton(
-      backgroundColor: _animateColor?.value,
+      backgroundColor: _animateColor.value,
       onPressed: () {
         animate();
       },

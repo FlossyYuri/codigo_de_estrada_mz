@@ -10,6 +10,9 @@ class NoticiaView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the color you want for the back button
+        ),
         title: Text(
           noticia.titulo,
           overflow: TextOverflow.ellipsis,

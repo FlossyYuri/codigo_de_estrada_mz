@@ -1,101 +1,29 @@
-import 'dart:async';
-
-import 'package:codigo_de_estrada/blocs/transacoes_bloc.dart';
-import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:codigo_de_estrada/ui/utils/screen_notification_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 
 class GPLAYCard extends StatefulWidget {
   final int item;
-  GPLAYCard({required this.item});
+  const GPLAYCard({super.key, required this.item});
   @override
   _GPLAYCardState createState() => _GPLAYCardState();
 }
 
 class _GPLAYCardState extends State<GPLAYCard> {
-  late StreamSubscription _purchaseUpdatedSubscription;
-
-  late StreamSubscription _purchaseErrorSubscription;
-
-  bool comprando = false;
-
-  final List<String> _productLists = [
-    '100_cs',
-    '200_cs',
-    '500_cs',
-    'premium',
-  ];
-
-  List<IAPItem> _items = [];
   @override
   void initState() {
     super.initState();
-    _initPlatformState();
-  }
-
-  Future<bool> _initPlatformState() async {
-    // prepare
-    await FlutterInappPurchase.instance.initialize();
-    await _getProduct();
-    _purchaseUpdatedSubscription = FlutterInappPurchase.purchaseUpdated.listen(
-      (productItem) {
-        switch (productItem?.productId) {
-          case '100_cs':
-            BlocProvider.getBloc<TransacoesBloc>().comprarCS(100, context);
-            break;
-          case '200_cs':
-            BlocProvider.getBloc<TransacoesBloc>().comprarCS(200, context);
-            break;
-          case '500_cs':
-            BlocProvider.getBloc<TransacoesBloc>().comprarCS(500, context);
-            break;
-        }
-      },
-    );
-
-    _purchaseErrorSubscription = FlutterInappPurchase.purchaseError.listen(
-      (purchaseError) {
-        print("Novo erro: $purchaseError");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Compra mal sucedida.\n",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-            ),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
-      },
-    );
-    return true;
-  }
-
-  Future<Null> _requestPurchase(IAPItem item) async {
-    await FlutterInappPurchase.instance.requestPurchase(item.productId!);
-  }
-
-  Future<bool> _getProduct() async {
-    List<IAPItem> items =
-        await FlutterInappPurchase.instance.getProducts(_productLists);
-    for (var item in items) {
-      this._items.add(item);
-    }
-    return true;
   }
 
   @override
   void dispose() {
-    _purchaseErrorSubscription.cancel();
-    _purchaseUpdatedSubscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -104,12 +32,12 @@ class _GPLAYCardState extends State<GPLAYCard> {
           BoxShadow(
             blurRadius: 5,
             color: Colors.black.withOpacity(.1),
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
           ),
           BoxShadow(
             color: Colors.black.withOpacity(.2),
             blurRadius: 5,
-            offset: Offset(2.0, 4.0),
+            offset: const Offset(2.0, 4.0),
           ),
         ],
       ),
@@ -123,14 +51,11 @@ class _GPLAYCardState extends State<GPLAYCard> {
               alignment: Alignment.centerLeft,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              this._requestPurchase(_items[widget.item]).then(
-                (_) {
-                  comprando = false;
-                },
-              );
+              ScreenNotificationUtils()
+                  .showSnackBar(context, "Funcionalidade desabilitada");
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -141,7 +66,7 @@ class _GPLAYCardState extends State<GPLAYCard> {
             child: Container(
               height: 40,
               alignment: Alignment.center,
-              child: Text(
+              child: const Text(
                 "Comprar",
                 style: TextStyle(
                   color: Colors.white,
@@ -151,7 +76,7 @@ class _GPLAYCardState extends State<GPLAYCard> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           )
         ],

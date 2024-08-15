@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 class LojaScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  LojaScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -15,24 +17,25 @@ class LojaScreen extends StatelessWidget {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "LOJA",
-                  style: TextStyle(
-                      color: Colors.white,
-                      letterSpacing: 5,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
-                Icon(
-                  Icons.shop,
-                  size: 24,
-                )
-              ],
-            ),
+          iconTheme: const IconThemeData(
+            color: Colors.white, // Set the color you want for the back button
+          ),
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "LOJA",
+                style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 5,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.shop,
+                size: 24,
+              )
+            ],
           ),
           backgroundColor: mainBG,
           bottom: PreferredSize(
