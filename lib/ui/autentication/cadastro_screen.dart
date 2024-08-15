@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 class CadastroScreen extends StatefulWidget {
   final UserCredential? userCredencial;
   final SignUpMethod method;
-  CadastroScreen(
+  const CadastroScreen(
       {super.key, required this.userCredencial, required this.method});
   @override
   _CadastroScreenState createState() => _CadastroScreenState();
@@ -32,11 +32,13 @@ class _CadastroScreenState extends State<CadastroScreen> {
     super.initState();
     if (widget.userCredencial != null) {
       String username = widget.userCredencial!.user!.displayName!
-          .substring(0, widget.userCredencial!.user!.displayName!.indexOf(" "))
+          .substring(0, widget.userCredencial!.user!.displayName?.indexOf(" "))
           .toLowerCase();
       _usernameController.text = username;
-      _emailController.text = widget.userCredencial!.user!.email!;
-      _cellController.text = widget.userCredencial!.user!.phoneNumber!;
+      _emailController.text =
+          widget.userCredencial!.user!.email ?? _emailController.text;
+      _cellController.text =
+          widget.userCredencial!.user!.phoneNumber ?? _cellController.text;
     }
   }
 
@@ -94,10 +96,12 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         asSufix: false,
                         valid: (String text) {
                           text.toLowerCase();
-                          if (text.length < 4)
+                          if (text.length < 4) {
                             return "Deve conter pelo menos 4 letras";
-                          if (text.length > 15)
+                          }
+                          if (text.length > 15) {
                             return "O nome deve conter no max 15 letras";
+                          }
                           if (text.contains(" ")) {
                             return "O texto nao pode ter espaços em branco";
                           }
@@ -115,10 +119,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           var pattern =
                               r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                           RegExp regex = new RegExp(pattern);
-                          if (!regex.hasMatch(value))
+                          if (!regex.hasMatch(value)) {
                             return 'Introduza um email valido.';
-                          else
+                          } else {
                             return null;
+                          }
                         },
                       ),
                       CustomTextField2(
@@ -182,10 +187,12 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             ScreenNotificationUtils().showLoadingModal(context);
 
                             // Check if the phone number already exists
-                            if (await _checkIfCellExists(context)) return;
+                            if (context.mounted) {
+                              if (await _checkIfCellExists(context)) return;
 
-                            // Check if the username already exists
-                            if (await _checkIfUsernameExists(context)) return;
+                              // Check if the username already exists
+                              if (await _checkIfUsernameExists(context)) return;
+                            }
 
                             final Usuario user = Usuario(
                               id: null,

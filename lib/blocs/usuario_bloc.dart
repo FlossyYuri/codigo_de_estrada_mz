@@ -55,25 +55,7 @@ class UsuarioBloc extends BlocBase {
 
   Future<AppSessionStatus> sessionStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    int estadoHelper = -1;
-    try {
-      estadoHelper = prefs.getInt(APP_CONSTANTS.SESSION_STATE)!;
-    } catch (e) {
-      print(e.toString());
-    }
 
-    if (estadoHelper >= 0) {
-      if (estadoHelper == 0) {
-        prefs.remove(APP_CONSTANTS.SESSION_STATE);
-        prefs.setString(APP_CONSTANTS.SESSION_STATE,
-            AppSessionStatus.NOT_LOGGED_IN.toString());
-        return AppSessionStatus.NOT_LOGGED_IN;
-      }
-      prefs.remove(APP_CONSTANTS.SESSION_STATE);
-      prefs.setString(
-          APP_CONSTANTS.SESSION_STATE, AppSessionStatus.LOGGED_IN.toString());
-      return AppSessionStatus.LOGGED_IN;
-    }
     AppSessionStatus estado = AppSessionStatus.values.firstWhere(
         (element) =>
             element.toString() == prefs.getString(APP_CONSTANTS.SESSION_STATE),
@@ -157,21 +139,26 @@ class UsuarioBloc extends BlocBase {
   }
 
   Future<Null> facebookAuthentication(GlobalKey<ScaffoldState> key) async {
-    final LoginResult result = await FacebookAuth.instance.login(
-      permissions: ['public_profile', 'email'],
-    );
-    switch (result.status) {
-      case LoginStatus.success:
-        _firebaseAuthWithFacebook(accessToken: result.accessToken!, key: key);
-        return;
-      case LoginStatus.cancelled:
-        Navigator.pop(key.currentContext!);
-        return;
-      case LoginStatus.failed:
-        Navigator.pop(key.currentContext!);
-        return;
-      default:
-        return null;
+    try {
+      final LoginResult result = await FacebookAuth.instance.login(
+        permissions: ['public_profile', 'email'],
+      );
+      switch (result.status) {
+        case LoginStatus.success:
+          _firebaseAuthWithFacebook(accessToken: result.accessToken!, key: key);
+          return;
+        case LoginStatus.cancelled:
+          Navigator.pop(key.currentContext!);
+          return;
+        case LoginStatus.failed:
+          Navigator.pop(key.currentContext!);
+          return;
+        default:
+          return null;
+      }
+    } catch (e) {
+      print('-------------');
+      print(e);
     }
   }
 
@@ -330,7 +317,7 @@ class UsuarioBloc extends BlocBase {
       await userHelper.deleteUsuario(userData!.id!);
     } catch (e) {}
     userData = null;
-    _userController.sink.add(userData);
+    _userController.sink.done;
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
         APP_CONSTANTS.SESSION_STATE, AppSessionStatus.NOT_LOGGED_IN.toString());
