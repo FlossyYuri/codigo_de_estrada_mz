@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/models/noticia.dart';
-import 'package:codigo_de_estrada/ui/home/views/noticia_view.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/models/noticia.dart';
+import 'package:codigo_de_estrada_mz/ui/home/views/noticia_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

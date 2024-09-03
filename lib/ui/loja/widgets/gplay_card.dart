@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada/ui/utils/screen_notification_utils.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
 import 'package:flutter/material.dart';
 
 class GPLAYCard extends StatefulWidget {

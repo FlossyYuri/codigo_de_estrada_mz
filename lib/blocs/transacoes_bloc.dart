@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/helpers/conexao.dart';
-import 'package:codigo_de_estrada/models/cuppon.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/models/cuppon.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

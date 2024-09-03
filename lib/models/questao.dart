@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:codigo_de_estrada/helpers/questao_helper.dart';
-import 'package:codigo_de_estrada/models/portugues.dart';
+import 'package:codigo_de_estrada_mz/helpers/questao_helper.dart';
+import 'package:codigo_de_estrada_mz/models/portugues.dart';
 
 class Questao {
   int id;

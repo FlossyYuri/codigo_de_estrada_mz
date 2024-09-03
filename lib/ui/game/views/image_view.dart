@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/models/questao.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/models/questao.dart';
 import 'package:flutter/material.dart';
 
 class ImageView extends StatelessWidget {

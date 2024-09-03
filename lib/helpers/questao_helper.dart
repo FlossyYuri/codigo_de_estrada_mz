@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada/helpers/conexao.dart';
-import 'package:codigo_de_estrada/models/questao.dart';
+import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/models/questao.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 

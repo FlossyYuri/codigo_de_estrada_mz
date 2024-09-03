@@ -1,11 +1,11 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/enums/signup_method.dart';
-import 'package:codigo_de_estrada/models/usuario.dart';
-import 'package:codigo_de_estrada/ui/autentication/widgets/background.dart';
-import 'package:codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
-import 'package:codigo_de_estrada/ui/utils/screen_notification_utils.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
+import 'package:codigo_de_estrada_mz/models/usuario.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/widgets/custom_text_field2.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -185,7 +185,15 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             ScreenNotificationUtils().showLoadingModal(context);
-
+                            if (_emailController.text.isEmpty) {
+                              if (context.mounted) {
+                                Navigator.of(context)
+                                    .pop(); // Close loading modal
+                              }
+                              ScreenNotificationUtils().showSnackBar(
+                                  context, "Preencha o formulário");
+                              return;
+                            }
                             // Check if the phone number already exists
                             if (context.mounted) {
                               if (await _checkIfCellExists(context)) return;

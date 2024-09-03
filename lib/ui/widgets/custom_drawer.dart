@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/models/usuario.dart';
-import 'package:codigo_de_estrada/ui/home/views/historico_view.dart';
-import 'package:codigo_de_estrada/ui/widgets/load_all_images.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/models/usuario.dart';
+import 'package:codigo_de_estrada_mz/ui/home/views/historico_view.dart';
+import 'package:codigo_de_estrada_mz/ui/widgets/load_all_images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

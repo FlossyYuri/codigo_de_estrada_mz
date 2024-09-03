@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:codigo_de_estrada/enums/connectivity_status.dart';
+import 'package:codigo_de_estrada_mz/enums/connectivity_status.dart';
 
 class ConnectivityService {
   StreamController<ConnectivityStatus> statusController =

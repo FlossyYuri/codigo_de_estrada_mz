@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada/models/teste.dart';
+import 'package:codigo_de_estrada_mz/models/teste.dart';
 
 class Resultados {
   List<Map<int, String>> opcoesEscolhidas;

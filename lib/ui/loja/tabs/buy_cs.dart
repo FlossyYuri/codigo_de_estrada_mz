@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada/ui/loja/widgets/buy_cs_tile.dart';
+import 'package:codigo_de_estrada_mz/ui/loja/widgets/buy_cs_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

@@ -1,6 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codigo_de_estrada/models/noticia.dart';
+import 'package:codigo_de_estrada_mz/models/noticia.dart';
 
 class NoticiaBloc extends BlocBase {
   Future<List<Noticia>> downloadNoticias() async {

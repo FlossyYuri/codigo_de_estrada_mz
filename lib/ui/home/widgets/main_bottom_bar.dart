@@ -1,7 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/models/usuario.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/models/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

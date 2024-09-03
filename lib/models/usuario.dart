@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada/helpers/usuario_helper.dart';
+import 'package:codigo_de_estrada_mz/helpers/usuario_helper.dart';
 
 class Usuario {
   String? id;

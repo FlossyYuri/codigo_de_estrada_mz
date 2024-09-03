@@ -1,4 +1,4 @@
-import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -22,17 +22,17 @@ class ScreenNotificationUtils {
                   Container(
                     height: 60,
                     width: 60,
-                    child: CircularProgressIndicator(
+                    child: const CircularProgressIndicator(
                       strokeWidth: 5,
                       valueColor: AlwaysStoppedAnimation(
                         mainBG,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text("Loading"),
+                  const Text("Loading"),
                 ],
               ),
             ),
@@ -42,7 +42,8 @@ class ScreenNotificationUtils {
     );
   }
 
-  void showSnackBar(BuildContext context, String text) {
+  void showSnackBar(BuildContext context, String text,
+      {Color backgroundColor = Colors.red}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -53,7 +54,7 @@ class ScreenNotificationUtils {
             color: branco,
           ),
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: backgroundColor,
         duration: const Duration(seconds: 5),
       ),
     );

@@ -5,7 +5,7 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = codigo_de_estrada
+PRODUCT_NAME = codigo_de_estrada_mz
 
 // The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = mz.co.chillstudio.codigo_de_estrada_mz

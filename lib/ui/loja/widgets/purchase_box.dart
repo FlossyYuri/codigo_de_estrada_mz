@@ -1,10 +1,10 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/data/usuario_api.dart';
-import 'package:codigo_de_estrada/ui/loja/widgets/gplay_card.dart';
-import 'package:codigo_de_estrada/ui/utils/common_utils.dart';
+import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/data/usuario_api.dart';
+import 'package:codigo_de_estrada_mz/ui/loja/widgets/gplay_card.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

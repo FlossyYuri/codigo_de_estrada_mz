@@ -8,19 +8,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/enums/app_session_status.dart';
-import 'package:codigo_de_estrada/enums/signup_method.dart';
-import 'package:codigo_de_estrada/helpers/conexao.dart';
-import 'package:codigo_de_estrada/helpers/usuario_helper.dart';
-import 'package:codigo_de_estrada/models/usuario.dart';
-import 'package:codigo_de_estrada/ui/autentication/cadastro_screen.dart';
-import 'package:codigo_de_estrada/ui/autentication/criar_conta_auth.dart';
-import 'package:codigo_de_estrada/ui/autentication/login_screen.dart';
-import 'package:codigo_de_estrada/ui/autentication/widgets/auth_view.dart';
-import 'package:codigo_de_estrada/ui/home/home_screen.dart';
-import 'package:codigo_de_estrada/ui/utils/common_utils.dart';
-import 'package:codigo_de_estrada/ui/utils/screen_notification_utils.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/enums/app_session_status.dart';
+import 'package:codigo_de_estrada_mz/enums/signup_method.dart';
+import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/helpers/usuario_helper.dart';
+import 'package:codigo_de_estrada_mz/models/usuario.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/cadastro_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/criar_conta_auth.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/login_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/widgets/auth_view.dart';
+import 'package:codigo_de_estrada_mz/ui/home/home_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/common_utils.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -175,7 +175,7 @@ class UsuarioBloc extends BlocBase {
       switch (error.code) {
         case "account-exists-with-different-credential":
           ScreenNotificationUtils().showSnackBar(key.currentContext!,
-              "Esta conta já foi criada usando outro método (provedor).");
+              "Esta conta já foi criada usando outro método. Tentando Login com Google...");
 
           // Handling the specific case where the account exists with a Google credential
           final email = error.email;
@@ -297,6 +297,29 @@ class UsuarioBloc extends BlocBase {
         case 'too-many-requests':
           currentError =
               "Muitas tentativas de login. Por favor, tente novamente mais tarde.";
+          break;
+        default:
+          currentError = "Occoreu algum erro: ${e.message}";
+      }
+      ScreenNotificationUtils().showSnackBar(key.currentContext!, currentError);
+    } catch (e) {
+      Navigator.pop(key.currentContext!);
+      print("Podre:  $e");
+    }
+  }
+
+  Future<Null> sendResetPasswordEmail(
+      String email, GlobalKey<ScaffoldState> key) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      CommonUtils().popUntilRoot(key.currentContext!);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(key.currentContext!);
+      String currentError = "";
+
+      switch (e.code) {
+        case 'user-not-found':
+          currentError = "Nenhum usuário encontrado com esse e-mail.";
           break;
         default:
           currentError = "Occoreu algum erro: ${e.message}";

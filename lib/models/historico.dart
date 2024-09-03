@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:codigo_de_estrada/models/teste.dart';
+import 'package:codigo_de_estrada_mz/models/teste.dart';
 
 class ResultadoHistorico {
   int nrErros;

@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/helpers/conexao.dart';
-import 'package:codigo_de_estrada/ui/home/sobre_screen.dart';
-import 'package:codigo_de_estrada/ui/home/temas_screen.dart';
-import 'package:codigo_de_estrada/ui/home/views/testes_view.dart';
-import 'package:codigo_de_estrada/ui/home/widgets/modo_card.dart';
-import 'package:codigo_de_estrada/ui/home/widgets/option_card.dart';
-import 'package:codigo_de_estrada/ui/home/widgets/promo-dialogue.dart';
-import 'package:codigo_de_estrada/ui/loja/loja_screen.dart';
-import 'package:codigo_de_estrada/ui/widgets/custom_app_bar.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/ui/home/sobre_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/home/temas_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/home/views/testes_view.dart';
+import 'package:codigo_de_estrada_mz/ui/home/widgets/modo_card.dart';
+import 'package:codigo_de_estrada_mz/ui/home/widgets/option_card.dart';
+import 'package:codigo_de_estrada_mz/ui/home/widgets/promo-dialogue.dart';
+import 'package:codigo_de_estrada_mz/ui/loja/loja_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/widgets/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

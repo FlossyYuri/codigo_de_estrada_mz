@@ -1,5 +1,5 @@
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/ui/widgets/load_all_images.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/ui/widgets/load_all_images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

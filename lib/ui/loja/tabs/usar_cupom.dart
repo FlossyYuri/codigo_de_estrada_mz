@@ -1,6 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada/blocs/transacoes_bloc.dart';
-import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada_mz/blocs/transacoes_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';

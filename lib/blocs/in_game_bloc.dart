@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada/models/historico.dart';
-import 'package:codigo_de_estrada/models/questao.dart';
-import 'package:codigo_de_estrada/blocs/questao_bloc.dart';
-import 'package:codigo_de_estrada/models/resultados.dart';
-import 'package:codigo_de_estrada/models/teste.dart';
-import 'package:codigo_de_estrada/helpers/historico_helper.dart';
+import 'package:codigo_de_estrada_mz/models/historico.dart';
+import 'package:codigo_de_estrada_mz/models/questao.dart';
+import 'package:codigo_de_estrada_mz/blocs/questao_bloc.dart';
+import 'package:codigo_de_estrada_mz/models/resultados.dart';
+import 'package:codigo_de_estrada_mz/models/teste.dart';
+import 'package:codigo_de_estrada_mz/helpers/historico_helper.dart';
 import 'package:flutter/material.dart';
 
 class InGameBloc extends BlocBase {

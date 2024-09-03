@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:codigo_de_estrada/constantes.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';

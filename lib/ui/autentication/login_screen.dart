@@ -1,14 +1,18 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:codigo_de_estrada/blocs/usuario_bloc.dart';
-import 'package:codigo_de_estrada/constantes.dart';
-import 'package:codigo_de_estrada/helpers/conexao.dart';
-import 'package:codigo_de_estrada/ui/autentication/widgets/background.dart';
-import 'package:codigo_de_estrada/ui/autentication/widgets/custom_text_field2.dart';
-import 'package:codigo_de_estrada/ui/home/home_screen.dart';
+import 'package:codigo_de_estrada_mz/blocs/usuario_bloc.dart';
+import 'package:codigo_de_estrada_mz/constantes.dart';
+import 'package:codigo_de_estrada_mz/helpers/conexao.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/forgot_password_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/widgets/background.dart';
+import 'package:codigo_de_estrada_mz/ui/autentication/widgets/custom_text_field2.dart';
+import 'package:codigo_de_estrada_mz/ui/home/home_screen.dart';
+import 'package:codigo_de_estrada_mz/ui/utils/screen_notification_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -37,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
       key: _scaffKey,
       body: Stack(
         children: <Widget>[
-          Background(),
+          const Background(),
           Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
@@ -50,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 35),
-                      child: Column(
+                      child: const Column(
                         children: <Widget>[
                           Text(
                             "Bem-Vindo de volta!",
@@ -87,9 +91,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefix: Icons.mail,
                             keyboard: TextInputType.emailAddress,
                             valid: (String text) {
+                              if (text.isEmpty) {
+                                return 'Campo obrigatório';
+                              }
                               var pattern =
                                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                              RegExp regex = new RegExp(pattern);
+                              RegExp regex = RegExp(pattern);
                               if (!regex.hasMatch(text)) {
                                 return 'Introduza um email valido.';
                               }
@@ -104,6 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefix: Icons.lock,
                             keyboard: TextInputType.text,
                             valid: (String text) {
+                              if (text.isEmpty) {
+                                return 'Campo obrigatório';
+                              }
                               if (text.length < 6) {
                                 return "Deve conter pelo menos 6 letras";
                               }
@@ -113,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     ElevatedButton(
@@ -129,11 +139,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (_formKey.currentState!.validate()) {
                                 if (!await checkConnection()) {
                                   loading = false;
-                                  Navigator.pop(context);
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                  }
                                   ScaffoldMessenger.of(
                                           _scaffKey.currentContext!)
                                       .showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                       content: Text(
                                         "Sem conexao a internet.",
                                         style: TextStyle(
@@ -150,72 +162,43 @@ class _LoginScreenState extends State<LoginScreen> {
                                 setState(
                                   () {
                                     loading = true;
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        return Dialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: Container(
-                                            height: 200,
-                                            width: 200,
-                                            child: Center(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Container(
-                                                    height: 60,
-                                                    width: 60,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      strokeWidth: 5,
-                                                      valueColor:
-                                                          AlwaysStoppedAnimation(
-                                                        mainBG,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Text("Loading"),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                    BlocProvider.getBloc<UsuarioBloc>()
-                                        .entrarEmail(_emailController.text,
-                                            _passController.text, _scaffKey)
-                                        .then(
-                                      (_) {
-                                        setState(
-                                          () {
-                                            loading = false;
-                                          },
-                                        );
-                                      },
-                                    );
+                                    ScreenNotificationUtils()
+                                        .showLoadingModal(context);
+                                    if (_emailController.text.isNotEmpty &&
+                                        _passController.text.isNotEmpty) {
+                                      BlocProvider.getBloc<UsuarioBloc>()
+                                          .entrarEmail(_emailController.text,
+                                              _passController.text, _scaffKey)
+                                          .then(
+                                        (_) {
+                                          setState(
+                                            () {
+                                              loading = false;
+                                            },
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      loading = false;
+                                      Navigator.of(context).pop();
+                                      ScreenNotificationUtils().showSnackBar(
+                                          context, "Preencha o formulário");
+                                    }
                                   },
                                 );
                               }
                             }
                           : null,
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         alignment: Alignment.center,
-                        child: Text(
+                        child: const Text(
                           "Entrar",
                           style: TextStyle(fontSize: 24, color: preto),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextButton(
@@ -225,15 +208,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(5),
                           )),
                       onPressed: () {
-                        _navHome();
-                      },
-                      child: Container(
-                        child: Text(
-                          "Esqueceu a senha? recuperar",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: branco,
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (context) => const ForgotPasswordScreen(),
                           ),
+                        );
+                      },
+                      child: const Text(
+                        "Esqueceu a senha? recuperar",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: branco,
                         ),
                       ),
                     ),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:codigo_de_estrada/helpers/teste_helper.dart';
-import 'package:codigo_de_estrada/models/questao.dart';
+import 'package:codigo_de_estrada_mz/helpers/teste_helper.dart';
+import 'package:codigo_de_estrada_mz/models/questao.dart';
 
 class Teste {
   int id;
